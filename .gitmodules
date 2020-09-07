@@ -1,0 +1,4 @@
+[submodule "thirdparty/sciter-sdk"]
+	path = thirdparty/sciter-sdk
+	url = https://github.com/c-smile/sciter-sdk
+	shallow = true
