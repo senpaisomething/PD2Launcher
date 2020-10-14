@@ -29,10 +29,9 @@
 			text-decoration: none;
 			color: @GOLD_LIGHTER;
 		}
-
-			a:hover {
-				color: @GOLD;
-			}
+		a:hover {
+			color: @GOLD;
+		}
 
 		button {
 			border: none;
@@ -46,32 +45,28 @@
 			height: 24px;
 		}
 
-			.window-btn:hover {
-				cursor: pointer;
-			}
+		.window-btn:hover {
+			cursor: pointer;
+		}
 
-			.window-btn.close {
-				background: url('img/close.jpg');
-				top: 20px;
-				right: 20px;
-			}
+		.window-btn.close {
+			background: url('img/close.jpg');
+			top: 20px;
+			right: 20px;
+		}
 
-				.window-btn.close:active {
-					background: url('img/close-pressed.jpg');
-				}
+		.window-btn.close:active {
+			background: url('img/close-pressed.jpg');
+		}
 
-			.window-btn.minimize {
-				background: url('img/minimize.jpg');
-				top: 20px;
-				right: 48px;
-			}
+		.window-btn.minimize {
+			background: url('img/minimize.jpg');
+			top: 20px;
+			right: 48px;
+		}
 
-				.window-btn.minimize:active {
-					background: url('img/minimize-pressed.jpg');
-				}
-
-		#header {
-			text-align: center;
+		.window-btn.minimize:active {
+			background: url('img/minimize-pressed.jpg');
 		}
 
 		#logo {
@@ -82,21 +77,22 @@
 			padding-bottom: 5px;
 		}
 
+		#header {
+			text-align: center;
+		}
 		#header .links {
 			width: 85%;
 			margin: 0 auto;
 			padding-top: 10px;
 		}
-
-			#header .links a {
-				color: inherit;
-				font-size: 18px;
-				text-transform: uppercase;
-			}
-
-				#header .links a:hover {
-					color: #c7baa9;
-				}
+		#header .links a {
+			color: inherit;
+			font-size: 18px;
+			text-transform: uppercase;
+		}
+		#header .links a:hover {
+			color: #c7baa9;
+		}
 
 		#news {
 			border: 2px solid @GOLD;
@@ -109,23 +105,19 @@
 			background: rgba(0,0,0,.5);
 			overflow-y: scroll;
 		}
-
-			#news .entry {
-				padding: 8px;
-				border-bottom: 1px solid #75654f;
-			}
-
-				#news .entry:last-child {
-					border-bottom: none;
-				}
-
-				#news .entry .title {
-					font-size: 18px;
-				}
-
-				#news .entry .date {
-					color: #666;
-				}
+		#news .entry {
+			padding: 8px;
+			border-bottom: 1px solid #75654f;
+		}
+		#news .entry:last-child {
+			border-bottom: none;
+		}
+		#news .entry .title {
+			font-size: 18px;
+		}
+		#news .entry .date {
+			color: #666;
+		}
 
 		#buttons-and-gameservers {
 			flow: horizontal;
@@ -148,30 +140,27 @@
 			height: 32px;
 			padding-bottom: 10px;
 		}
-
-			#play-button:active {
-				background: url("img/play-pressed.jpg");
-			}
+		#play-button:active {
+			background: url("img/play-pressed.jpg");
+		}
 
 		#options-button {
 			background: url("img/options.jpg");
 			width: 272px;
 			height: 32px;
 		}
-
-			#options-button:active {
-				background: url("img/options-pressed.jpg");
-			}
+		#options-button:active {
+			background: url("img/options-pressed.jpg");
+		}
 
 		#loot-filters-button {
 			background: url("img/loot.jpg");
 			width: 272px;
 			height: 32px;
 		}
-
-			#loot-filters-button:active {
-				background: url("img/loot-pressed.jpg");
-			}
+		#loot-filters-button:active {
+			background: url("img/loot-pressed.jpg");
+		}
 
 		#gameservers {
 			border: 2px solid @GOLD;
@@ -186,24 +175,21 @@
 			padding: 3px;
 			padding-bottom: 0;
 		}
-
-			#gameservers .gs {
-				background: url("img/gs.jpg");
-				width: 46px;
-				height: 20px;
-				margin-right: 3px;
-				margin-bottom: 3px;
-				text-align: center;
-				line-height: 20px;
-			}
-
-			#gameservers .gs-online {
-				background: url("img/gs-online.jpg");
-			}
-
-			#gameservers .gs-offline {
-				background: url("img/gs-offline.jpg");
-			}
+		#gameservers .gs {
+			background: url("img/gs.jpg");
+			width: 46px;
+			height: 20px;
+			margin-right: 3px;
+			margin-bottom: 3px;
+			text-align: center;
+			line-height: 20px;
+		}
+		#gameservers .gs-online {
+			background: url("img/gs-online.jpg");
+		}
+		#gameservers .gs-offline {
+			background: url("img/gs-offline.jpg");
+		}
 
 		@set my-v-scrollbar {
 			.prev {
@@ -249,10 +235,6 @@
 			}
 		}
 
-
-
-
-
 		#modal-background {
 			position: absolute;
 			z-index: 1000;
@@ -265,10 +247,10 @@
 			opacity: 0;
 		}
 
-			#modal-background.is-visible {
-				visibility: visible;
-				opacity: 1;
-			}
+		#modal-background.is-visible {
+			visibility: visible;
+			opacity: 1;
+		}
 
 		.modal {
 			position: absolute;
@@ -284,10 +266,10 @@
 			opacity: 0;
 		}
 
-			.modal.is-visible {
-				visibility: visible;
-				opacity: 1;
-			}
+		.modal.is-visible {
+			visibility: visible;
+			opacity: 1;
+		}
 
 		.modal-close {
 			position: absolute;
@@ -297,9 +279,9 @@
 			z-index: 5000;
 		}
 
-			.modal-close:hover {
-				cursor: pointer;
-			}
+		.modal-close:hover {
+			cursor: pointer;
+		}
 
 		.modal-title {
 			position: absolute;
@@ -323,84 +305,74 @@
 			font-size: 16px;
 		}
 
-			.loot-table.headers td {
-				border-top: 1px solid @GOLD !important;
-			}
+		.loot-table.headers td {
+			border-top: 1px solid @GOLD !important;
+		}
 
-				.loot-table.headers td:first-child {
-					border-left: 1px solid @GOLD !important;
-				}
+		.loot-table.headers td:first-child {
+			border-left: 1px solid @GOLD !important;
+		}
 
-				.loot-table.headers td:last-child {
-					border-right: 1px solid @GOLD !important;
-				}
+		.loot-table.headers td:last-child {
+			border-right: 1px solid @GOLD !important;
+		}
 
 		.loot-table {
-			width: 90%;
+			width: 75%;
 			margin: 0 auto;
 			border-spacing: 0;
 		}
+		.loot-table tbody {
+			height: 300px;
+			margin: 0 auto;
+			border: 1px solid @GOLD;
+			overflow-y: auto;
+		}
+		.loot-table input[type=text] {
+			width: 90%;
+			background: rgba(0,0,0,0.7);
+			border: 1px solid @GOLD;
+			padding: 2px 4px;
+			color: @GOLD;
+			text-selection-caret-color: @GOLD;
+		}
+		.loot-table th {
+			font-size: 18px;
+			background: rgba(0,0,0,0.5);
+			padding: 4px;
+		}
+		.loot-table td {
+			position: relative;
+			border-top: 1px solid @GOLD;
+			padding: 4px;
+		}
+		.loot-table tr:first-child td {
+			border-top: none;
+		}
+		.loot-table td:nth-child(1) {
+			text-align: center;
+			width: 10%;
+		}
+		.loot-table td:nth-child(2) {
+			width: 40%;
+		}
+		.loot-table td:nth-child(3) {
+			width: 35%;
+		}
+		.loot-table td:nth-child(4) {
+			text-align: right;
+			width: 15%;
+		}
+		.loot-table tr:nth-child(2n) td {
+			background: rgba(0,0,0,0.7);
+		}
 
-			.loot-table tbody {
-				height: 300px;
-				margin: 0 auto;
-				border: 1px solid @GOLD;
-				overflow-y: auto;
-			}
+		.loot-table input[type="checkbox"] {
+		}
 
-			.loot-table input[type=text] {
-				width: 90%;
-				background: rgba(0,0,0,0.7);
-				border: 1px solid @GOLD;
-				padding: 2px 4px;
-				color: @GOLD;
-				text-selection-caret-color: @GOLD;
-			}
-
-			.loot-table th {
-				font-size: 18px;
-				background: rgba(0,0,0,0.5);
-				padding: 4px;
-			}
-
-			.loot-table td {
-				position: relative;
-				border-top: 1px solid @GOLD;
-				padding: 4px;
-			}
-
-			.loot-table tr:first-child td {
-				border-top: none;
-			}
-
-			.loot-table td:nth-child(1) {
-				text-align: center;
-				width: 10%;
-			}
-
-			.loot-table td:nth-child(2) {
-				width: 40%;
-			}
-
-			.loot-table td:nth-child(3) {
-				width: 35%;
-			}
-
-			.loot-table td:nth-child(4) {
-				text-align: right;
-				width: 15%;
-			}
-
-			.loot-table tr:nth-child(2n) td {
-				background: rgba(0,0,0,0.7);
-			}
-
-			.loot-table input[type="checkbox"] {
-			}
-
-			.loot-table .filter-delete {
-				color: #bb4646;
-			}
+		.loot-table .filter-delete {
+			color: #bb4646;
+		}
 
 		input[type=checkbox] {
 			position: absolute;
@@ -415,28 +387,28 @@
 			border: 0;
 		}
 
-			input[type=checkbox] + label.css-label {
-				background-image: url("img/checkbox.png");
-				-webkit-touch-callout: none;
-				-webkit-user-select: none;
-				-khtml-user-select: none;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
-				padding-left: 21px;
-				height: 16px;
-				display: inline-block;
-				line-height: 16px;
-				background-repeat: no-repeat;
-				background-position: 0 0;
-				font-size: 16px;
-				vertical-align: middle;
-				cursor: pointer;
-			}
+		input[type=checkbox] + label.css-label {
+			background-image: url("img/checkbox.png");
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			padding-left: 21px;
+			height: 16px;
+			display: inline-block;
+			line-height: 16px;
+			background-repeat: no-repeat;
+			background-position: 0 0;
+			font-size: 16px;
+			vertical-align: middle;
+			cursor: pointer;
+		}
 
-			input[type=checkbox]:checked + label.css-label {
-				background-position: 0 -17px;
-			}
+		input[type=checkbox]:checked + label.css-label {
+			background-position: 0 -17px;
+		}
 	</style>
 	<script type="text/tiscript">
 		const body = $(body);
@@ -449,6 +421,9 @@
 			var (w,h) = (750,550)
 
 			view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
+
+			// call the update function
+			view.frame.update();
 		}
 
 		self.on("click", "a[href^=http]", function(evt) {
@@ -457,10 +432,14 @@
 			return true; // consume the event
 		});
 
+		$(#play-button).onClick = function() {
+			view.frame.play();
+		}
 		$(#loot-filters-button).onClick = function() {
 			modalBackground.attributes.addClass("is-visible");
 			lootFilterModal.attributes.addClass("is-visible");
 		}
+
 		$(#modal-background).onClick = function() {
 			modalBackground.attributes.removeClass("is-visible");
 			$(.modal).attributes.removeClass("is-visible");
@@ -515,7 +494,7 @@
 	<div id="content-wrapper">
 		<div id="news">
 			<div class="entry">
-				<a class="title" href="https://projectdiablo2.com/">www.ProjectDiablo2.com is Launching Right Now!</a>
+				<a id="sdfsdf" class="title" href="https://projectdiablo2.com/">www.ProjectDiablo2.com is Launching Right Now!</a>
 				<div class="date">Today</div>
 			</div>
 			<div class="entry">
