@@ -139,7 +139,7 @@ public:
 
 			// get the absolute path to the file/item in question
 			fs::path path = fs::current_path();
-			path = path / "downloads" / itemName;
+			path = path / itemName;
 			path = path.lexically_normal();
 
 			// create any needed directories
