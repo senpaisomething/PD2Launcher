@@ -149,6 +149,10 @@
             padding-bottom: 10px;
         }
 
+            #play-button:disabled {
+                background: url("img/updating-disabled.jpg");
+            }
+
             #play-button:active {
                 background: url("img/play-pressed.jpg");
             }
@@ -438,6 +442,7 @@
         const body = $(body);
         const modalBackground = $(#modal-background);
         const lootFilterModal = $(#loot-filter-modal);
+        const playButton = $(#play-button);
 
         self.ready = function() {
             // positioning the window in the middle of the screen:
@@ -456,9 +461,14 @@
             return true; // consume the event
         });
 
+        self.finish_update = function() {
+            delete playButton.attributes["disabled"];
+        }
+
         $(#play-button).onClick = function() {
             view.frame.play();
         }
+
         $(#loot-filters-button).onClick = function() {
             modalBackground.attributes.addClass("is-visible");
             lootFilterModal.attributes.addClass("is-visible");
@@ -549,7 +559,7 @@
 
         <div id="buttons-and-gameservers">
             <div id="buttons">
-                <button id="play-button"></button>
+                <button id="play-button" disabled></button>
                 <button id="options-button"></button>
                 <button id="loot-filters-button"></button>
             </div>

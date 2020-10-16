@@ -8,12 +8,16 @@
 #include <nlohmann/json.hpp>
 #include <filesystem>
 #include <fstream>
+#include <future>
+#include <vector>
 #include "crc32c/crc32c.h"
 #include "base64.h"
 
-const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-launcher/o";
+//const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-launcher/o";
+const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
 
 namespace fs = std::filesystem;
+std::vector<std::future<bool>> pending_futures;
 
 size_t writeString(void* ptr, size_t size, size_t nmemb, std::string* data) {
 	data->append((char*)ptr, size * nmemb);
@@ -31,6 +35,11 @@ nlohmann::json getBucketFiles() {
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "PD2Launcher/1.0.0");
 	curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10L);
+
+	struct curl_slist* headers = NULL;
+	headers = curl_slist_append(headers, "Content-Type: application/json");
+	//headers = curl_slist_append(headers, "Authorization: Bearer ");
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
 	std::string response_string;
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeString);
@@ -53,6 +62,11 @@ void downloadFile(std::string url, std::string filepath) {
 	CURL* curl = curl_easy_init();
 	if (curl) {
 		FILE* fp = fopen(filepath.c_str(), "wb");
+
+		//struct curl_slist* headers = NULL;
+		//headers = curl_slist_append(headers, "Content-Type: application/json");
+		//headers = curl_slist_append(headers, "Authorization: Bearer ");
+		//curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeFile);
@@ -96,6 +110,9 @@ bool compareCRC(fs::path filepath, std::string hash) {
 	return false;
 }
 
+class frame;
+bool _update(frame* window);
+
 class frame : public sciter::window {
 public:
 	frame() : window(SW_MAIN) {}
@@ -124,36 +141,43 @@ public:
 	}
 
 	bool update() {
-		nlohmann::json json = getBucketFiles();
-
-		// loop through items
-		for (auto& element : json["items"]) {
-			std::string itemName = element["name"];
-			std::string mediaLink = element["mediaLink"];
-			std::string crcHash = element["crc32c"];
-
-			// if the itemName ends in a slash, its not a file
-			if (hasEnding(itemName, "/")) {
-				continue;
-			}
-
-			// get the absolute path to the file/item in question
-			fs::path path = fs::current_path();
-			path = path / itemName;
-			path = path.lexically_normal();
-
-			// create any needed directories
-			fs::create_directories(path.parent_path());
-
-			// check if it doesnt exist or the crc32c hash doesnt match
-			if (!fs::exists(path) || !compareCRC(path, crcHash)) {
-				downloadFile(mediaLink, path.string());
-			}
-		}
-
+		auto fut = std::async(std::launch::async, _update, this);
+		pending_futures.push_back(std::move(fut));
 		return true;
 	}
 };
+
+bool _update(frame* window) {
+	nlohmann::json json = getBucketFiles();
+
+	// loop through items
+	for (auto& element : json["items"]) {
+		std::string itemName = element["name"];
+		std::string mediaLink = element["mediaLink"];
+		std::string crcHash = element["crc32c"];
+
+		// if the itemName ends in a slash, its not a file
+		if (hasEnding(itemName, "/")) {
+			continue;
+		}
+
+		// get the absolute path to the file/item in question
+		fs::path path = fs::current_path();
+		path = path / itemName;
+		path = path.lexically_normal();
+
+		// create any needed directories
+		fs::create_directories(path.parent_path());
+
+		// check if it doesnt exist or the crc32c hash doesnt match
+		if (!fs::exists(path) || !compareCRC(path, crcHash)) {
+			downloadFile(mediaLink, path.string());
+		}
+	}
+	window->call_function("self.finish_update");
+	return true;
+}
+
 
 int uimain(std::function<int()> run) {
 	// enable debug mode
