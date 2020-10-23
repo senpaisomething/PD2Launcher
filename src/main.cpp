@@ -126,10 +126,9 @@ public:
 			SOM_FUNC(play),
 			SOM_FUNC(update)
 		)
-		SOM_PASSPORT_END
+	SOM_PASSPORT_END
 
-
-		bool play(sciter::string args) {
+	bool play(sciter::string args) {
 		auto fut = std::async(std::launch::async, _update, this, args);
 		pending_futures.push_back(std::move(fut));
 		return true;
@@ -195,7 +194,7 @@ bool _update(frame* window, sciter::string args) {
 
 int uimain(std::function<int()> run) {
 	// enable debug mode
-	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+	//SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
 
 	// needed for persistant storage
 	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);
