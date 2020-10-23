@@ -19,8 +19,9 @@
 
         body {
             background: url('img/bg.jpg');
+            background-size: 100%;
             font-family: exocet-medium;
-            width: 750px;
+            width: 750dip;
             color: @GOLD_LIGHTER;
             overflow: hidden;
         }
@@ -42,8 +43,8 @@
         .window-btn {
             display: block;
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 24dip;
+            height: 24dip;
         }
 
             .window-btn:hover {
@@ -52,30 +53,34 @@
 
             .window-btn.close {
                 background: url('img/close.jpg');
-                top: 20px;
-                right: 20px;
+                background-size: 100%;
+                top: 20dip;
+                right: 20dip;
             }
 
                 .window-btn.close:active {
                     background: url('img/close-pressed.jpg');
+                    background-size: 100%;
                 }
 
             .window-btn.minimize {
                 background: url('img/minimize.jpg');
-                top: 20px;
-                right: 48px;
+                background-size: 100%;
+                top: 20dip;
+                right: 48dip;
             }
 
                 .window-btn.minimize:active {
                     background: url('img/minimize-pressed.jpg');
+                    background-size: 100%;
                 }
 
         #logo {
             behavior: layer;
-            width: 300px;
+            width: 300dip;
             height: auto;
-            padding-top: 15px;
-            padding-bottom: 5px;
+            padding-top: 15dip;
+            padding-bottom: 5dip;
         }
 
         #header {
@@ -85,12 +90,12 @@
             #header .links {
                 width: 85%;
                 margin: 0 auto;
-                padding-top: 10px;
+                padding-top: 10dip;
             }
 
                 #header .links a {
                     color: inherit;
-                    font-size: 18ppx;
+                    font-size: 18dip;
                     text-transform: uppercase;
                 }
 
@@ -101,17 +106,17 @@
         #news {
             border: 2px solid @GOLD;
             border-right: none;
-            border-radius: 2px;
+            border-radius: 2dip;
             width: 95%;
             margin: 0 auto;
-            height: 225px;
-            margin-top: 10px;
+            height: 225dip;
+            margin-top: 10dip;
             background: rgba(0,0,0,.5);
             overflow-y: scroll;
         }
 
             #news .entry {
-                padding: 8px;
+                padding: 8dip;
                 border-bottom: 1px solid #75654f;
             }
 
@@ -120,7 +125,7 @@
                 }
 
                 #news .entry .title {
-                    font-size: 18ppx;
+                    font-size: 18dip;
                 }
 
                 #news .entry .date {
@@ -132,73 +137,81 @@
             border-spacing: *;
             width: 95%;
             margin: 0 auto;
-            height: 150px;
-            margin-top: 12px;
+            height: 150dip;
+            margin-top: 12dip;
         }
 
         #buttons {
-            width: 301px;
+            width: 301dip;
             display: block;
-            margin-left: -2px;
+            margin-left: -2dip;
         }
 
         #play-button {
             background: url("img/play.jpg");
-            width: 272px;
-            height: 32px;
-            padding-bottom: 10px;
+            background-size: 100%;
+            width: 272dip;
+            height: 32dip;
+            padding-bottom: 10dip;
         }
 
             #play-button.disabled {
                 background: url("img/updating-disabled.jpg");
+                background-size: 100%;
             }
 
             #play-button:active {
                 background: url("img/play-pressed.jpg");
+                background-size: 100%;
             }
 
         #options-button {
             background: url("img/options.jpg");
-            width: 272px;
-            height: 32px;
+            background-size: 100%;
+            width: 272dip;
+            height: 32dip;
         }
 
             #options-button:active {
                 background: url("img/options-pressed.jpg");
+                background-size: 100%;
             }
 
         #loot-filters-button {
             background: url("img/loot.jpg");
-            width: 272px;
-            height: 32px;
+            background-size: 100%;
+            width: 272dip;
+            height: 32dip;
         }
 
             #loot-filters-button:active {
                 background: url("img/loot-pressed.jpg");
+                background-size: 100%;
             }
 
         #gameservers {
             border: 2px solid @GOLD;
             border-right: none;
-            border-radius: 2px;
-            width: 405px;
+            border-radius: 2dip;
+            width: 405dip;
             display: block;
             overflow-y: scroll;
             background: rgba(0,0,0,0.75);
-            height: 95px;
-            flow: horizontal-wrap;
-            padding: 3px;
+            height: 95dip;
+            text-align: center;
+            /*flow: horizontal-wrap;*/
+            padding: 3dip;
             padding-bottom: 0;
         }
 
             #gameservers .gs {
                 background: url("img/gs.jpg");
-                width: 46px;
-                height: 20px;
-                margin-right: 3px;
-                margin-bottom: 3px;
+                width: 46dip;
+                height: 20dip;
+                margin-right: 3dip;
+                margin-bottom: 3dip;
                 text-align: center;
-                line-height: 20px;
+                line-height: 20dip;
             }
 
             #gameservers .gs-online {
@@ -212,26 +225,28 @@
         @set my-v-scrollbar {
             .prev {
                 background-image: url("img/thin_prev.jpg");
-                background-position: 1px -1px;
+                background-size: 14dip 10dip;
+                background-position: 1px -1dip;
             }
 
             .next {
                 background-image: url("img/thin_next.jpg");
-                background-position: 1px -1px;
+                background-size: 14dip 10dip;
+                background-position: 1px -1dip;
             }
 
             .prev, .next {
                 background-repeat: no-repeat;
                 border-left: 2px solid @GOLD;
                 border-right: 2px solid @GOLD;
-                height: 10px;
+                height: 10dip;
                 overflow: hidden;
             }
 
             .base,
             .next-page,
             .prev-page {
-                width: 18px;
+                width: 18dip;
                 border-left: 2px solid @GOLD;
                 border-right: 2px solid @GOLD;
                 background: rgba(0,0,0,0.5);
@@ -245,7 +260,7 @@
             }
 
             .base {
-                width: 16px;
+                width: 16dip;
             }
 
             .corner {
@@ -292,9 +307,9 @@
 
         .modal-close {
             position: absolute;
-            font-size: 30ppx;
-            right: 15px;
-            top: 10px;
+            font-size: 30dip;
+            right: 15dip;
+            top: 10dip;
             z-index: 5000;
         }
 
@@ -303,30 +318,37 @@
             }
 
         .modal-title {
-            padding-top: 15px;
-            padding-bottom: 15px;
-            margin: 0 15px;
-            font-size: 20ppx;
+            padding-top: 15dip;
+            padding-bottom: 15dip;
+            margin: 0 15dip;
+            font-size: 20dip;
             border-bottom: 1px solid @GOLD_DARKER;
         }
 
         .modal-content {
-            padding: 20px;
+            padding: 20dip;
             height: *;
         }
 
+        .options-modal .modal-content {
+            font-size: 14dip;
+        }
+
         .option-header {
-            margin-bottom: 10px;
+            font-size: 16dip;
+            margin-bottom: 10dip;
         }
 
         .option-container {
-            margin-bottom: 10px;
-            margin-left: 20px;
+            margin-bottom: 10dip;
+            margin-left: 20dip;
         }
+
+        
 
         .loot-table.headers {
             background: rgba(0,0,0,0.9);
-            font-size: 16ppx;
+            font-size: 16dip;
         }
 
             .loot-table.headers td {
@@ -350,21 +372,21 @@
                 width: 90%;
                 background: rgba(0,0,0,0.7);
                 border: 1px solid @GOLD;
-                padding: 2px 4px;
+                padding: 2px 4dip;
                 color: @GOLD;
                 text-selection-caret-color: @GOLD;
             }
 
             .loot-table th {
-                font-size: 18ppx;
+                font-size: 18dip;
                 background: rgba(0,0,0,0.5);
-                padding: 4px;
+                padding: 4dip;
             }
 
             .loot-table td {
                 position: relative;
                 border-top: 1px solid @GOLD;
-                padding: 4px;
+                padding: 4dip;
             }
 
             .loot-table tr:first-child td {
@@ -410,28 +432,38 @@
             cursor: pointer;
         }
 
+            label.checkbox {
+                font-size: 16dip;
+            }
+
+            input[type=checkbox]:root {
+                height: 0;
+                width: 0;
+            }
+
             input[type=checkbox]::after {
                 background-image: url("img/checkbox.png");
+                background-size: 16dip;
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
                 -khtml-user-select: none;
                 -moz-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
-                padding-left: 21px;
-                height: 16px;
-                width: 16px;
+                padding-left: 21dip;
+                height: 16dip;
+                width: 16dip;
                 display: inline-block;
-                line-height: 16px;
+                line-height: 16dip;
                 background-repeat: no-repeat;
                 background-position: 0 0;
-                font-size: 16ppx;
+                font-size: 16dip;
                 vertical-align: middle;
                 cursor: pointer;
             }
 
             input[type=checkbox]:checked::after {
-                background-position: 0 -16px;
+                background-position: 0 -16dip;
             }
     </style>
     <script type="text/tiscript">
@@ -461,7 +493,7 @@
 
             // positioning the window in the middle of the screen:
             var (sx,sy,sw,sh) = view.screenBox(#workarea,#rectw); // getting screen/monitor size
-            var (w,h) = (750,550)
+            var (w,h) = (self.toPixels(750dip),self.toPixels(550dip))
 
             view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
 
@@ -636,16 +668,17 @@
                 <button id="loot-filters-button"></button>
             </div>
             <div id="gameservers">
-                <span class="gs" title="Chicago">GS1</span>
-                <span class="gs gs-online">GS2</span>
-                <span class="gs gs-online">GS3</span>
-                <span class="gs gs-offline">GS4</span>
-                <span class="gs gs-online">GS5</span>
-                <span class="gs gs-online">GS6</span>
-                <span class="gs gs-online">GS7</span>
-                <span class="gs gs-online">GS8</span>
-                <span class="gs gs-online">GS9</span>
-                <span class="gs gs-online">GS10</span>
+                <p style="margin-top: 36dip; font-size: 16dip;">Server Status coming soon...</p>
+                <!--<span class="gs" title="Chicago">GS1</span>
+    <span class="gs gs-online">GS2</span>
+    <span class="gs gs-online">GS3</span>
+    <span class="gs gs-offline">GS4</span>
+    <span class="gs gs-online">GS5</span>
+    <span class="gs gs-online">GS6</span>
+    <span class="gs gs-online">GS7</span>
+    <span class="gs gs-online">GS8</span>
+    <span class="gs gs-online">GS9</span>
+    <span class="gs gs-online">GS10</span>-->
             </div>
         </div>
     </div>

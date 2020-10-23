@@ -195,7 +195,7 @@ bool _update(frame* window, sciter::string args) {
 
 int uimain(std::function<int()> run) {
 	// enable debug mode
-	//SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
 
 	// needed for persistant storage
 	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);
