@@ -125,10 +125,11 @@ public:
 		)
 		SOM_PASSPORT_END
 
-		bool play() {
+	bool play(sciter::string args) {
 		STARTUPINFO info = { sizeof(info) };
 		PROCESS_INFORMATION processInfo;
-		if (CreateProcess(L"Diablo II.exe", NULL, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+		std::wstring commandLine = L"Diablo II.exe " + args;
+		if (CreateProcess(NULL, &commandLine[0], NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
 		{
 			//WaitForSingleObject(processInfo.hProcess, INFINITE);
 			CloseHandle(processInfo.hProcess);
@@ -181,7 +182,10 @@ bool _update(frame* window) {
 
 int uimain(std::function<int()> run) {
 	// enable debug mode
-	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+	//SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+
+	// needed for persistant storage
+	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);
 
 	sciter::archive::instance().open(aux::elements_of(resources)); // bind resources[] (defined in "resources.cpp") with the archive
 

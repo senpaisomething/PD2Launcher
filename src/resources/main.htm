@@ -90,7 +90,7 @@
 
                 #header .links a {
                     color: inherit;
-                    font-size: 18px;
+                    font-size: 18ppx;
                     text-transform: uppercase;
                 }
 
@@ -120,7 +120,7 @@
                 }
 
                 #news .entry .title {
-                    font-size: 18px;
+                    font-size: 18ppx;
                 }
 
                 #news .entry .date {
@@ -149,7 +149,7 @@
             padding-bottom: 10px;
         }
 
-            #play-button:disabled {
+            #play-button.disabled {
                 background: url("img/updating-disabled.jpg");
             }
 
@@ -282,6 +282,7 @@
             display: block;
             visibility: hidden;
             opacity: 0;
+            flow: vertical;
         }
 
             .modal.is-visible {
@@ -291,7 +292,7 @@
 
         .modal-close {
             position: absolute;
-            font-size: 30px;
+            font-size: 30ppx;
             right: 15px;
             top: 10px;
             z-index: 5000;
@@ -302,25 +303,29 @@
             }
 
         .modal-title {
-            position: absolute;
-            left: 30px;
-            top: 20px;
-            right: 40px;
-            height: 25px;
-            font-size: 20px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            margin: 0 15px;
+            font-size: 20ppx;
+            border-bottom: 1px solid @GOLD_DARKER;
         }
 
         .modal-content {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 60px;
+            padding: 20px;
+            height: *;
+        }
+        
+        .option-header {
+            margin-bottom: 10px;
+        }
+        .option-container {
+            margin-bottom: 10px;
+            margin-left: 20px;
         }
 
         .loot-table.headers {
             background: rgba(0,0,0,0.9);
-            font-size: 16px;
+            font-size: 16ppx;
         }
 
             .loot-table.headers td {
@@ -336,17 +341,9 @@
                 }
 
         .loot-table {
-            width: 75%;
-            margin: 0 auto;
+            width: *;
             border-spacing: 0;
         }
-
-            .loot-table tbody {
-                height: 300px;
-                margin: 0 auto;
-                border: 1px solid @GOLD;
-                overflow-y: auto;
-            }
 
             .loot-table input[type=text] {
                 width: 90%;
@@ -358,7 +355,7 @@
             }
 
             .loot-table th {
-                font-size: 18px;
+                font-size: 18ppx;
                 background: rgba(0,0,0,0.5);
                 padding: 4px;
             }
@@ -402,57 +399,81 @@
                 color: #bb4646;
             }
 
-        input[type=checkbox] {
-            position: absolute;
-            z-index: -1000;
-            left: -1000px;
-            overflow: hidden;
-            clip: rect(0 0 0 0);
-            height: 1px;
-            width: 1px;
-            margin: -1px;
-            padding: 0;
-            border: 0;
+        .loot-table.filters {
+            height: *;
+            border: 1px solid @GOLD;
+            overflow-y: auto;
         }
 
-            input[type=checkbox] + label.css-label {
-                background-image: url("img/checkbox.png");
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                padding-left: 21px;
-                height: 16px;
-                display: inline-block;
-                line-height: 16px;
-                background-repeat: no-repeat;
-                background-position: 0 0;
-                font-size: 16px;
-                vertical-align: middle;
-                cursor: pointer;
-            }
+        label.checkbox, input[type=checkbox] {
+            cursor: pointer;
+        }
 
-            input[type=checkbox]:checked + label.css-label {
-                background-position: 0 -17px;
+        input[type=checkbox]::after {
+            background-image: url("img/checkbox.png");
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            padding-left: 21px;
+            height: 16px;
+            width: 16px;
+            display: inline-block;
+            line-height: 16px;
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            font-size: 16ppx;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+            input[type=checkbox]:checked::after {
+                background-position: 0 -16px;
             }
     </style>
     <script type="text/tiscript">
-        const body = $(body);
-        const modalBackground = $(#modal-background);
-        const lootFilterModal = $(#loot-filter-modal);
-        const playButton = $(#play-button);
+        function initDb(storage) {
+            storage.root = {
+                options: {
+                    skiptobnet: true
+                },
+                filters: []
+            }
+
+            return storage.root;
+        }
+
+        var storage = Storage.open(System.home("settings.db"));
+        var storageRoot = storage.root || initDb(storage);
+
+        var body = $(body);
+        var modalBackground = $(#modal-background);
+        var optionsModal = $(#options-modal);
+        var lootFilterModal = $(#loot-filter-modal);
+        var playButton = $(#play-button);
 
         self.ready = function() {
+            // connect to debugger
+            if( view.connectToInspector ) view.connectToInspector();
+
             // positioning the window in the middle of the screen:
-            var (sx,sy,sw,sh) = view.screenBox(#workarea,#rectw); // gettting screen/monitor size
+            var (sx,sy,sw,sh) = view.screenBox(#workarea,#rectw); // getting screen/monitor size
             var (w,h) = (750,550)
 
             view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
 
             // call the update function
             view.frame.update();
+
+            loadOptions();
+        }
+
+        // function that is used by cpp for updating the
+        self.finish_update = function() {
+            delete playButton.attributes["disabled"];
+            playButton.attributes.removeClass("disabled");
         }
 
         self.on("click", "a[href^=http]", function(evt) {
@@ -461,12 +482,13 @@
             return true; // consume the event
         });
 
-        self.finish_update = function() {
-            delete playButton.attributes["disabled"];
+        $(#play-button).onClick = function() {
+            view.frame.play(getLaunchArguments());
         }
 
-        $(#play-button).onClick = function() {
-            view.frame.play();
+        $(#options-button).onClick = function() {
+            modalBackground.attributes.addClass("is-visible");
+            optionsModal.attributes.addClass("is-visible");
         }
 
         $(#loot-filters-button).onClick = function() {
@@ -474,13 +496,63 @@
             lootFilterModal.attributes.addClass("is-visible");
         }
 
+        // deal with clicking the modal background
         $(#modal-background).onClick = function() {
-            modalBackground.attributes.removeClass("is-visible");
-            $(.modal).attributes.removeClass("is-visible");
+            closeModals();
         }
-        $(.modal-close).onClick = function() {
+
+        // deal with all the modal close buttons
+        var modalCloseButtons = $$(.modal-close);
+        for(var modalCloseButton in modalCloseButtons) {
+            modalCloseButton.onClick = function() {
+                closeModals();
+            }
+        }
+
+        // deal with options saving
+        event change $(input.launcher-option) {
+            switch(this.attributes#type) {
+                case "checkbox":
+                    storageRoot.options[this.attributes#name] = this.checked;
+                    break;
+            }
+        }
+
+        function closeModals() {
             modalBackground.attributes.removeClass("is-visible");
-            $(.modal).attributes.removeClass("is-visible");
+
+            var modals = $$(.modal);
+            for (var modal in modals) {
+                modal.attributes.removeClass("is-visible");
+            }
+        }
+
+        function loadOptions() {
+            var options = storageRoot.options;
+
+            for(var key in options) {
+                var value = options[key];
+                var element = self.select("input.launcher-option[name='" + key + "']");
+
+                switch(element.attributes#type) {
+                    case "checkbox":
+                        element.checked = value;
+                        break;
+                }
+            }
+        }
+
+        function getLaunchArguments() {
+            var args = [];
+            var options = $$(input.launcher-option);
+
+            for(var option in options) {
+                if(option.attributes#type == "checkbox" && option.checked) {
+                    args.push(option.value);
+                }
+            }
+
+            return args.join(" ");
         }
     </script>
 </head>
@@ -559,7 +631,7 @@
 
         <div id="buttons-and-gameservers">
             <div id="buttons">
-                <button id="play-button" disabled></button>
+                <button id="play-button" class="disabled" disabled></button>
                 <button id="options-button"></button>
                 <button id="loot-filters-button"></button>
             </div>
@@ -579,61 +651,37 @@
     </div>
 
     <div id="modal-background"></div>
+    <div id="options-modal" class="modal">
+        <div class="modal-close">x</div>
+        <div class="modal-title">Options</div>
+        <div class="modal-content">
+            <h2 class="option-header">Graphics</h2>
+            <div class="option-container">
+                <label class="checkbox"><input type="checkbox" name="windowed" value="-w" class="launcher-option" /> Windowed mode (-w)</label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox"><input type="checkbox" name="3dfx" value="-3dfx" class="launcher-option" /> Don't Fix Aspect Ratio (-nofixaspect)</label>
+            </div>
+
+            <h2 class="option-header">Sound</h2>
+            <div class="option-container">
+                <label class="checkbox"><input type="checkbox" name="nosound" value="-ns" class="launcher-option" /> No Sound (-ns)</label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox"><input type="checkbox" name="sndbkg" value="-sndbkg" class="launcher-option" /> Sound in Background (-sndbkg)</label>
+            </div>
+
+            <h2 class="option-header">Other</h2>
+            <div class="option-container">
+                <label class="checkbox"><input type="checkbox" name="skiptobnet" value="-skiptobnet" class="launcher-option" /> Skip To BattleNet (-skiptobnet)</label>
+            </div>
+        </div>
+    </div>
     <div id="loot-filter-modal" class="modal">
         <div class="modal-close">x</div>
         <div class="modal-title">Loot Filter Profiles</div>
-        <div class="modal-content">
-            <table class="loot-table headers">
-                <thead>
-                    <tr>
-                        <td></td>
-                        <td>Name</td>
-                        <td>Url</td>
-                        <td></td>
-                    </tr>
-                </thead>
-            </table>
-
-            <table class="loot-table">
-                <tbody>
-                    <tr>
-                        <td class="checkbox-container">
-                            <input type="checkbox" name="checkboxG1" id="checkboxG1" />
-                            <label for="checkboxG1" class="css-label"></label>
-                        </td>
-                        <td>Filter #1</td>
-                        <td><input type="text" name=""></td>
-                        <td class="filter-delete">X</td>
-                    </tr>
-                    <tr>
-                        <td class="checkbox-container">
-                            <input type="checkbox" name="checkboxG1" id="checkboxG1" />
-                            <label for="checkboxG1" class="css-label"></label>
-                        </td>
-                        <td>Filter #2</td>
-                        <td><input type="text" name=""></td>
-                        <td class="filter-delete">X</td>
-                    </tr>
-                    <tr>
-                        <td class="checkbox-container">
-                            <input type="checkbox" name="checkboxG1" id="checkboxG1" />
-                            <label for="checkboxG1" class="css-label"></label>
-                        </td>
-                        <td>Filter #3</td>
-                        <td><input type="text" name=""></td>
-                        <td class="filter-delete">X</td>
-                    </tr>
-                    <tr>
-                        <td class="checkbox-container">
-                            <input type="checkbox" name="checkboxG1" id="checkboxG1" />
-                            <label for="checkboxG1" class="css-label"></label>
-                        </td>
-                        <td>Filter #4</td>
-                        <td><input type="text" name=""></td>
-                        <td class="filter-delete">X</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="modal-content" style="text-align: center;">
+            <h2>Coming soon...</h2>
         </div>
     </div>
 </body>
