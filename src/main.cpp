@@ -7,6 +7,7 @@
 #include <codecvt>
 #include <nlohmann/json.hpp>
 #include <filesystem>
+#include <algorithm>
 #include <fstream>
 #include <future>
 #include <vector>
@@ -15,6 +16,8 @@
 
 //const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-launcher/o";
 const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
+
+std::vector<std::string> dont_update = { "D2.LNG", "BnetLog.txt", "ProjectDiablo.cfg", "ddraw.ini", "default.filter", "loot.filter", "UI.ini" };
 
 namespace fs = std::filesystem;
 std::vector<std::future<bool>> pending_futures;
@@ -111,7 +114,7 @@ bool compareCRC(fs::path filepath, std::string hash) {
 }
 
 class frame;
-bool _update(frame* window);
+bool _update(frame* window, sciter::string args);
 
 class frame : public sciter::window {
 public:
@@ -125,30 +128,35 @@ public:
 		)
 		SOM_PASSPORT_END
 
-	bool play(sciter::string args) {
-		STARTUPINFO info = { sizeof(info) };
-		PROCESS_INFORMATION processInfo;
-		std::wstring commandLine = L"Diablo II.exe " + args;
-		if (CreateProcess(NULL, &commandLine[0], NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
-		{
-			//WaitForSingleObject(processInfo.hProcess, INFINITE);
-			CloseHandle(processInfo.hProcess);
-			CloseHandle(processInfo.hThread);
 
-			return true;
-		}
-
-		return false;
+		bool play(sciter::string args) {
+		auto fut = std::async(std::launch::async, _update, this, args);
+		pending_futures.push_back(std::move(fut));
+		return true;
 	}
 
 	bool update() {
-		auto fut = std::async(std::launch::async, _update, this);
-		pending_futures.push_back(std::move(fut));
 		return true;
 	}
 };
 
-bool _update(frame* window) {
+bool _launch(sciter::string args) {
+	STARTUPINFO info = { sizeof(info) };
+	PROCESS_INFORMATION processInfo;
+	std::wstring commandLine = L"Diablo II.exe " + args;
+	if (CreateProcess(NULL, &commandLine[0], NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+	{
+		//WaitForSingleObject(processInfo.hProcess, INFINITE);
+		CloseHandle(processInfo.hProcess);
+		CloseHandle(processInfo.hThread);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool _update(frame* window, sciter::string args) {
 	nlohmann::json json = getBucketFiles();
 
 	// loop through items
@@ -171,14 +179,19 @@ bool _update(frame* window) {
 		fs::create_directories(path.parent_path());
 
 		// check if it doesnt exist or the crc32c hash doesnt match
-		if (!fs::exists(path) || !compareCRC(path, crcHash)) {
+		if (!fs::exists(path)) {
 			downloadFile(mediaLink, path.string());
+		}
+		else if (!compareCRC(path, crcHash)) {
+			// Don't update certain files (config files, etc.)
+			if (std::find(dont_update.begin(), dont_update.end(), itemName) == dont_update.end()) {
+				downloadFile(mediaLink, path.string());
+			}
 		}
 	}
 	window->call_function("self.finish_update");
-	return true;
+	return _launch(args);
 }
-
 
 int uimain(std::function<int()> run) {
 	// enable debug mode

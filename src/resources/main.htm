@@ -314,10 +314,11 @@
             padding: 20px;
             height: *;
         }
-        
+
         .option-header {
             margin-bottom: 10px;
         }
+
         .option-container {
             margin-bottom: 10px;
             margin-left: 20px;
@@ -399,35 +400,35 @@
                 color: #bb4646;
             }
 
-        .loot-table.filters {
-            height: *;
-            border: 1px solid @GOLD;
-            overflow-y: auto;
-        }
+            .loot-table.filters {
+                height: *;
+                border: 1px solid @GOLD;
+                overflow-y: auto;
+            }
 
         label.checkbox, input[type=checkbox] {
             cursor: pointer;
         }
 
-        input[type=checkbox]::after {
-            background-image: url("img/checkbox.png");
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            padding-left: 21px;
-            height: 16px;
-            width: 16px;
-            display: inline-block;
-            line-height: 16px;
-            background-repeat: no-repeat;
-            background-position: 0 0;
-            font-size: 16ppx;
-            vertical-align: middle;
-            cursor: pointer;
-        }
+            input[type=checkbox]::after {
+                background-image: url("img/checkbox.png");
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                padding-left: 21px;
+                height: 16px;
+                width: 16px;
+                display: inline-block;
+                line-height: 16px;
+                background-repeat: no-repeat;
+                background-position: 0 0;
+                font-size: 16ppx;
+                vertical-align: middle;
+                cursor: pointer;
+            }
 
             input[type=checkbox]:checked::after {
                 background-position: 0 -16px;
@@ -464,9 +465,6 @@
 
             view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
 
-            // call the update function
-            view.frame.update();
-
             loadOptions();
         }
 
@@ -483,6 +481,8 @@
         });
 
         $(#play-button).onClick = function() {
+            playButton.attributes["disabled"] = true;
+            playButton.attributes.addClass("disabled");
             view.frame.play(getLaunchArguments());
         }
 
@@ -631,7 +631,7 @@
 
         <div id="buttons-and-gameservers">
             <div id="buttons">
-                <button id="play-button" class="disabled" disabled></button>
+                <button id="play-button"></button>
                 <button id="options-button"></button>
                 <button id="loot-filters-button"></button>
             </div>
