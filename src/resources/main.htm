@@ -132,6 +132,13 @@
                     color: #666;
                 }
 
+        #news-loading {
+            text-align: center;
+            height: *;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+
         #buttons-and-gameservers {
             flow: horizontal;
             border-spacing: *;
@@ -486,6 +493,7 @@
         var optionsModal = $(#options-modal);
         var lootFilterModal = $(#loot-filter-modal);
         var playButton = $(#play-button);
+        var news = $(#news);
 
         self.ready = function() {
             // connect to debugger
@@ -497,6 +505,7 @@
 
             view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
 
+            loadNews();
             loadOptions();
         }
 
@@ -559,6 +568,34 @@
             }
         }
 
+        var asdasdasd;
+
+        function loadNews() {
+            view.request({
+                url: "https://storage.googleapis.com/pd2-launcher/news.json",
+                protocol: #basic,
+                output: #json,
+                noCache: true,
+                success: function(data, status) {
+                    asdasdasd = data;
+
+                    news.clear();
+
+                    for(var item in data.items) {
+                        news.$append(
+                            <div.entry>
+                                <a.title href="{item.url}">{item.header}</a>
+                                <div.date>{item.date}</div>
+                            </div>
+                        );
+                    }
+                },
+                error:function(err, status) {
+
+                }
+            });
+        }
+
         function loadOptions() {
             var options = storageRoot.options;
 
@@ -611,7 +648,7 @@
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
-                    <a href="https://projectdiablo2.com/">Discord</a>
+                    <a href="https://discord.gg/RgX4MWu">Discord</a>
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
@@ -619,11 +656,7 @@
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
-                    <a href="https://projectdiablo2.com/">Wiki</a>
-                </td>
-                <td class="separator">&bull;</td>
-                <td>
-                    <a href="https://projectdiablo2.com/">Test</a>
+                    <a>Wiki</a>
                 </td>
             </tr>
         </table>
@@ -631,34 +664,7 @@
 
     <div id="content-wrapper">
         <div id="news">
-            <div class="entry">
-                <a id="sdfsdf" class="title" href="https://projectdiablo2.com/">www.ProjectDiablo2.com is Launching Right Now!</a>
-                <div class="date">Today</div>
-            </div>
-            <div class="entry">
-                <a class="title" href="https://projectdiablo2.com/">Welcome to Project Diablo 2!</a>
-                <div class="date">1 Day ago</div>
-            </div>
-            <div class="entry">
-                <a class="title" href="https://projectdiablo2.com/">Season 1 "Awakening" Announcement</a>
-                <div class="date">3 Days ago</div>
-            </div>
-            <div class="entry">
-                <a class="title" href="https://projectdiablo2.com/">Checkout the Wiki!</a>
-                <div class="date">9 Days ago</div>
-            </div>
-            <div class="entry">
-                <a class="title" href="https://projectdiablo2.com/">Announcement!</a>
-                <div class="date">13 Days ago</div>
-            </div>
-            <div class="entry">
-                <a class="title" href="https://projectdiablo2.com/">Announcement!</a>
-                <div class="date">14 Days ago</div>
-            </div>
-            <div class="entry">
-                <a class="title" href="https://projectdiablo2.com/">Announcement!</a>
-                <div class="date">15 Days ago</div>
-            </div>
+            <p id="news-loading">loading...</p>
         </div>
 
         <div id="buttons-and-gameservers">
