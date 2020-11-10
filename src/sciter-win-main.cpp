@@ -26,7 +26,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
   OleInitialize(0); // for system drag-n-drop
 
   // comment this out if you need system theming
-  ::SciterSetOption(NULL,SCITER_SET_UX_THEMING,TRUE);
+  //::SciterSetOption(NULL,SCITER_SET_UX_THEMING,TRUE);
 
   auto message_pump = []() -> int {
     MSG msg;

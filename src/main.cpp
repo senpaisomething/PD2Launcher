@@ -13,6 +13,7 @@
 #include <vector>
 #include "crc32c/crc32c.h"
 #include "base64.h"
+#include <Windows.h>
 
 //const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-launcher/o";
 const char* BUCKET_URL = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
@@ -84,8 +85,7 @@ void downloadFile(std::string url, std::string filepath) {
 bool hasEnding(std::string const& fullString, std::string const& ending) {
 	if (fullString.length() >= ending.length()) {
 		return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -143,8 +143,7 @@ bool _launch(sciter::string args) {
 	STARTUPINFO info = { sizeof(info) };
 	PROCESS_INFORMATION processInfo;
 	std::wstring commandLine = L"Diablo II.exe " + args;
-	if (CreateProcess(NULL, &commandLine[0], NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
-	{
+	if (CreateProcess(NULL, &commandLine[0], NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo)) {
 		//WaitForSingleObject(processInfo.hProcess, INFINITE);
 		CloseHandle(processInfo.hProcess);
 		CloseHandle(processInfo.hThread);
@@ -188,11 +187,19 @@ bool _update(frame* window, sciter::string args) {
 			}
 		}
 	}
+
 	window->call_function("self.finish_update");
 	return _launch(args);
 }
 
 int uimain(std::function<int()> run) {
+	// ensure only one running instance
+	HANDLE hMutexHandle = CreateMutex(NULL, TRUE, L"pd2.launcher.mutex");
+	if (GetLastError() == ERROR_ALREADY_EXISTS) {
+		MessageBox(NULL, L"The Project Diablo 2 Launcher is already running! Please close it before running it again.", L"Already running!", MB_OK | MB_ICONERROR);
+		return 0;
+	}
+
 	// enable debug mode
 	//SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
 
@@ -200,13 +207,18 @@ int uimain(std::function<int()> run) {
 	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);
 
 	sciter::archive::instance().open(aux::elements_of(resources)); // bind resources[] (defined in "resources.cpp") with the archive
-
 	sciter::om::hasset<frame> pwin = new frame();
 
 	// note: this:://app URL is dedicated to the sciter::archive content associated with the application
 	pwin->load(WSTR("this://app/main.htm"));
-
 	pwin->expand();
 
-	return run();
+	// start the launcher ui
+	int result = run();
+
+	// close the mutex
+	ReleaseMutex(hMutexHandle);
+	CloseHandle(hMutexHandle);
+
+	return result;
 }

@@ -485,8 +485,12 @@
             return storage.root;
         }
 
-        var storage = Storage.open(System.home("settings.db"));
-        var storageRoot = storage.root || initDb(storage);
+        try {
+            var storage = Storage.open(System.home("settings.db"));
+            var storageRoot = storage.root || initDb(storage);
+        } catch (e) {
+            view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
+        }
 
         var body = $(body);
         var modalBackground = $(#modal-background);
@@ -494,6 +498,17 @@
         var lootFilterModal = $(#loot-filter-modal);
         var playButton = $(#play-button);
         var news = $(#news);
+
+        // handle pressing escape
+        event keydown (e) {
+            if(e.keyCode == Event.VK_ESCAPE) {
+                if(modalBackground.attributes.hasClass("is-visible")) {
+                    closeModals();
+                } else {
+                    view.close();
+                }
+            }
+        }
 
         self.ready = function() {
             // connect to debugger
