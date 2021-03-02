@@ -451,7 +451,8 @@
 
             view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
 
-            loadNews();
+            // disable news loading in favor of hard coding
+            //loadNews();
             loadOptions();
         }
 
@@ -606,7 +607,18 @@
 
     <div id="content-wrapper">
         <div id="news">
-            <p id="news-loading">loading...</p>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/Rules">Don't forget trading on any third party site or platform will result in a permanent ban make sure to get up to speed with our server rules to avoid having your account suspended or banned!</a>
+                <div class="date">11-8-2020</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/Trade">Check out our Trade Site at www.ProjectDiablo2.com/trade or the Trading Channels in our discord!</a>
+                <div class="date">11-8-2020</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/">Project Diablo 2 season 1 Awakening has gone live!</a>
+                <div class="date">11-6-2020</div>
+            </div>
         </div>
 
         <div id="buttons-and-gameservers">
