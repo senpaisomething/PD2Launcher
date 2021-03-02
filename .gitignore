@@ -1,5 +1,4 @@
-/src/Build/
+/src/*/Build/
 /.vs/
 /bin/*
 !/bin/.gitkeep
-/src/downloads/
