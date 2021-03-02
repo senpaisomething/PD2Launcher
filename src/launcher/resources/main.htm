@@ -351,88 +351,10 @@
             margin-left: 20dip;
         }
 
-        
-
-        .loot-table.headers {
-            background: rgba(0,0,0,0.9);
-            font-size: 16dip;
-        }
-
-            .loot-table.headers td {
-                border-top: 1px solid @GOLD !important;
-            }
-
-                .loot-table.headers td:first-child {
-                    border-left: 1px solid @GOLD !important;
-                }
-
-                .loot-table.headers td:last-child {
-                    border-right: 1px solid @GOLD !important;
-                }
-
-        .loot-table {
-            width: *;
-            border-spacing: 0;
-        }
-
-            .loot-table input[type=text] {
-                width: 90%;
-                background: rgba(0,0,0,0.7);
-                border: 1px solid @GOLD;
-                padding: 2px 4dip;
-                color: @GOLD;
-                text-selection-caret-color: @GOLD;
-            }
-
-            .loot-table th {
-                font-size: 18dip;
-                background: rgba(0,0,0,0.5);
-                padding: 4dip;
-            }
-
-            .loot-table td {
-                position: relative;
-                border-top: 1px solid @GOLD;
-                padding: 4dip;
-            }
-
-            .loot-table tr:first-child td {
-                border-top: none;
-            }
-
-            .loot-table td:nth-child(1) {
-                text-align: center;
-                width: 10%;
-            }
-
-            .loot-table td:nth-child(2) {
-                width: 40%;
-            }
-
-            .loot-table td:nth-child(3) {
-                width: 35%;
-            }
-
-            .loot-table td:nth-child(4) {
-                text-align: right;
-                width: 15%;
-            }
-
-            .loot-table tr:nth-child(2n) td {
-                background: rgba(0,0,0,0.7);
-            }
-
-            .loot-table input[type="checkbox"] {
-            }
-
-            .loot-table .filter-delete {
-                color: #bb4646;
-            }
-
-            .loot-table.filters {
-                height: *;
-                border: 1px solid @GOLD;
-                overflow-y: auto;
+            .option-container p {
+                font-size: 14dip;
+                margin-left: 25dip;
+                color: @GOLD_DARKER;
             }
 
         label.checkbox, input[type=checkbox] {
@@ -472,6 +394,12 @@
             input[type=checkbox]:checked::after {
                 background-position: 0 -16dip;
             }
+
+            #version {
+                position: absolute;
+                bottom: 5dip;
+                right: 5dip;
+            }
     </style>
     <script type="text/tiscript">
         function initDb(storage) {
@@ -485,9 +413,12 @@
             return storage.root;
         }
 
+        var storage;
+        var storageRoot;
+
         try {
-            var storage = Storage.open(System.home("settings.db"));
-            var storageRoot = storage.root || initDb(storage);
+            storage = Storage.open(System.home("settings.db"));
+            storageRoot = storage.root || initDb(storage);
         } catch (e) {
             view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
         }
@@ -647,7 +578,7 @@
         <table class="links">
             <tr>
                 <td>
-                    <a href="https://projectdiablo2.com">Home</a>
+                    <a href="https://www.projectdiablo2.com">Home</a>
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
@@ -667,7 +598,7 @@
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
-                    <a>Wiki</a>
+                    <a href="https://projectdiablo2.miraheze.org/wiki/Main_Page">Wiki</a>
                 </td>
             </tr>
         </table>
@@ -684,7 +615,7 @@
                 <button id="options-button"></button>
                 <button id="loot-filters-button"></button>
             </div>
-            <div id="gameservers">
+            <!--<div id="gameservers">
                 <p style="margin-top: 36dip; font-size: 16dip;">Server Status coming soon...</p>
                 <!--<span class="gs" title="Chicago">GS1</span>
     <span class="gs gs-online">GS2</span>
@@ -696,7 +627,7 @@
     <span class="gs gs-online">GS8</span>
     <span class="gs gs-online">GS9</span>
     <span class="gs gs-online">GS10</span>-->
-            </div>
+            </div>-->
         </div>
     </div>
 
@@ -707,13 +638,13 @@
         <div class="modal-content">
             <h2 class="option-header">Graphics</h2>
             <div class="option-container">
-                <label class="checkbox"><input type="checkbox" name="windowed" value="-w" class="launcher-option" /> Windowed mode (-w)</label>
+                <label class="checkbox">
+                    <input type="checkbox" name="windowed" value="-w" class="launcher-option" /> Windowed mode (-w)
+                    <p>This will disable upscaling and shaders</p>
+                </label>
             </div>
 
             <h2 class="option-header">Sound</h2>
-            <div class="option-container">
-                <label class="checkbox"><input type="checkbox" name="nosound" value="-ns" class="launcher-option" /> No Sound (-ns)</label>
-            </div>
             <div class="option-container">
                 <label class="checkbox"><input type="checkbox" name="sndbkg" value="-sndbkg" class="launcher-option" /> Sound in Background (-sndbkg)</label>
             </div>
@@ -731,5 +662,6 @@
             <h2>Coming soon...</h2>
         </div>
     </div>
+    <div id="version">v1.1</div>
 </body>
 </html>

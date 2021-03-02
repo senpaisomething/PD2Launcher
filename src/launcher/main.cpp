@@ -8,7 +8,6 @@
 #include <future>
 #include <vector>
 #include <nlohmann/json.hpp>
-#include <curl/curl.h>
 #include <common/common.h>
 #include "sciter-x.h"
 #include "sciter-x-window.hpp"
