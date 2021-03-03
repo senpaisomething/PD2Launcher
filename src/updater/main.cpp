@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
+const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
 
 void checkUpdates(bool forceDownload) {
 	std::cout << "Calling API..." << "\n";
