@@ -1,4 +1,4 @@
-#define CURL_STATICLIB
+﻿#define CURL_STATICLIB
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher/o";
+const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
 
 void checkUpdates(bool forceDownload) {
 	std::cout << "Calling API..." << "\n";

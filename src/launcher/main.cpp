@@ -15,7 +15,7 @@
 
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher/o";
+const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
 const char* CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
 
 std::vector<std::string> dont_update = { "D2.LNG", "BnetLog.txt", "ProjectDiablo.cfg", "ddraw.ini", "default.filter", "loot.filter", "UI.ini" };
@@ -102,9 +102,9 @@ public:
 		SOM_FUNCS(
 			SOM_FUNC(play)
 		)
-	SOM_PASSPORT_END
+		SOM_PASSPORT_END
 
-	bool _update(sciter::string args) {
+		bool _update(sciter::string args) {
 		updateLauncher();
 		updateClientFiles();
 
