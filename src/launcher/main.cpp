@@ -149,7 +149,9 @@ int uimain(std::function<int()> run) {
 	}
 
 	// enable debug mode
-	//SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+#ifdef _DEBUG
+	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+#endif
 
 	// needed for persistant storage
 	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);

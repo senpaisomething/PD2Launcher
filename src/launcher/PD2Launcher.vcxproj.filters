@@ -43,6 +43,7 @@
     <None Include="resources\main.htm">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\css\pure\pure-nr-min.css" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PD2Launcher1.rc">

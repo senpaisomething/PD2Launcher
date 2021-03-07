@@ -50,6 +50,7 @@
     <IntDir>Build\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\thirdparty\sciter-sdk\include;$(SolutionDir)\thirdparty\curl\include;$(SolutionDir)\thirdparty\crc32c\include;$(SolutionDir)\thirdparty\json\include;$(SolutionDir)\src\common\include</IncludePath>
     <TargetName>PD2Launcher</TargetName>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -68,14 +69,15 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(SolutionDir)\thirdparty\curl\lib\libcurl_a.lib;$(SolutionDir)\thirdparty\crc32c\lib\crc32c.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(SolutionDir)\thirdparty\curl\lib\libcurl_a.lib;$(SolutionDir)\thirdparty\crc32c\debug\crc32c.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>$(SolutionDir)\thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
+      <Command>xcopy /Y /Q "$(SolutionDir)thirdparty\sciter-sdk\bin.win\x32\sciter.dll" "$(OutDir)"
+$(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,6 +119,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\css\pure\pure-nr-min.css" />
     <None Include="resources\main.htm">
       <DeploymentContent>true</DeploymentContent>
     </None>
