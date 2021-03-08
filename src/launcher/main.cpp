@@ -103,7 +103,7 @@ std::string ws2s(const std::wstring& wstr)
 
 bool lootFilter(sciter::string author, sciter::string filter, sciter::string download_url, sciter::string url) {
 
-	fs::path defaultFilterPath = (fs::current_path() / "default.filter").lexically_normal();
+	fs::path defaultFilterPath = (fs::current_path() / "loot.filter").lexically_normal();
 	fs::path path = (fs::current_path() / "filters").lexically_normal();
 
 	if (author == std::wstring("local", "local" + strlen("local"))) {
