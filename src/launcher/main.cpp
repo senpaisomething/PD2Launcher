@@ -128,8 +128,11 @@ public:
 		SOM_PASSPORT_END
 
 		bool _update(sciter::string args) {
+
+#ifndef _DEBUG
 		updateLauncher();
 		updateClientFiles();
+#endif
 
 		this->call_function("self.finish_update");
 		return _launch(args);
