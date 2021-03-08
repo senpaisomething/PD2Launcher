@@ -324,7 +324,7 @@
 
                         if (lootFilterLoaded == true){
                             savedLootFilterListLabel.$append(
-                                <span>Loot Filter Updated</span>
+                                <span>Config Saved</span>
                             );
                         }
 
