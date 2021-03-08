@@ -33,6 +33,7 @@
         var lootfilterListDictionary = {};
         var selectedLootFilter = {};
         var lootFilterLoaded = false;
+        var savedLootFilterListLabel = $(#saved);
 
         // handle pressing escape
         event keydown (e) {
@@ -216,6 +217,7 @@
             lootFilterList.clear();
             lootFilterListHeader.clear();
 
+
             if (author != null && author != ""){
                 // Get author object
                 for(var item in jsonFilters) {
@@ -317,6 +319,19 @@
                         storageRoot.options["LootFilterSelection"] = selectedLootFilter.name;
                         storageRoot.options["LootFilterDownloadUrl"] = selectedLootFilter.download_url;
                         storageRoot.options["LootFilterUrl"] = selectedLootFilter.url;
+
+                        savedLootFilterListLabel.clear();
+
+                        if (lootFilterLoaded == true){
+                            savedLootFilterListLabel.$append(
+                                <span>Loot Filter Updated</span>
+                            );
+                        }
+
+                        savedLootFilterListLabel.timer(1000, function(){
+                            savedLootFilterListLabel.clear();
+                            return false;
+                        });
                     });
 
                     if (!lootFilterLoaded){
@@ -325,7 +340,7 @@
                         }
                     }
                 }
-                
+
                 lootFilterLoaded = true;
             }
         }

@@ -150,7 +150,7 @@ button {
     margin-left: -2dip;
 }
 
-.lootfilter-container{
+.lootfilter-container {
     flow: horizontal;
     border-spacing: *;
     width: 95%;
@@ -190,17 +190,17 @@ button {
     padding-bottom: 0;
 }
 
-.author-button-selected, .lootfilter-button-selected{
+.author-button-selected, .lootfilter-button-selected {
     border: 1px solid @GOLD;
 }
 
-.lootfilter-list-container{
+.lootfilter-list-container {
     height: *;
     display: block;
     width: 335dip;
 }
 
-.lootfilter-list-header{
+.lootfilter-list-header {
     height: 30dip;
     width: 335ip;
     display: block;
