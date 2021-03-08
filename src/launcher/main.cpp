@@ -93,6 +93,29 @@ void updateClientFiles() {
 	}
 }
 
+void checkLootFilterFileStructure() {
+	fs::path filtersPath = (fs::current_path() / "filters").lexically_normal();
+	fs::path localPath = (filtersPath / "local").lexically_normal();
+	fs::path onlinePath = (filtersPath / "online").lexically_normal();
+
+	if (!fs::exists(filtersPath)) {
+		fs::create_directories(filtersPath);
+	}
+
+	if (!fs::exists(localPath)) {
+		fs::create_directories(localPath);
+	}
+
+	if (!fs::exists(onlinePath)) {
+		fs::create_directories(onlinePath);
+		fs::path defaultFilterPath = (fs::current_path() / "default.filter").lexically_normal();
+
+		if (fs::exists(defaultFilterPath)) {
+			fs::copy(defaultFilterPath, localPath / "default.filter");
+		}
+	}
+}
+
 class frame : public sciter::window {
 public:
 	frame() : window(SW_MAIN) {}
@@ -152,6 +175,8 @@ int uimain(std::function<int()> run) {
 		return 0;
 	}
 
+	checkLootFilterFileStructure();
+
 	// needed for persistant storage
 	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);
 
@@ -161,6 +186,7 @@ int uimain(std::function<int()> run) {
 	// note: this:://app URL is dedicated to the sciter::archive content associated with the application
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
+
 
 	// start the launcher ui
 	int result = run();

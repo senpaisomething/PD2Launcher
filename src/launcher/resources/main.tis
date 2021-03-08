@@ -146,13 +146,19 @@
 
         function getLootFilterJsonList(){
             if (jsonFilters == null){
+                jsonFilters = [];
                 view.request({
                     url: "https://raw.githubusercontent.com/Project-Diablo-2/LootFilters/main/filters.json",
                     protocol: #basic,
                     output: #json,
                     noCache: false,
                     success: function(data, status) {
-                        jsonFilters = data;
+                        jsonFilters.push({"author":"local", "url":"", "name":"local"});
+
+                        for (var d in data){
+                            jsonFilters.push(d);
+                        }
+                        
                         openLootFiltersModal();
                     },
                     error:function(err, status) {
@@ -171,11 +177,6 @@
 
         function loadLootFilterAuthors(){
             lootFilterAuthors.clear();
-            lootFilterAuthors.$append(
-                        <div.entry>
-                            <span.title>Local</span>
-                        </div>
-            );
 
             if (jsonFilters != null){
                 for(var item in jsonFilters) {
