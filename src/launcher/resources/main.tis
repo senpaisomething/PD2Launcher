@@ -75,6 +75,8 @@
         $(#play-button).onClick = function() {
             playButton.attributes["disabled"] = true;
             playButton.attributes.addClass("disabled");
+
+            view.frame.setLootFilter(storageRoot.options["LootFilterSelectionAuthor"], storageRoot.options["LootFilterSelection"], storageRoot.options["LootFilterDownloadUrl"], storageRoot.options["LootFilterUrl"]);
             view.frame.play(getLaunchArguments());
         }
 
@@ -215,17 +217,26 @@
             lootFilterListHeader.clear();
 
             if (author != null && author != ""){
+                // Get author object
+                for(var item in jsonFilters) {
+                    if (item.author == author){
+                        selectedLootFilterAuthor = item;
+                        break;
+                    }
+                }
+
                 if (author.toLowerCase() == "local"){
-                    // Handle local
-                } else {
-                    // Get author object
-                    for(var item in jsonFilters) {
-                        if (item.author == author){
-                            selectedLootFilterAuthor = item;
-                            break;
+                    var localFiles = view.frame.getLocalFiles();
+                    var filters = [];
+                    for (var item in localFiles){
+                        var f = item + "";
+                        if (f.indexOf(".filter") != -1){
+                            filters.push({"name": f});
                         }
                     }
-
+                    lootfilterListDictionary[author] = filters;
+                    onLootFilterAuthorLoadComplete(selectedLootFilterAuthor, filters);
+                } else {
                     if (lootfilterListDictionary[author] == null){
                         // Lookup author git repo
                         if (selectedLootFilterAuthor != null && selectedLootFilterAuthor.url != null){
@@ -260,17 +271,21 @@
         }
 
         function onLootFilterAuthorLoadComplete(author, filters){
-            var repoStart = author.url.indexOf("/repos/") + 7;
-            var repo = author.url.substr(repoStart);
-            var reposEnd = repo.indexOf("/contents");
-            repo = repo.substr(0, reposEnd);
+            var url = "https://github.com/Project-Diablo-2/LootFilters";
+            if (author.url){
+                var repoStart = author.url.indexOf("/repos/") + 7;
+                var repo = author.url.substr(repoStart);
+                var reposEnd = repo.indexOf("/contents");
+                repo = repo.substr(0, reposEnd);
+                var url = "https://github.com/" + repo;
+            }
 
-            var url = "https://github.com/" + repo;
             lootFilterListHeader.$append(
                 <div>
                     <a href="{url}">{author.name}</a>
                 </div>
             );
+
             if (filters != null){
                 for(var item in filters) {
                     var name = item.name.substr(0, item.name.indexOf(".filter"));
@@ -349,4 +364,12 @@
             }
 
             return args.join(" ");
+        }
+
+        function getLootFilterArgument() {
+            var filterArg = {
+                
+            };
+
+            return filterArg;
         }

@@ -93,6 +93,63 @@ void updateClientFiles() {
 	}
 }
 
+std::string ws2s(const std::wstring& wstr)
+{
+	int count = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), wstr.length(), NULL, 0, NULL, NULL);
+	std::string str(count, 0);
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], count, NULL, NULL);
+	return str;
+}
+
+bool lootFilter(sciter::string author, sciter::string filter, sciter::string download_url, sciter::string url) {
+
+	fs::path defaultFilterPath = (fs::current_path() / "default.filter").lexically_normal();
+	fs::path path = (fs::current_path() / "filters").lexically_normal();
+
+	if (author == std::wstring("local", "local" + strlen("local"))) {
+		// Is local folder
+		path = (path / "local").lexically_normal();
+		fs::path filterPath = (path / filter).lexically_normal();
+
+		if (!fs::exists(filterPath)) {
+			return false;
+		}
+
+		if (fs::exists(defaultFilterPath)) {
+			fs::remove(defaultFilterPath);
+		}
+
+		fs::copy(filterPath, defaultFilterPath);
+	}
+	else {
+		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "") {
+			return false;
+		}
+
+		path = (path / "online").lexically_normal();
+		fs::path authorPath = (path / author).lexically_normal();
+		fs::path filterPath = (authorPath / filter).lexically_normal();
+
+		if (!fs::exists(authorPath)) {
+			fs::create_directories(authorPath);
+		}
+
+		downloadFile(ws2s(download_url), filterPath.string());
+
+		if (!fs::exists(filterPath)) {
+			return false;
+		}
+
+		if (fs::exists(defaultFilterPath)) {
+			fs::remove(defaultFilterPath);
+		}
+
+		fs::copy(filterPath, defaultFilterPath);
+	}
+
+	return true;
+}
+
 void checkLootFilterFileStructure() {
 	fs::path filtersPath = (fs::current_path() / "filters").lexically_normal();
 	fs::path localPath = (filtersPath / "local").lexically_normal();
@@ -123,7 +180,9 @@ public:
 	// passport - lists native functions and properties exposed to script:
 	SOM_PASSPORT_BEGIN(frame)
 		SOM_FUNCS(
-			SOM_FUNC(play)
+			SOM_FUNC(play),
+			SOM_FUNC(setLootFilter),
+			SOM_FUNC(getLocalFiles)
 		)
 		SOM_PASSPORT_END
 
@@ -158,6 +217,25 @@ public:
 		pending_futures.push_back(std::move(fut));
 
 		return true;
+	}
+
+	bool setLootFilter(sciter::string author, sciter::string filter, sciter::string download_url, sciter::string url) {
+		return lootFilter(author, filter, download_url, url);
+	}
+
+	std::vector<std::string> getLocalFiles() {
+		fs::path filtersPath = (fs::current_path() / "filters").lexically_normal();
+		fs::path localPath = (filtersPath / "local").lexically_normal();
+
+		std::vector<std::string> files = {};
+
+		if (fs::exists(localPath)) {
+			for (const auto& entry : fs::directory_iterator(localPath)) {
+				files.push_back(entry.path().filename().string());
+			}
+		}
+
+		return files;
 	}
 
 private:
