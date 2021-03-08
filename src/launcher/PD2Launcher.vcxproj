@@ -120,9 +120,11 @@ $(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.c
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\css\pure\pure-nr-min.css" />
+    <None Include="resources\main.css" />
     <None Include="resources\main.htm">
-      <DeploymentContent>true</DeploymentContent>
+      <DeploymentContent>false</DeploymentContent>
     </None>
+    <None Include="resources\main.tis" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PD2Launcher1.rc" />

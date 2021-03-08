@@ -140,6 +140,10 @@ private:
 
 int uimain(std::function<int()> run) {
 	// TODO: Check for sciter.dll
+	// enable debug mode
+#ifdef _DEBUG
+	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
+#endif
 
 	// ensure only one running instance
 	pd2Mutex = CreateMutex(NULL, TRUE, L"pd2.launcher.mutex");
@@ -147,11 +151,6 @@ int uimain(std::function<int()> run) {
 		MessageBox(NULL, L"The Project Diablo 2 Launcher is already running! Please close it before running it again.", L"Already running!", MB_OK | MB_ICONERROR);
 		return 0;
 	}
-
-	// enable debug mode
-#ifdef _DEBUG
-	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
-#endif
 
 	// needed for persistant storage
 	SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES, ALLOW_FILE_IO | ALLOW_SOCKET_IO | ALLOW_EVAL | ALLOW_SYSINFO);

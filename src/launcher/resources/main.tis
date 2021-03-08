@@ -1,0 +1,278 @@
+﻿ function initDb(storage) {
+            storage.root = {
+                options: {
+                    skiptobnet: true
+                },
+                filters: []
+            }
+
+            return storage.root;
+        }
+
+        var storage;
+        var storageRoot;
+
+        try {
+            storage = Storage.open(System.home("settings.db"));
+            storageRoot = storage.root || initDb(storage);
+        } catch (e) {
+            view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
+        }
+
+        var body = $(body);
+        var modalBackground = $(#modal-background);
+        var optionsModal = $(#options-modal);
+        var lootFilterModal = $(#loot-filter-modal);
+        var playButton = $(#play-button);
+        var news = $(#news);
+        var jsonFilters = null;
+        var lootFilterAuthors = $(#lootfilter-authors);
+        var selectedLootFilterAuthor = "";
+        var lootFilterList = $(#lootfilter-list);
+        var lootfilterListDictionary = {};
+
+        // handle pressing escape
+        event keydown (e) {
+            if(e.keyCode == Event.VK_ESCAPE) {
+                if(modalBackground.attributes.hasClass("is-visible")) {
+                    closeModals();
+                } else {
+                    view.close();
+                }
+            }
+        }
+
+        self.ready = function() {
+            // connect to debugger
+            if( view.connectToInspector ) view.connectToInspector();
+
+            // positioning the window in the middle of the screen:
+            var (sx,sy,sw,sh) = view.screenBox(#workarea,#rectw); // getting screen/monitor size
+            var (w,h) = (self.toPixels(750dip),self.toPixels(550dip))
+
+            view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
+
+            // disable news loading in favor of hard coding
+            //loadNews();
+            loadOptions();
+        }
+
+        // function that is used by cpp for updating the
+        self.finish_update = function() {
+            delete playButton.attributes["disabled"];
+            playButton.attributes.removeClass("disabled");
+        }
+
+        self.on("click", "a[href^=http]", function(evt) {
+            var href = this.attributes["href"];
+            Sciter.launch(href); // will open the url in default browser
+            return true; // consume the event
+        });
+
+        $(#play-button).onClick = function() {
+            playButton.attributes["disabled"] = true;
+            playButton.attributes.addClass("disabled");
+            view.frame.play(getLaunchArguments());
+        }
+
+        $(#options-button).onClick = function() {
+            modalBackground.attributes.addClass("is-visible");
+            optionsModal.attributes.addClass("is-visible");
+        }
+
+        $(#loot-filters-button).onClick = function() {
+           getLootFilterJsonList(); 
+           
+        }
+
+        // deal with clicking the modal background
+        $(#modal-background).onClick = function() {
+            closeModals();
+        }
+
+        // deal with all the modal close buttons
+        var modalCloseButtons = $$(.modal-close);
+        for(var modalCloseButton in modalCloseButtons) {
+            modalCloseButton.onClick = function() {
+                closeModals();
+            }
+        }
+
+        // deal with options saving
+        event change $(input.launcher-option) {
+            switch(this.attributes#type) {
+                case "checkbox":
+                    storageRoot.options[this.attributes#name] = this.checked;
+                    break;
+            }
+        }
+
+        function closeModals() {
+            modalBackground.attributes.removeClass("is-visible");
+
+            var modals = $$(.modal);
+            for (var modal in modals) {
+                modal.attributes.removeClass("is-visible");
+            }
+        }
+
+        function loadNews() {
+            view.request({
+                url: "https://storage.googleapis.com/pd2-launcher/news.json",
+                protocol: #basic,
+                output: #json,
+                noCache: true,
+                success: function(data, status) {
+                    news.clear();
+
+                    for(var item in data.items) {
+                        news.$append(
+                            <div.entry>
+                                <a.title href="{item.url}">{item.header}</a>
+                                <div.date>{item.date}</div>
+                            </div>
+                        );
+                    }
+                },
+                error:function(err, status) {
+
+                }
+            });
+        }
+
+        function getLootFilterJsonList(){
+            if (jsonFilters == null){
+                view.request({
+                    url: "https://raw.githubusercontent.com/Project-Diablo-2/LootFilters/main/filters.json",
+                    protocol: #basic,
+                    output: #json,
+                    noCache: false,
+                    success: function(data, status) {
+                        jsonFilters = data;
+                        openLootFiltersModal();
+                    },
+                    error:function(err, status) {
+                    }
+                });
+            } else {
+                openLootFiltersModal();
+            }
+        }
+
+        function openLootFiltersModal(){
+            loadLootFilterAuthors();
+            modalBackground.attributes.addClass("is-visible");
+            lootFilterModal.attributes.addClass("is-visible");
+        }
+
+        function loadLootFilterAuthors(){
+            lootFilterAuthors.clear();
+            lootFilterAuthors.$append(
+                        <div.entry>
+                            <span.title>Local</span>
+                        </div>
+            );
+
+            if (jsonFilters != null){
+                for(var item in jsonFilters) {
+                    lootFilterAuthors.$append(
+                        <div.entry>
+                            <button id="{item.author}btn" author="{item.author}">{item.author}</button>
+                        </div>
+                    );
+
+                    $(#{item.author}btn).on("click", function(evt, btn){
+                        selectLootFilterAuthor(btn.html);
+                    });
+                }
+            }
+        }
+
+        function selectLootFilterAuthor(author){
+            selectedLootFilterAuthor = null;
+            lootFilterList.clear();
+
+            if (author != null && author != ""){
+                if (author.toLowerCase() == "local"){
+                    // Handle local
+                } else {
+                    // Get author object
+                    for(var item in jsonFilters) {
+                        if (item.author == author){
+                            selectedLootFilterAuthor = item;
+                            break;
+                        }
+                    }
+
+                    if (lootfilterListDictionary[author] == null){
+                        // Lookup author git repo
+                        if (selectedLootFilterAuthor != null && selectedLootFilterAuthor.url != null){
+                            view.request({
+                            url: selectedLootFilterAuthor.url,
+                            protocol: #basic,
+                            output: #json,
+                            noCache: false,
+                            success: function(data, status) {
+                                var filters = [];
+                                for (var item in data){
+                                    if (item.name.indexOf(".filter") != -1){
+                                        filters.push(item);
+                                    }
+                                }
+
+                                // Cache loaded loot filters to save data to github
+                                lootfilterListDictionary[author] = filters;
+                                // We have now loaded the loot filters, show them!
+                                onLootFilterAuthorLoadComplete(filters);
+                            },
+                            error:function(err, status) {
+                            }
+                        });
+                        }                     
+                    } else {
+                        // Already loaded before
+                        onLootFilterAuthorLoadComplete(lootfilterListDictionary[author]);
+                    }
+                }
+            }
+        }
+
+        function onLootFilterAuthorLoadComplete(filters){
+            if (filters != null){
+                for(var item in filters) {
+                    lootFilterList.$append(
+                        <div.entry onClick="">
+                            <span.title>{item.name}</span>
+                        </div>
+                    );
+                }
+            }
+        }
+
+        function loadOptions() {
+            var options = storageRoot.options;
+
+            for(var key in options) {
+                var value = options[key];
+                var element = self.select("input.launcher-option[name='" + key + "']");
+
+                switch(element.attributes#type) {
+                    case "checkbox":
+                        element.checked = value;
+                        break;
+                }
+            }
+        }
+
+        function getLaunchArguments() {
+            var args = [];
+            var options = $$(input.launcher-option);
+
+            for(var option in options) {
+                if(option.attributes#type == "checkbox" && option.checked) {
+                    args.push(option.value);
+                }
+            }
+
+            return args.join(" ");
+        }

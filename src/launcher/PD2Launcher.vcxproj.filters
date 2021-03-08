@@ -44,6 +44,8 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\css\pure\pure-nr-min.css" />
+    <None Include="resources\main.css" />
+    <None Include="resources\main.tis" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PD2Launcher1.rc">

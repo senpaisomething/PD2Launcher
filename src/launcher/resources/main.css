@@ -1,0 +1,430 @@
+﻿@const GOLD: #998363;
+@const GOLD_LIGHTER: #b39a74;
+@const GOLD_DARKER: #877458;
+
+@font-face {
+    font-family: exocet-medium;
+    src: url('font/exocet-blizzard-medium.ttf');
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    vertical-scrollbar: my-v-scrollbar;
+}
+
+body {
+    background: url('img/bg.jpg');
+    background-size: 100%;
+    font-family: exocet-medium;
+    width: 750dip;
+    color: @GOLD_LIGHTER;
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: @GOLD_LIGHTER;
+}
+
+    a:hover {
+        color: @GOLD;
+    }
+
+button {
+    border: none;
+    font-family: inherit;
+}
+
+.window-btn {
+    display: block;
+    position: absolute;
+    width: 24dip;
+    height: 24dip;
+}
+
+    .window-btn:hover {
+        cursor: pointer;
+    }
+
+    .window-btn.close {
+        background: url('img/close.jpg');
+        background-size: 100%;
+        top: 20dip;
+        right: 20dip;
+    }
+
+        .window-btn.close:active {
+            background: url('img/close-pressed.jpg');
+            background-size: 100%;
+        }
+
+    .window-btn.minimize {
+        background: url('img/minimize.jpg');
+        background-size: 100%;
+        top: 20dip;
+        right: 48dip;
+    }
+
+        .window-btn.minimize:active {
+            background: url('img/minimize-pressed.jpg');
+            background-size: 100%;
+        }
+
+#logo {
+    behavior: layer;
+    width: 300dip;
+    height: auto;
+    padding-top: 15dip;
+    padding-bottom: 5dip;
+}
+
+#header {
+    text-align: center;
+}
+
+    #header .links {
+        width: 85%;
+        margin: 0 auto;
+        padding-top: 10dip;
+    }
+
+        #header .links a {
+            color: inherit;
+            font-size: 18dip;
+            text-transform: uppercase;
+        }
+
+            #header .links a:hover {
+                color: #c7baa9;
+            }
+
+#news {
+    border: 2px solid @GOLD;
+    border-right: none;
+    border-radius: 2dip;
+    width: 95%;
+    margin: 0 auto;
+    height: 225dip;
+    margin-top: 10dip;
+    background: rgba(0,0,0,.5);
+    overflow-y: scroll;
+}
+
+    #news .entry {
+        padding: 8dip;
+        border-bottom: 1px solid #75654f;
+    }
+
+        #news .entry:last-child {
+            border-bottom: none;
+        }
+
+        #news .entry .title {
+            font-size: 18dip;
+        }
+
+        #news .entry .date {
+            color: #666;
+        }
+
+#news-loading {
+    text-align: center;
+    height: *;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+#buttons-and-gameservers {
+    flow: horizontal;
+    border-spacing: *;
+    width: 95%;
+    margin: 0 auto;
+    height: 150dip;
+    margin-top: 12dip;
+}
+
+#buttons {
+    width: 301dip;
+    display: block;
+    margin-left: -2dip;
+}
+
+.lootfilter-author-list {
+    width: 201dip;
+    border: 2px solid @GOLD;
+    margin-left: -2dip;
+    border-right: none;
+    border-radius: 2dip;
+    display: block;
+    overflow-y: scroll;
+    background: rgba(0,0,0,0.75);
+    height: 100%;
+    text-align: center;
+    /*flow: horizontal-wrap;*/
+    padding: 3dip;
+    padding-bottom: 0;
+}
+
+.lootfilter-list {
+    border: 2px solid @GOLD;
+    border-right: none;
+    border-radius: 2dip;
+    width: 305dip;
+    display: block;
+    overflow-y: scroll;
+    background: rgba(0,0,0,0.75);
+    height: 100%;
+    text-align: center;
+    /*flow: horizontal-wrap;*/
+    padding: 3dip;
+    padding-bottom: 0;
+}
+
+
+#play-button {
+    background: url("img/play.jpg");
+    background-size: 100%;
+    width: 272dip;
+    height: 32dip;
+    padding-bottom: 10dip;
+}
+
+    #play-button.disabled {
+        background: url("img/updating-disabled.jpg");
+        background-size: 100%;
+    }
+
+    #play-button:active {
+        background: url("img/play-pressed.jpg");
+        background-size: 100%;
+    }
+
+#options-button {
+    background: url("img/options.jpg");
+    background-size: 100%;
+    width: 272dip;
+    height: 32dip;
+}
+
+    #options-button:active {
+        background: url("img/options-pressed.jpg");
+        background-size: 100%;
+    }
+
+#loot-filters-button {
+    background: url("img/loot.jpg");
+    background-size: 100%;
+    width: 272dip;
+    height: 32dip;
+}
+
+    #loot-filters-button:active {
+        background: url("img/loot-pressed.jpg");
+        background-size: 100%;
+    }
+
+#gameservers {
+    border: 2px solid @GOLD;
+    border-right: none;
+    border-radius: 2dip;
+    width: 405dip;
+    display: block;
+    overflow-y: scroll;
+    background: rgba(0,0,0,0.75);
+    height: 95dip;
+    text-align: center;
+    /*flow: horizontal-wrap;*/
+    padding: 3dip;
+    padding-bottom: 0;
+}
+
+    #gameservers .gs {
+        background: url("img/gs.jpg");
+        width: 46dip;
+        height: 20dip;
+        margin-right: 3dip;
+        margin-bottom: 3dip;
+        text-align: center;
+        line-height: 20dip;
+    }
+
+    #gameservers .gs-online {
+        background: url("img/gs-online.jpg");
+    }
+
+    #gameservers .gs-offline {
+        background: url("img/gs-offline.jpg");
+    }
+
+@set my-v-scrollbar {
+    .prev {
+        background-image: url("img/thin_prev.jpg");
+        background-size: 14dip 10dip;
+        background-position: 1px -1dip;
+    }
+
+    .next {
+        background-image: url("img/thin_next.jpg");
+        background-size: 14dip 10dip;
+        background-position: 1px -1dip;
+    }
+
+    .prev, .next {
+        background-repeat: no-repeat;
+        border-left: 2px solid @GOLD;
+        border-right: 2px solid @GOLD;
+        height: 10dip;
+        overflow: hidden;
+    }
+
+    .base,
+    .next-page,
+    .prev-page {
+        width: 18dip;
+        border-left: 2px solid @GOLD;
+        border-right: 2px solid @GOLD;
+        background: rgba(0,0,0,0.5);
+    }
+
+    .slider {
+        background: @GOLD;
+        box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.5), inset 0 0 0px 2px #000;
+        border-left: 2px solid @GOLD;
+        border-right: 2px solid @GOLD;
+    }
+
+    .base {
+        width: 16dip;
+    }
+
+    .corner {
+        background-color: transparent;
+    }
+}
+
+#modal-background {
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.75);
+    visibility: hidden;
+    opacity: 0;
+}
+
+    #modal-background.is-visible {
+        visibility: visible;
+        opacity: 1;
+    }
+
+.modal {
+    position: absolute;
+    z-index: 1500;
+    left: 8%;
+    right: 8%;
+    top: 8%;
+    bottom: 8%;
+    background: url("img/bg_plain.jpg");
+    background-repeat: stretch;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    flow: vertical;
+}
+
+    .modal.is-visible {
+        visibility: visible;
+        opacity: 1;
+    }
+
+.modal-close {
+    position: absolute;
+    font-size: 30dip;
+    right: 15dip;
+    top: 10dip;
+    z-index: 5000;
+}
+
+    .modal-close:hover {
+        cursor: pointer;
+    }
+
+.modal-title {
+    padding-top: 15dip;
+    padding-bottom: 15dip;
+    margin: 0 15dip;
+    font-size: 20dip;
+    border-bottom: 1px solid @GOLD_DARKER;
+}
+
+.modal-content {
+    padding: 20dip;
+    height: *;
+}
+
+.options-modal .modal-content {
+    font-size: 14dip;
+}
+
+.option-header {
+    font-size: 16dip;
+    margin-bottom: 10dip;
+}
+
+.option-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+}
+
+    .option-container p {
+        font-size: 14dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+label.checkbox, input[type=checkbox] {
+    cursor: pointer;
+}
+
+label.checkbox {
+    font-size: 16dip;
+}
+
+input[type=checkbox]:root {
+    height: 0;
+    width: 0;
+}
+
+input[type=checkbox]::after {
+    background-image: url("img/checkbox.png");
+    background-size: 16dip;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding-left: 21dip;
+    height: 16dip;
+    width: 16dip;
+    display: inline-block;
+    line-height: 16dip;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 16dip;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type=checkbox]:checked::after {
+    background-position: 0 -16dip;
+}
+
+#version {
+    position: absolute;
+    bottom: 5dip;
+    right: 5dip;
+}
