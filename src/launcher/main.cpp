@@ -194,11 +194,13 @@ public:
 
 		bool _update(sciter::string args) {
 
+#ifndef _DEBUG
 		updateClientFiles();
+#endif
 
 		this->call_function("self.finish_update");
 		return _launch(args);
-}
+	}
 
 	bool _launch(sciter::string args) {
 		STARTUPINFO info = { sizeof(info) };
@@ -271,7 +273,9 @@ int uimain(std::function<int()> run) {
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
 
+#ifndef _DEBUG
 	updateLauncher();
+#endif
 
 	// start the launcher ui
 	int result = run();
