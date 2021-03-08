@@ -279,7 +279,7 @@
                 var repo = author.url.substr(repoStart);
                 var reposEnd = repo.indexOf("/contents");
                 repo = repo.substr(0, reposEnd);
-                var url = "https://github.com/" + repo;
+                url = "https://github.com/" + repo;
             }
 
             lootFilterListHeader.$append(
