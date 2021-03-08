@@ -150,6 +150,15 @@ button {
     margin-left: -2dip;
 }
 
+.lootfilter-container{
+    flow: horizontal;
+    border-spacing: *;
+    width: 95%;
+    margin: 0 auto;
+    height: *;
+    margin-top: 12dip
+}
+
 .lootfilter-author-list {
     width: 201dip;
     border: 2px solid @GOLD;
@@ -159,8 +168,8 @@ button {
     display: block;
     overflow-y: scroll;
     background: rgba(0,0,0,0.75);
-    height: 100%;
-    text-align: center;
+    height: *;
+    text-align: left;
     /*flow: horizontal-wrap;*/
     padding: 3dip;
     padding-bottom: 0;
@@ -170,15 +179,30 @@ button {
     border: 2px solid @GOLD;
     border-right: none;
     border-radius: 2dip;
-    width: 305dip;
+    width: *;
     display: block;
     overflow-y: scroll;
     background: rgba(0,0,0,0.75);
-    height: 100%;
-    text-align: center;
+    height: *;
+    text-align: left;
     /*flow: horizontal-wrap;*/
     padding: 3dip;
     padding-bottom: 0;
+}
+
+.author-button-selected, .lootfilter-button-selected{
+    border: 1px solid @GOLD;
+}
+
+.lootfilter-list-container{
+    height: *;
+    display: block;
+    width: 335dip;
+}
+
+.lootfilter-list-header{
+    height: 30dip;
+    overflow: hidden;
 }
 
 

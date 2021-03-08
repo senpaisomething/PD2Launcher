@@ -29,6 +29,7 @@
         var lootFilterAuthors = $(#lootfilter-authors);
         var selectedLootFilterAuthor = "";
         var lootFilterList = $(#lootfilter-list);
+        var lootFilterListHeader = $(#lootfilter-header);
         var lootfilterListDictionary = {};
 
         // handle pressing escape
@@ -176,13 +177,23 @@
             if (jsonFilters != null){
                 for(var item in jsonFilters) {
                     lootFilterAuthors.$append(
-                        <div.entry>
-                            <button id="{item.author}btn" author="{item.author}">{item.author}</button>
+                        <div id="{item.author}btn" class="author-button">
+                            <span id="{item.author}btntext">{item.author}</span>
                         </div>
                     );
 
+                    $(#{item.author}btntext).on("click", function(evt, btn){
+                        btn.parent.postEvent("click");
+                    });
+
                     $(#{item.author}btn).on("click", function(evt, btn){
-                        selectLootFilterAuthor(btn.html);
+                        var buttons = $$(.author-button);
+                        for (var button in buttons) {
+                            button.attributes.removeClass("author-button-selected");
+                        }
+                        
+                        btn.attributes.addClass("author-button-selected");
+                        selectLootFilterAuthor(btn.id.substr(0, btn.id.length - 3));
                     });
                 }
             }
@@ -191,6 +202,7 @@
         function selectLootFilterAuthor(author){
             selectedLootFilterAuthor = null;
             lootFilterList.clear();
+            lootFilterListHeader.clear();
 
             if (author != null && author != ""){
                 if (author.toLowerCase() == "local"){
@@ -223,7 +235,7 @@
                                 // Cache loaded loot filters to save data to github
                                 lootfilterListDictionary[author] = filters;
                                 // We have now loaded the loot filters, show them!
-                                onLootFilterAuthorLoadComplete(filters);
+                                onLootFilterAuthorLoadComplete(selectedLootFilterAuthor, filters);
                             },
                             error:function(err, status) {
                             }
@@ -231,20 +243,46 @@
                         }                     
                     } else {
                         // Already loaded before
-                        onLootFilterAuthorLoadComplete(lootfilterListDictionary[author]);
+                        onLootFilterAuthorLoadComplete(selectedLootFilterAuthor, lootfilterListDictionary[author]);
                     }
                 }
             }
         }
 
-        function onLootFilterAuthorLoadComplete(filters){
+        function onLootFilterAuthorLoadComplete(author, filters){
+            var repoStart = author.url.indexOf("/repos/") + 7;
+            var repo = author.url.substr(repoStart);
+            var reposEnd = repo.indexOf("/contents");
+            repo = repo.substr(0, reposEnd);
+
+            var url = "https://github.com/" + repo;
+            lootFilterListHeader.$append(
+                <div>
+                    <a href="{url}">{author.name}</a>
+                </div>
+            );
             if (filters != null){
                 for(var item in filters) {
+                    var name = item.name.substr(0, item.name.indexOf(".filter"));
                     lootFilterList.$append(
-                        <div.entry onClick="">
-                            <span.title>{item.name}</span>
+                        <div id="{name}btn" class="lootfilter-button">
+                            <span id="{name}btntext">{item.name}</span>
                         </div>
                     );
+
+                    $(#{name}btntext).on("click", function(evt, btn){
+                        btn.parent.postEvent("click");
+                    });
+
+                    $(#{name}btn).on("click", function(evt, btn){
+                        var buttons = $$(.lootfilter-button);
+                        for (var button in buttons) {
+                            button.attributes.removeClass("lootfilter-button-selected");
+                        }
+                        
+                        btn.attributes.addClass("lootfilter-button-selected");
+                        //selectLootFilterAuthor(btn.id.substr(0, btn.id.length - 3));
+                    });
                 }
             }
         }
