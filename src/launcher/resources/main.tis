@@ -31,6 +31,8 @@
         var lootFilterList = $(#lootfilter-list);
         var lootFilterListHeader = $(#lootfilter-header);
         var lootfilterListDictionary = {};
+        var selectedLootFilter = {};
+        var lootFilterLoaded = false;
 
         // handle pressing escape
         event keydown (e) {
@@ -110,6 +112,7 @@
 
         function closeModals() {
             modalBackground.attributes.removeClass("is-visible");
+            lootFilterLoaded = false;
 
             var modals = $$(.modal);
             for (var modal in modals) {
@@ -195,6 +198,12 @@
                         btn.attributes.addClass("author-button-selected");
                         selectLootFilterAuthor(btn.id.substr(0, btn.id.length - 3));
                     });
+
+                    if (!lootFilterLoaded){
+                        if (item.author == storageRoot.options["LootFilterSelectionAuthor"]){
+                            $(#{item.author}btn).postEvent("click");
+                        }
+                    }
                 }
             }
         }
@@ -279,12 +288,38 @@
                         for (var button in buttons) {
                             button.attributes.removeClass("lootfilter-button-selected");
                         }
+
+                        for (var f in lootfilterListDictionary[selectedLootFilterAuthor.author]){
+                            var filterName = f.name.substr(0, f.name.indexOf(".filter"));
+                            if (filterName == btn.id.substr(0, btn.id.length - 3)){
+                                selectedLootFilter = f;
+                            }
+                        }
                         
                         btn.attributes.addClass("lootfilter-button-selected");
-                        //selectLootFilterAuthor(btn.id.substr(0, btn.id.length - 3));
+                        storageRoot.options["LootFilterSelectionAuthor"] = selectedLootFilterAuthor.author;
+                        storageRoot.options["LootFilterSelection"] = selectedLootFilter.name;
+                        storageRoot.options["LootFilterDownloadUrl"] = selectedLootFilter.download_url;
+                        storageRoot.options["LootFilterUrl"] = selectedLootFilter.url;
                     });
+
+                    if (!lootFilterLoaded){
+                        if (item.name == storageRoot.options["LootFilterSelection"]){
+                            $(#{name}btn).postEvent("click");
+                        }
+                    }
                 }
+                
+                lootFilterLoaded = true;
             }
+        }
+
+        function loadLootFilterSave(){
+            var author = storageRoot.options["LootFilterSelectionAuthor"];
+            if (author != null && author != ""){
+
+            }
+            var filter = storageRoot.options["LootFilterSelection"];
         }
 
         function loadOptions() {
