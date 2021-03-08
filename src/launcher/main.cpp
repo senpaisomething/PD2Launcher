@@ -161,15 +161,21 @@ void checkLootFilterFileStructure() {
 
 	if (!fs::exists(localPath)) {
 		fs::create_directories(localPath);
-	}
 
-	if (!fs::exists(onlinePath)) {
-		fs::create_directories(onlinePath);
 		fs::path defaultFilterPath = (fs::current_path() / "default.filter").lexically_normal();
+		fs::path lootFilterPath = (fs::current_path() / "loot.filter").lexically_normal();
 
 		if (fs::exists(defaultFilterPath)) {
 			fs::copy(defaultFilterPath, localPath / "default.filter");
 		}
+
+		if (fs::exists(lootFilterPath)) {
+			fs::copy(lootFilterPath, localPath / "loot.filter");
+		}
+	}
+
+	if (!fs::exists(onlinePath)) {
+		fs::create_directories(onlinePath);
 	}
 }
 
@@ -192,7 +198,7 @@ public:
 
 		this->call_function("self.finish_update");
 		return _launch(args);
-	}
+}
 
 	bool _launch(sciter::string args) {
 		STARTUPINFO info = { sizeof(info) };
