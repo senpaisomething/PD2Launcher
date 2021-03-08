@@ -188,10 +188,7 @@ public:
 
 		bool _update(sciter::string args) {
 
-#ifndef _DEBUG
-		updateLauncher();
 		updateClientFiles();
-#endif
 
 		this->call_function("self.finish_update");
 		return _launch(args);
@@ -268,6 +265,7 @@ int uimain(std::function<int()> run) {
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
 
+	updateLauncher();
 
 	// start the launcher ui
 	int result = run();
