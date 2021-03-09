@@ -119,7 +119,7 @@ bool lootFilter(sciter::string author, sciter::string filter, sciter::string dow
 			fs::remove(defaultFilterPath);
 		}
 
-		fs::copy(filterPath, defaultFilterPath);
+		fs::create_symlink(filterPath, defaultFilterPath);
 	}
 	else {
 		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "") {
