@@ -284,7 +284,7 @@
 
             lootFilterListHeader.$append(
                 <div>
-                    <a href="{url}">{author.name}</a>
+                    <a href="{url}">&#128712; - {author.name}</a>
                 </div>
             );
 
