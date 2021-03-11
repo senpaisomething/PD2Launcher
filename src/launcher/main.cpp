@@ -18,6 +18,8 @@ namespace fs = std::filesystem;
 const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
 const char* CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
 
+std::string lastFilterDownload = "";
+
 std::vector<std::string> dont_update = { "D2.LNG", "BnetLog.txt", "ProjectDiablo.cfg", "ddraw.ini", "default.filter", "loot.filter", "UI.ini" };
 HANDLE pd2Mutex;
 
@@ -122,7 +124,7 @@ bool lootFilter(sciter::string author, sciter::string filter, sciter::string dow
 		fs::create_symlink(filterPath, defaultFilterPath);
 	}
 	else {
-		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "") {
+		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "" || lastFilterDownload == ws2s(download_url)) {
 			return false;
 		}
 
@@ -145,6 +147,8 @@ bool lootFilter(sciter::string author, sciter::string filter, sciter::string dow
 		}
 
 		fs::copy(filterPath, defaultFilterPath);
+
+		lastFilterDownload = ws2s(download_url);
 	}
 
 	return true;
