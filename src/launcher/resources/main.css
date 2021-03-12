@@ -101,7 +101,6 @@ button {
 
 #news {
     border: 2px solid @GOLD;
-    border-right: none;
     border-radius: 2dip;
     width: 95%;
     margin: 0 auto;
@@ -156,17 +155,16 @@ button {
     width: 95%;
     margin: 0 auto;
     height: *;
-    margin-top: 12dip
+    margin-top: 12dip;
 }
 
 .lootfilter-author-list {
     width: 201dip;
     border: 2px solid @GOLD;
     margin-left: -2dip;
-    border-right: none;
     border-radius: 2dip;
     display: block;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: rgba(0,0,0,0.75);
     height: *;
     text-align: left;
@@ -177,11 +175,10 @@ button {
 
 .lootfilter-list {
     border: 2px solid @GOLD;
-    border-right: none;
     border-radius: 2dip;
     width: *;
     display: block;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: rgba(0,0,0,0.75);
     height: *;
     text-align: left;
@@ -284,24 +281,21 @@ button {
     }
 
 @set my-v-scrollbar {
+    .prev, .next {
+        background-repeat: no-repeat;
+        background-size: 14dip 10dip;
+        background-position: 1px 0px;
+        border-left: 2px solid @GOLD;
+        height: 11dip;
+        overflow: hidden;
+    }
+
     .prev {
         background-image: url("img/thin_prev.jpg");
-        background-size: 14dip 10dip;
-        background-position: 1px -1dip;
     }
 
     .next {
         background-image: url("img/thin_next.jpg");
-        background-size: 14dip 10dip;
-        background-position: 1px -1dip;
-    }
-
-    .prev, .next {
-        background-repeat: no-repeat;
-        border-left: 2px solid @GOLD;
-        border-right: 2px solid @GOLD;
-        height: 10dip;
-        overflow: hidden;
     }
 
     .base,
@@ -309,7 +303,6 @@ button {
     .prev-page {
         width: 18dip;
         border-left: 2px solid @GOLD;
-        border-right: 2px solid @GOLD;
         background: rgba(0,0,0,0.5);
     }
 
@@ -317,7 +310,6 @@ button {
         background: @GOLD;
         box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.5), inset 0 0 0px 2px #000;
         border-left: 2px solid @GOLD;
-        border-right: 2px solid @GOLD;
     }
 
     .base {
@@ -366,7 +358,14 @@ button {
         opacity: 1;
     }
 
-.modal-close {
+.modal-titlebar {
+    padding: 15dip;
+    font-size: 20dip;
+    border-bottom: 2px solid @GOLD_DARKER;
+    position: relative;
+}
+
+.modal-title-right {
     position: absolute;
     font-size: 30dip;
     right: 15dip;
@@ -374,25 +373,20 @@ button {
     z-index: 5000;
 }
 
+.modal-close {
+    display: inline;
+}
+
     .modal-close:hover {
         cursor: pointer;
     }
 
-.modal-title {
-    padding-top: 15dip;
-    padding-bottom: 15dip;
-    margin: 0 15dip;
-    font-size: 20dip;
-    border-bottom: 1px solid @GOLD_DARKER;
-}
-
 .modal-content {
     padding: 20dip;
+    margin-right: 2dip;
     height: *;
-}
-
-.options-modal .modal-content {
     font-size: 14dip;
+    overflow: auto;
 }
 
 .option-header {
@@ -405,7 +399,8 @@ button {
     margin-left: 20dip;
 }
 
-    .option-container p {
+    .option-container span {
+        display: block;
         font-size: 14dip;
         margin-left: 25dip;
         color: @GOLD_DARKER;

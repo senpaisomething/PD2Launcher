@@ -73,15 +73,26 @@
     </div>
 
     <div id="modal-background"></div>
-    <div id="options-modal" class="modal">
-        <div class="modal-close">x</div>
-        <div class="modal-title">Options</div>
+    <div id="options-modal" class="modal scrollable">
+        <div class="modal-titlebar">
+            <div class="modal-title-left">Options</div>
+            <div class="modal-title-right">
+                <div class="modal-close">x</div>
+            </div>
+        </div>
         <div class="modal-content">
+            <h2 class="option-header">DDraw</h2>
+            <select>
+                <option value="asd">800x600</option>
+                <option value="asd">1024x768</option>
+                <option value="asd">Custom</option>
+            </select>
+
             <h2 class="option-header">Graphics</h2>
             <div class="option-container">
                 <label class="checkbox">
                     <input type="checkbox" name="windowed" value="-w" class="launcher-option" /> Windowed mode (-w)
-                    <p>This will disable upscaling and shaders</p>
+                    <span>This will disable upscaling and shaders</span>
                 </label>
             </div>
 
@@ -97,10 +108,12 @@
         </div>
     </div>
     <div id="loot-filter-modal" class="modal">
-        <div class="modal-close">x</div>
-        <div class="modal-title">
-            <div style="float: left; width: auto;">Loot Filter Profiles</div>
-            <div style="float: right; width: auto; margin-right: 30px;"><a href="https://github.com/Project-Diablo-2/LootFilters">&#128712;</a></div>
+        <div class="modal-titlebar">
+            <div class="modal-title-left">Loot Filter Profiles</div>
+            <div class="modal-title-right">
+                <a href="https://github.com/Project-Diablo-2/LootFilters">&#128712;</a>
+                <div class="modal-close">x</div>
+            </div>
         </div>
         <div class="modal-content" style="text-align: center;">
             <div class="lootfilter-container" style="height: auto">
