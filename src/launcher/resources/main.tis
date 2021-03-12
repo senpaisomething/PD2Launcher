@@ -19,6 +19,11 @@ try {
 	view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
 }
 
+// Fixes update to latest version.
+if (storageRoot.lootfilters == null){
+	storageRoot.lootfilters = {};
+}
+
 var body = $(body);
 var modalBackground = $(#modal-background);
 var optionsModal = $(#options-modal);
