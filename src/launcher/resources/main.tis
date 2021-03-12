@@ -3,7 +3,7 @@
 		options: {
 			skiptobnet: true
 		},
-		lootfilters: []
+		lootfilters: {}
 	}
 
 	return storage.root;
