@@ -12,6 +12,7 @@
 #include "sciter-x.h"
 #include "sciter-x-window.hpp"
 #include "resources.cpp"
+#include "inihelper.h"
 
 namespace fs = std::filesystem;
 
@@ -95,8 +96,7 @@ void updateClientFiles() {
 	}
 }
 
-std::string ws2s(const std::wstring& wstr)
-{
+std::string ws2s(const std::wstring& wstr) {
 	int count = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), wstr.length(), NULL, 0, NULL, NULL);
 	std::string str(count, 0);
 	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], count, NULL, NULL);
@@ -104,7 +104,6 @@ std::string ws2s(const std::wstring& wstr)
 }
 
 bool lootFilter(sciter::string author, sciter::string filter, sciter::string download_url, sciter::string url) {
-
 	fs::path defaultFilterPath = (fs::current_path() / "loot.filter").lexically_normal();
 	fs::path path = (fs::current_path() / "filters").lexically_normal();
 
@@ -122,8 +121,7 @@ bool lootFilter(sciter::string author, sciter::string filter, sciter::string dow
 		}
 
 		fs::create_symlink(filterPath, defaultFilterPath);
-	}
-	else {
+	} else {
 		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "" || lastFilterDownload == ws2s(download_url)) {
 			return false;
 		}
@@ -194,13 +192,12 @@ public:
 			SOM_FUNC(setLootFilter),
 			SOM_FUNC(getLocalFiles)
 		)
-		SOM_PASSPORT_END
+	SOM_PASSPORT_END
 
-		bool _update(sciter::string args) {
-
-#ifndef _DEBUG
+	bool _update(sciter::string args) {
+		#ifndef _DEBUG
 		updateClientFiles();
-#endif
+		#endif
 
 		this->call_function("self.finish_update");
 		return _launch(args);
@@ -253,10 +250,11 @@ private:
 
 int uimain(std::function<int()> run) {
 	// TODO: Check for sciter.dll
+
 	// enable debug mode
-#ifdef _DEBUG
+	#ifdef _DEBUG
 	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
-#endif
+	#endif
 
 	// ensure only one running instance
 	pd2Mutex = CreateMutex(NULL, TRUE, L"pd2.launcher.mutex");
@@ -277,9 +275,9 @@ int uimain(std::function<int()> run) {
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
 
-#ifndef _DEBUG
+	#ifndef _DEBUG
 	updateLauncher();
-#endif
+	#endif
 
 	// start the launcher ui
 	int result = run();

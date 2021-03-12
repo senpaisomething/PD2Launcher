@@ -14,3 +14,4 @@ Set the following environment variables according to your setup, change the fold
 ```
 [System.Environment]::SetEnvironmentVariable('DIABLO_DEBUG_FOLDER','C:\Program Files (x86)\Diablo II\ProjectD2',[System.EnvironmentVariableTarget]::Machine)
 ```
+4. Open the project in Visual Studio and run it.

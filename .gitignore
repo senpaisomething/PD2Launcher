@@ -2,3 +2,4 @@
 /.vs/
 /bin/*
 !/bin/.gitkeep
+src/launcher/resources.cpp
