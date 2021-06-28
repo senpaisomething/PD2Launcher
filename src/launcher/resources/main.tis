@@ -132,7 +132,6 @@ event change $(input.ddraw-bool) {
 		case "checkbox":
 			storageRoot.ddrawoptions[this.attributes#name] = this.checked;
 			break;
-		case "select":
 	}
 }
 
