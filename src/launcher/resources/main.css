@@ -414,10 +414,6 @@ label.checkbox {
     font-size: 16dip;
 }
 
-select {
-    display: none;
-}
-
 input[type=checkbox]:root {
     height: 0;
     width: 0;
