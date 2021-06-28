@@ -430,9 +430,6 @@ label.select select, option, select > caption {
     background: #000;
 }
 
-select  {
-    display: none;
-}
 input[type=checkbox]:root {
     height: 0;
     width: 0;
