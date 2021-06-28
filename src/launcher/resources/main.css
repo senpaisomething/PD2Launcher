@@ -36,6 +36,16 @@ button {
     font-family: inherit;
 }
 
+select {
+    border: solid;
+    border-color: @GOLD;
+    font-family: inherit;
+}
+
+option {
+    border: none;
+}
+
 .window-btn {
     display: block;
     position: absolute;
@@ -414,6 +424,15 @@ label.checkbox {
     font-size: 16dip;
 }
 
+label.select select, option, select > caption {
+    color: @GOLD_DARKER;
+    font-size: 16dip;
+    background: #000;
+}
+
+select  {
+    display: none;
+}
 input[type=checkbox]:root {
     height: 0;
     width: 0;
