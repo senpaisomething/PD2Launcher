@@ -85,6 +85,58 @@
             </div>
         </div>
         <div class="modal-content">
+            <h2 class="option-header">DDraw Options</h2>
+            <div class="option-container">
+                <label class="select">
+                    <label for="mode">Mode</label>
+                    <select type="dropdown" name="mode" class="ddraw-select">
+                        <option value="borderless">Borderless</option>
+                        <option value="fullscreen">Fullscreen</option>
+                        <option value="windowed">Windowed</option>
+                    </select>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="maintas" class="ddraw-bool" /> Maintain Aspect Ratio
+                    <span>(Description if needed)</span>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="boxing" class="ddraw-bool" /> WindowBoxing / Integer Scaling
+                    <span>(Description if needed)</span>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="vsync" class="ddraw-bool" /> V-Sync
+                    <span>Enable if you get tearing</span>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="devmode" class="ddraw-bool" /> Lock cursor to screen
+                    <span>(Description if needed)</span>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="border" class="ddraw-bool" /> Borders
+                    <span>Show window borders</span>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="resizeable" class="ddraw-bool" /> Resizeable window
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="vhack" value="vhack" class="ddraw-bool" /> Stretch cutscenes to fullscreen
+                </label>
+            </div>
+
             <h2 class="option-header">Graphics</h2>
             <div class="option-container">
                 <label class="checkbox">

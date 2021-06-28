@@ -3,7 +3,8 @@
 		options: {
 			skiptobnet: true
 		},
-		lootfilters: {}
+		lootfilters: {},
+		ddrawoptions: {}
 	}
 
 	return storage.root;
@@ -122,6 +123,16 @@ event change $(input.launcher-option) {
 		case "checkbox":
 			storageRoot.options[this.attributes#name] = this.checked;
 			break;
+	}
+}
+
+// handling ddraw options
+event change $(input.ddraw-bool) {
+	switch(this.attributes#type) {
+		case "checkbox":
+			storageRoot.ddrawoptions[this.attributes#name] = this.checked;
+			break;
+		case "select":
 	}
 }
 
