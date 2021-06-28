@@ -1,6 +1,7 @@
 ﻿@const GOLD: #998363;
 @const GOLD_LIGHTER: #b39a74;
 @const GOLD_DARKER: #877458;
+@const DISABLED: #56585c ;
 
 @font-face {
     font-family: exocet-medium;
@@ -426,8 +427,18 @@ label.checkbox {
 
 label.select select, option, select > caption {
     color: @GOLD_DARKER;
-    font-size: 16dip;
+    font-size: 14dip;
     background: #000;
+}
+
+input[type=number] {
+    text-align: center;
+    width: 65dip;
+    font-size: 14dip;
+    border: 2dip solid @GOLD;
+    color: @GOLD_DARKER;
+    background: #000;
+    font-family: inherit;
 }
 
 input[type=checkbox]:root {
