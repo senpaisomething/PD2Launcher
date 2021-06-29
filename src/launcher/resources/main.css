@@ -43,10 +43,6 @@ select {
     font-family: inherit;
 }
 
-option {
-    border: none;
-}
-
 .window-btn {
     display: block;
     position: absolute;
@@ -423,6 +419,10 @@ label.checkbox, input[type=checkbox] {
 
 label.checkbox {
     font-size: 16dip;
+}
+
+select > popup.list {
+    border: 2dip @GOLD;
 }
 
 label.select select, option, select > caption {
