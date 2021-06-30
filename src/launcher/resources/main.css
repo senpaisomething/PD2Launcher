@@ -476,3 +476,33 @@ input[type=checkbox]:checked::after {
     bottom: 5dip;
     right: 5dip;
 }
+
+[title~=advancedCheck]:checked {
+    /* background-color: white !important; */
+}
+
+[title~=advancedCheck]:checked #checktest {
+    /* background-color: blue !important; */
+}
+
+
+.adv-box {
+    display: none;
+    width: auto;
+    height: 100%;
+  }
+  
+  #trigger {
+    display: none;
+  }
+  
+  #trigger:checked + .adv-box {
+    display: block;
+  }
+
+  #show-advanced-btn:hover {
+    border-bottom: 1px solid white;
+  }
+  #show-advanced-btn {
+      border-bottom: 1px solid rgba(0,0,0,0.0);
+  }
