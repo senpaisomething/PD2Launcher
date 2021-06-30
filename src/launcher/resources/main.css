@@ -486,23 +486,30 @@ input[type=checkbox]:checked::after {
 }
 
 
-.adv-box {
+.ddraw-adv-options {
     display: none;
     width: auto;
     height: 100%;
   }
   
-  #trigger {
+  #ddraw-adv-trigger {
     display: none;
   }
   
-  #trigger:checked + .adv-box {
+  #ddraw-adv-trigger:checked + .ddraw-adv-options {
     display: block;
   }
 
   #show-advanced-btn:hover {
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid @GOLD_LIGHTER;
+    
   }
   #show-advanced-btn {
       border-bottom: 1px solid rgba(0,0,0,0.0);
+  }
+
+  select option {
+      padding-left: 10dip !important;
+      padding-top: 5dip;
+      padding-bottom: 1dip;
   }

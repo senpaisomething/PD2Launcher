@@ -171,7 +171,7 @@
                 <span>-32000 = center to screen</span>
             </div>
 
-            <label for="trigger"><h2 class="option-header" id="show-advanced-btn">
+            <label for="ddraw-adv-trigger"><h2 class="option-header" id="show-advanced-btn">
                 Enable Advanced Options
                 <label class="option-container">
                 </label>
@@ -179,8 +179,8 @@
             </label>
             <p>Read ddraw.ini for info on advanced options. </p>
 
-            <input id="trigger" type="checkbox">
-            <div class="adv-box">
+            <input id="ddraw-adv-trigger" type="checkbox">
+            <div class="ddraw-adv-options">
 
                 <div class="option-container">
                     <label class="checkbox">
@@ -210,7 +210,8 @@
                     </label>
                 </div>
     
-                <div class="option-container">
+                <!-- old -->
+                <!-- <div class="option-container">
                     <label for="maxfps">Rendering rate (Max FPS)</label>
                     <select type="dropdown" name="maxgameticks" class="ddraw-select">
                         <option value="60">60 (default)</option>
@@ -218,7 +219,22 @@
                         <option value="0">unlimited</option>
                         <option value="n">n = cap</option>
                     </select><span>Does not have an impact on the game speed</span>
+                </div> -->
+
+                <!-- start // use this structure -->
+                <div class="option-container">
+                    <label class="select">Rendering rate (Max FPS)
+                        <label for="maxfps">Mode</label>
+                        <select type="dropdown" name="maxfps" class="ddraw-select">
+                            <option value="60">60 (default)</option>
+                            <option value="-1">-1(screen rate)</option>
+                            <option value="0">unlimited</option>
+                            <option value="n">n = cap</option>
+                        </select>
+                    </label>
+                    <span>Does not have an impact on the game speed</span>
                 </div>
+                <!-- end -->
     
                 <div class="option-container">
                     <label for="mode">Max Game Ticks</label>
