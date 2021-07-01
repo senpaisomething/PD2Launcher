@@ -3,8 +3,7 @@
 		options: {
 			skiptobnet: true
 		},
-		lootfilters: {},
-		ddrawoptions: {}
+		lootfilters: {}
 	}
 
 	return storage.root;
@@ -40,6 +39,7 @@ var lootfilterListDictionary = {};
 var selectedLootFilter = {};
 var lootFilterLoaded = false;
 var savedLootFilterListLabel = $(#saved);
+var ddrawOptions = null;
 
 // handle pressing escape
 event keydown (e) {
@@ -97,6 +97,7 @@ $(#play-button).onClick = function() {
 $(#options-button).onClick = function() {
 	modalBackground.attributes.addClass("is-visible");
 	optionsModal.attributes.addClass("is-visible");
+	getDdrawOptions();
 }
 
 $(#loot-filters-button).onClick = function() {
@@ -126,18 +127,13 @@ event change $(input.launcher-option) {
 	}
 }
 
-// handling ddraw options
-event change $(input.ddraw-bool) {
-	switch(this.attributes#type) {
-		case "checkbox":
-			storageRoot.ddrawoptions[this.attributes#name] = this.checked;
-			break;
-	}
-}
-
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
+
+	if (optionsModal.attributes.hasClass("is_visibile")); {
+		setDdrawOptions();
+	}
 
 	var modals = $$(.modal);
 	for (var modal in modals) {
@@ -396,4 +392,39 @@ function getLaunchArguments() {
 	}
 
 	return args.join(" ");
+}
+
+function getDdrawOptions() {
+	ddrawOptions = view.frame.getDdrawOptions();
+	for (var el in $$(.ddraw)) {
+		el.value = ddrawOptions.(el.id);
+	}
+	if (ddrawOptions.fullscreen && ddrawOptions.windowed){
+		$(#mode).value = "borderless"
+	}
+	else if (ddrawOptions.fullscreen){
+		$(#mode).value = "fullscreen"
+	}
+	else {
+		$(#mode).value = "windowed"
+	}
+}
+
+function setDdrawOptions() {
+	for (var el in $$(.ddraw)) {
+		ddrawOptions.(el.id) = el.value;
+	}
+	if($(#mode).value == "borderless") {
+		ddrawOptions.fullscreen = true;
+		ddrawOptions.windowed = true;
+	}
+	else if($(#mode).value == "fullscreen") {
+		ddrawOptions.fullscreen = true;
+		ddrawOptions.windowed = false;
+	}
+	else {
+		ddrawOptions.fullscreen = false;
+		ddrawOptions.windowed = true;
+	}
+	view.frame.setDdrawOptions(ddrawOptions);
 }
