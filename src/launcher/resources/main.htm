@@ -89,58 +89,83 @@
             <div class="option-container">
                 <label class="select">
                     <label for="mode">Mode</label>
-                    <select type="dropdown" id="mode" class="ddraw-select">
+                    <select type="dropdown" name="mode" class="ddraw-select">
                         <option value="fullscreen">Fullscreen (default)</option>
                         <option value="borderless">Borderless</option>
                         <option value="windowed">Windowed</option>
                     </select>
                 </label>
             </div>
-            <div class="option-container">
+            <div class="window-position-container">
+                Resolution
+                <span>0 = default</span>
+            </div>
+            <div class="width-box">
+                Width
                 <label class="field">
-                    <label for="resolution">Resolution</label>
-                    <input type="number" id="width" novalue="Width" class="ddraw">
-                    <input type="number" id="height" novalue="Height" class="ddraw">
-                </label><span>(0 = default)</span>
+                    <label for="posX"></label>
+                    <input type="number" name="width" novalue="Width">
+                </label>
             </div>
-            <div class="option-container">
-                <label class="checkbox">
-                    <input type="checkbox" id="maintas" class="ddraw" /> Maintain Aspect Ratio
-                    <span>(Requires handle mouse checked)</span>
+            <div class="height-box">
+                Height
+                <label class="field">
+                    <label for="posY"></label>
+                    <input type="number" name="height" novalue="Height">
+                </label>
+            </div>
+            <div class="window-position-container">
+                Window Position
+                <span>-32000 = center to screen</span>
+            </div>
+            <div class="pos-x-box">
+                <label class="field">
+                    <label for="posX"></label>Vertical
+                    <input type="number" name="posX" novalue="-32000">
+                </label>
+            </div>
+            <div class="pos-y-box">
+                <label class="field">
+                    <label for="posY"></label>Horizontal
+                    <input type="number" name="posY" novalue="-32000">
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" id="boxing" class="ddraw" /> WindowBoxing / Integer Scaling
-                    <span>(Requires handle mouse checked)</span>
+                    <input type="checkbox" name="maintas" class="ddraw-bool" /> Maintain Aspect Ratio
+                    <span>Requires handle mouse checked</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" id="vsync" class="ddraw" /> V-Sync
-                    <span>Enable if you get tearing</span>
+                    <input type="checkbox" name="boxing" class="ddraw-bool" /> WindowBoxing / Integer Scaling
+                    <span>Requires handle mouse checked</span>
+                </label>
+            </div>
+            <div class="v-sync-container">
+                <label class="checkbox">
+                    <input type="checkbox" name="vsync" class="ddraw-bool" /> Vertical Sync
+                    <span>Enable if you get tearing.</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" id="devmode" class="ddraw" /> 
-                    <span>Lock cursor to screen</span>
+                    <input type="checkbox" name="devmode" class="ddraw-bool" /> Lock cursor to screen
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" id="border" class="ddraw" /> Borders
-                    <span>Show window borders</span>
+                    <input type="checkbox" name="border" class="ddraw-bool" /> Show Window Borders
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" id="resizeable" class="ddraw" /> Resizeable window
+                    <input type="checkbox" name="resizeable" class="ddraw-bool" checked /> Resizeable window
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" id="vhack" value="vhack" class="ddraw" /> Stretch cutscenes to fullscreen
+                    <input type="checkbox" name="vhack" value="vhack" class="ddraw-bool" /> Stretch cutscenes to fullscreen
                 </label>
             </div>
 
@@ -148,7 +173,7 @@
             <div class="option-container">
                 <label class="checkbox">
                     <input type="checkbox" name="windowed" value="-w" class="launcher-option" /> Windowed mode (-w)
-                    <span>(This will disable upscaling and shaders)</span>
+                    <span>This will disable upscaling and shaders</span>
                 </label>
             </div>
 
@@ -162,55 +187,50 @@
                 <label class="checkbox"><input type="checkbox" name="skiptobnet" value="-skiptobnet" class="launcher-option" /> Skip To BattleNet (-skiptobnet)</label>
             </div>
 
-            <div class="option-container">
-                <label class="field">
-                    <label for="windowPosition">Window Position</label>
-                    <input type="number" name="posX" novalue="-32000"> Vertical
-                    <input type="number" name="posY" novalue="-32000"> Horizontal
-                </label>
-                <span>-32000 = center to screen</span>
-            </div>
-
-            <label for="ddraw-adv-trigger"><h2 class="option-header" id="show-advanced-btn">
-                Enable Advanced Options
-                <label class="option-container">
-                </label>
+            <label for="ddraw-adv-trigger">
+                <h2 class="option-header" id="show-advanced-btn">
+                    Enable Advanced Options
+                    <label class="option-container">
+                    </label>
                 </h2>
             </label>
-            <p>Read ddraw.ini for info on advanced options. </p>
 
             <input id="ddraw-adv-trigger" type="checkbox">
             <div class="ddraw-adv-options">
+                <div class="window-position-header-container">
+                    <span>Read ddraw.ini for info on advanced options.</span>
+                </div>
 
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="noactivateapp" class="ddraw-bool" /> Hide alt+tab messages
                     </label>
                 </div>
-    
+
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="handlemouse" class="ddraw-bool" checked /> DDraw Handle Mouse
                         <span>Uncheck this if cursor is disappearing.</span>
                     </label>
                 </div>
-    
+
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="adjmouse" class="ddraw-bool" /> Automatic Mouse Sensitivity
                         <span>Only works if full screen is enabled.</span>
                     </label>
                 </div>
-    
+
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="nonexclusive" class="ddraw-bool" /> Disable fullscreen-exclusive mode
                         <span>Use if some GUI elements are invisible</span>
                     </label>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Rendering rate (Max FPS)
+                    <label class="select">
+                        Rendering rate (Max FPS)
                         <label for="maxfps"></label>
                         <select type="dropdown" name="maxfps" class="ddraw-select">
                             <option value="60">60 (default)</option>
@@ -221,10 +241,11 @@
                     </label>
                     <span>Does not have an impact on the game speed</span>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Rendering rate (Max FPS)
-                        <label for="maxfps"></label>
+                    <label class="select">
+                        Max game ticks
+                        <label for="maxgameticks"></label>
                         <select type="dropdown" name="maxgameticks" class="ddraw-select">
                             <option value="0">0 (default)</option>
                             <option value="-1">-1 (disable)</option>
@@ -237,9 +258,10 @@
                     </label>
                     <span>Fix for flickering (lower = slower)</span>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Save Window Position
+                    <label class="select">
+                        Save Window Position
                         <label for="savesettings"></label>
                         <select type="dropdown" name="savesettings" class="ddraw-select">
                             <option value="1">global (default)</option>
@@ -249,9 +271,10 @@
                     </label>
                     <span>Save window position/size</span>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Renderer
+                    <label class="select">
+                        Renderer
                         <label for="renderer"></label>
                         <select type="dropdown" name="renderer" class="ddraw-select">
                             <option value="opengl">OpenGL (default)</option>
@@ -262,9 +285,10 @@
                     </label>
                     <span>Auto will try OpenGl,Direct finally GDI</span>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Windows API Hooking
+                    <label class="select">
+                        Windows API Hooking
                         <label for="hook"></label>
                         <select type="dropdown" name="hook" class="ddraw-select">
                             <option value="4">all modules (default)</option>
@@ -276,9 +300,10 @@
                     </label>
                     <span>Detours Can help with problems requires rendering GDI</span>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Force Minimum FPS
+                    <label class="select">
+                        Force Minimum FPS
                         <label for="minfps"></label>
                         <select type="dropdown" name="minfps" class="ddraw-select">
                             <option value="0">0 (default)</option>
@@ -289,9 +314,10 @@
                     </label>
                     <span>Use 5/10 for display issues(menus/loading screens)</span>
                 </div>
-    
+
                 <div class="option-container">
-                    <label class="select">Preliminary Shade Support
+                    <label class="select">
+                        Preliminary Shade Support
                         <label for="shader"></label>
                         <select type="dropdown" name="shader" class="ddraw-select">
                             <option value="Shaders\xbr\xbr-lv2-noblend.glsl">xbr-lv2-noblend (default)</option>
@@ -314,11 +340,11 @@
                     </label>
                     <span>Requires Renderer OpenGL</span>
                 </div>
-    
+
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="singlecpu" class="ddraw-bool" checked /> Force CPU0 affinity
-                        <span>avoids crashes/freezing, *might* have a performance impact</span>
+                        <span>avoids crashes/freezing can effect performance</span>
                     </label>
                 </div>
             </div>

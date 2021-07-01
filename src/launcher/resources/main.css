@@ -1,7 +1,7 @@
 ﻿@const GOLD: #998363;
 @const GOLD_LIGHTER: #b39a74;
 @const GOLD_DARKER: #877458;
-@const DISABLED: #56585c ;
+@const DISABLED: #56585c;
 
 @font-face {
     font-family: exocet-medium;
@@ -413,6 +413,86 @@ select {
         color: @GOLD_DARKER;
     }
 
+.v-sync-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+}
+
+    .v-sync-container span {
+        display: block;
+        font-size: 14dip;
+        margin-right: 125dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+.window-position-header {
+    font-size: 16dip;
+    margin-bottom: 10dip;
+}
+
+.window-position-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+    font-size: 16dip;
+    color: @GOLD_LIGHTER;
+}
+
+    .window-position-container span {
+        display: block;
+        font-size: 12dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+.window-position-boxes {
+    display: block;
+    font-size: 14dip;
+    margin-left: 25dip;
+    margin-bottom: 10dip;
+    color: @GOLD_DARKER;
+}
+
+.height-box {
+    display: block;
+    font-size: 14dip;
+    margin-left: 25dip;
+    margin-bottom: 10dip;
+    color: @GOLD_DARKER;
+}
+
+.width-box {
+    display: block;
+    font-size: 14dip;
+    margin-left: 25dip;
+    margin-bottom: 10dip;
+    color: @GOLD_DARKER;
+}
+
+.width-box-label {
+    display: block;
+    font-size: 14dip;
+    margin-left: 25dip;
+    margin-bottom: 10dip;
+    color: @GOLD_DARKER;
+}
+
+.pos-x-box {
+    display: block;
+    font-size: 14dip;
+    margin-left: 25dip;
+    margin-bottom: 10dip;
+    color: @GOLD_DARKER;
+}
+
+.pos-y-box {
+    display: block;
+    font-size: 14dip;
+    margin-left: 25dip;
+    margin-bottom: 10dip;
+    color: @GOLD_DARKER;
+}
+
 label.checkbox, input[type=checkbox] {
     cursor: pointer;
 }
@@ -481,35 +561,35 @@ input[type=checkbox]:checked::after {
     /* background-color: white !important; */
 }
 
-[title~=advancedCheck]:checked #checktest {
-    /* background-color: blue !important; */
-}
+    [title~=advancedCheck]:checked #checktest {
+        /* background-color: blue !important; */
+    }
 
 
 .ddraw-adv-options {
     display: none;
     width: auto;
     height: 100%;
-  }
-  
-  #ddraw-adv-trigger {
+}
+
+#ddraw-adv-trigger {
     display: none;
-  }
-  
-  #ddraw-adv-trigger:checked + .ddraw-adv-options {
-    display: block;
-  }
+}
 
-  #show-advanced-btn:hover {
+    #ddraw-adv-trigger:checked + .ddraw-adv-options {
+        display: block;
+    }
+
+#show-advanced-btn:hover {
     border-bottom: 1px solid @GOLD_LIGHTER;
-    
-  }
-  #show-advanced-btn {
-      border-bottom: 1px solid rgba(0,0,0,0.0);
-  }
+}
 
-  select option {
-      padding-left: 10dip !important;
-      padding-top: 5dip;
-      padding-bottom: 1dip;
-  }
+#show-advanced-btn {
+    border-bottom: 1px solid rgba(0,0,0,0.0);
+}
+
+select option {
+    padding-left: 10dip !important;
+    padding-top: 5dip;
+    padding-bottom: 1dip;
+}
