@@ -106,6 +106,12 @@ $(#options-button).onClick = function() {
 	}
 }
 
+$(#width).onMouse = function(evt) {
+    switch(evt.type) {
+      case Event.HANDLED | Event.MOUSE_DOWN: break; // handled mouse down event in bubbling phase
+    }
+}
+
 $(#mode).onValueChanged = function () {
 	if ($(#mode).value == "windowed") {
 		$(#resolution).style.set {display: "block"};
@@ -414,6 +420,15 @@ function getDdrawOptions() {
 	ddrawOptions = view.frame.getDdrawOptions();
 	for (var el in $$(.ddraw)) {
 		el.value = ddrawOptions.(el.id);
+		// handling blank edit fields by adding default values
+		if (el.value === undefined) {
+			if (el.id == "posx" || el.id == "posy") {
+				el.value = -32000;
+			}
+			else {
+				el.value = 0;
+			}
+		}
 	}
 	if (ddrawOptions.fullscreen && ddrawOptions.windowed){
 		$(#mode).value = "borderless"
