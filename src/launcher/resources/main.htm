@@ -89,7 +89,7 @@
             <div class="option-container">
                 <label class="select">
                     <label for="mode">Mode</label>
-                    <select type="dropdown" name="mode" class="ddraw-select">
+                    <select type="dropdown" id="mode" class="ddraw-select">
                         <option value="fullscreen">Fullscreen (default)</option>
                         <option value="borderless">Borderless</option>
                         <option value="windowed">Windowed</option>
@@ -104,24 +104,22 @@
                 Width
                 <label class="field">
                     <label for="posX"></label>
-                    <input type="number" name="width" novalue="Width">
+                    <input type="number" name="width" style="margin-left: 4px" novalue="Width">
                 </label>
             </div>
-            <div class="height-box">
-                Height
+            <div class="height-box">Height
                 <label class="field">
                     <label for="posY"></label>
                     <input type="number" name="height" novalue="Height">
                 </label>
             </div>
-            <div class="window-position-container">
-                Window Position
+            <div class="window-position-container">Window Position
                 <span>-32000 = center to screen</span>
             </div>
             <div class="pos-x-box">
                 <label class="field">
                     <label for="posX"></label>Vertical
-                    <input type="number" name="posX" novalue="-32000">
+                    <input type="number" name="posX" style="margin-left: 24px" novalue="-32000">
                 </label>
             </div>
             <div class="pos-y-box">
@@ -145,7 +143,7 @@
             <div class="v-sync-container">
                 <label class="checkbox">
                     <input type="checkbox" name="vsync" class="ddraw-bool" /> Vertical Sync
-                    <span>Enable if you get tearing.</span>
+                    <span>Enable if you get tearing</span>
                 </label>
             </div>
             <div class="option-container">
@@ -197,8 +195,8 @@
 
             <input id="ddraw-adv-trigger" type="checkbox">
             <div class="ddraw-adv-options">
-                <div class="window-position-header-container">
-                    <span>Read ddraw.ini for info on advanced options.</span>
+                <div class="window-position-header-container" style="margin-bottom: 10px">
+                    <span>Read ddraw.ini for info on advanced options</span>
                 </div>
 
                 <div class="option-container">
@@ -210,14 +208,14 @@
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="handlemouse" class="ddraw-bool" checked /> DDraw Handle Mouse
-                        <span>Uncheck this if cursor is disappearing.</span>
+                        <span>Uncheck this if cursor is disappearing</span>
                     </label>
                 </div>
 
                 <div class="option-container">
                     <label class="checkbox">
                         <input type="checkbox" name="adjmouse" class="ddraw-bool" /> Automatic Mouse Sensitivity
-                        <span>Only works if full screen is enabled.</span>
+                        <span>Only works if full screen is enabled</span>
                     </label>
                 </div>
 
