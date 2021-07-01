@@ -127,6 +127,7 @@ $(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.c
       <DeploymentContent>false</DeploymentContent>
     </None>
     <None Include="resources\main.tis" />
+    <None Include="resources\test.js" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PD2Launcher1.rc" />

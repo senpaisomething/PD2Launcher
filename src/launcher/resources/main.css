@@ -476,3 +476,40 @@ input[type=checkbox]:checked::after {
     bottom: 5dip;
     right: 5dip;
 }
+
+[title~=advancedCheck]:checked {
+    /* background-color: white !important; */
+}
+
+[title~=advancedCheck]:checked #checktest {
+    /* background-color: blue !important; */
+}
+
+
+.ddraw-adv-options {
+    display: none;
+    width: auto;
+    height: 100%;
+  }
+  
+  #ddraw-adv-trigger {
+    display: none;
+  }
+  
+  #ddraw-adv-trigger:checked + .ddraw-adv-options {
+    display: block;
+  }
+
+  #show-advanced-btn:hover {
+    border-bottom: 1px solid @GOLD_LIGHTER;
+    
+  }
+  #show-advanced-btn {
+      border-bottom: 1px solid rgba(0,0,0,0.0);
+  }
+
+  select option {
+      padding-left: 10dip !important;
+      padding-top: 5dip;
+      padding-bottom: 1dip;
+  }
