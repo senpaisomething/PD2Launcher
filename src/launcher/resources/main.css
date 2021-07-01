@@ -413,6 +413,86 @@ select {
         color: @GOLD_DARKER;
     }
 
+.v-sync-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+}
+
+    .v-sync-container span {
+        display: block;
+        font-size: 14dip;
+        margin-right: 125dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+.window-position-header {
+    font-size: 16dip;
+    margin-bottom: 10dip;
+}
+
+.window-position-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+    font-size: 16dip;
+    color: @GOLD_LIGHTER;
+}
+
+    .window-position-container span {
+        display: block;
+        font-size: 12dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+    .window-position-boxes {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .height-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .width-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .width-box-label {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .pos-x-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .pos-y-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
 label.checkbox, input[type=checkbox] {
     cursor: pointer;
 }
