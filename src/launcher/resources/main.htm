@@ -89,7 +89,7 @@
             <div class="option-container">
                 <label class="select">
                     <label for="mode">Mode</label>
-                    <select type="dropdown" name="mode" class="ddraw-select">
+                    <select type="dropdown" id="mode" class="ddraw-select">
                         <option value="borderless">Borderless</option>
                         <option value="fullscreen">Fullscreen</option>
                         <option value="windowed">Windowed</option>
@@ -99,48 +99,48 @@
             <div class="option-container">
                 <label class="field">
                     <label for="resolution">Resolution</label>
-                    <input type="number" name="width" novalue="Width">
-                    <input type="number" name="height" novalue="Height">
+                    <input type="number" id="width" novalue="Width" class="ddraw">
+                    <input type="number" id="height" novalue="Height" class="ddraw">
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="maintas" class="ddraw-bool" /> Maintain Aspect Ratio
+                    <input type="checkbox" id="maintas" class="ddraw" /> Maintain Aspect Ratio
                     <span>(Description if needed)</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="boxing" class="ddraw-bool" /> WindowBoxing / Integer Scaling
+                    <input type="checkbox" id="boxing" class="ddraw" /> WindowBoxing / Integer Scaling
                     <span>(Description if needed)</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="vsync" class="ddraw-bool" /> V-Sync
+                    <input type="checkbox" id="vsync" class="ddraw" /> V-Sync
                     <span>Enable if you get tearing</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="devmode" class="ddraw-bool" /> Lock cursor to screen
+                    <input type="checkbox" id="devmode" class="ddraw" /> Lock cursor to screen
                     <span>(Description if needed)</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="border" class="ddraw-bool" /> Borders
+                    <input type="checkbox" id="border" class="ddraw" /> Borders
                     <span>Show window borders</span>
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="resizeable" class="ddraw-bool" /> Resizeable window
+                    <input type="checkbox" id="resizeable" class="ddraw" /> Resizeable window
                 </label>
             </div>
             <div class="option-container">
                 <label class="checkbox">
-                    <input type="checkbox" name="vhack" value="vhack" class="ddraw-bool" /> Stretch cutscenes to fullscreen
+                    <input type="checkbox" id="vhack" value="vhack" class="ddraw" /> Stretch cutscenes to fullscreen
                 </label>
             </div>
 
