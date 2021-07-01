@@ -98,7 +98,23 @@ $(#options-button).onClick = function() {
 	modalBackground.attributes.addClass("is-visible");
 	optionsModal.attributes.addClass("is-visible");
 	getDdrawOptions();
+	if ($(#mode).value == "windowed") {
+		$(#resolution).style.set {display: "block"};
+	}
+	else {
+		$(#resolution).style.set {display: "none"};
+	}
 }
+
+$(#mode).onValueChanged = function () {
+	if ($(#mode).value == "windowed") {
+		$(#resolution).style.set {display: "block"};
+	}
+	else {
+		$(#resolution).style.set {display: "none"};
+	}
+}
+
 
 $(#loot-filters-button).onClick = function() {
 	getLootFilterJsonList(); 
@@ -131,7 +147,7 @@ function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
 
-	if (optionsModal.attributes.hasClass("is_visibile")); {
+	if (optionsModal.attributes.hasClass("is-visibile")); {
 		setDdrawOptions();
 	}
 
