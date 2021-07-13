@@ -65,6 +65,8 @@ self.ready = function() {
 	// disable news loading in favor of hard coding
 	//loadNews();
 	loadOptions();
+	
+	getDdrawOptions();
 }
 
 // function that is used by cpp for updating the
@@ -152,12 +154,10 @@ event change $(input.launcher-option) {
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
+	setDdrawOptions();
 
 	var modals = $$(.modal);
 	for (var modal in modals) {
-		if(modal == optionsModal) {
-			setDdrawOptions();
-		}
 		modal.attributes.removeClass("is-visible");
 	}
 }
