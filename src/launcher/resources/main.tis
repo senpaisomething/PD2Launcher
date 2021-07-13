@@ -153,12 +153,11 @@ function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
 
-	if (optionsModal.attributes.hasClass("is-visibile")) {
-		setDdrawOptions();
-	}
-
 	var modals = $$(.modal);
 	for (var modal in modals) {
+		if(modal == optionsModal) {
+			setDdrawOptions();
+		}
 		modal.attributes.removeClass("is-visible");
 	}
 }
