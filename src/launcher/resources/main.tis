@@ -153,7 +153,7 @@ function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
 
-	if (lootFilterModal.attributes.addClass("is-visible"));{
+	if (lootFilterModal.attributes.addClass("is-visible")); {
 		lootFilterModal.attributes.removeClass("is-visible");
 	}
 
