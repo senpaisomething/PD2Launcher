@@ -13,7 +13,7 @@
 #include "sciter-x-window.hpp"
 #include "resources.cpp"
 #include "inihelper.h"
-
+#include <aux-cvt.h>
 namespace fs = std::filesystem;
 
 const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
@@ -181,6 +181,60 @@ void checkLootFilterFileStructure() {
 	}
 }
 
+sciter::value getDdrawIni() {
+	//Read ddraw.ini file and return a key/value map as sciter::value
+	sciter::value ddrawoptions;
+
+	mINI::INIFile file("ddraw.ini");
+	mINI::INIStructure ini;
+
+	file.read(ini);
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+		for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			auto const& value = it2.second;
+			ddrawoptions.set_item(key, value);
+		}
+	}
+	return ddrawoptions;
+}
+
+void setDdrawIni(sciter::value ddrawoptions) {
+	mINI::INIFile file("ddraw.ini");
+	mINI::INIStructure ini;
+
+	file.read(ini);
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+		for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			if (ddrawoptions.get_item(key).is_bool()) {
+				bool value = ddrawoptions.get_item(key).get(false);
+				ini[section][key] = (value) ? "true" : "false";
+			}
+			else if (ddrawoptions.get_item(key).is_int()) {
+				auto value = aux::itoa(ddrawoptions.get_item(key).get(1));
+				ini[section][key] = value;
+			}
+			else {
+				auto value = aux::w2a(ddrawoptions.get_item(key).get(L""));
+				ini[section][key] = value;
+			}
+		}
+	}
+	file.write(ini);
+	return;
+}
+
 class frame : public sciter::window {
 public:
 	frame() : window(SW_MAIN) {}
@@ -190,7 +244,9 @@ public:
 		SOM_FUNCS(
 			SOM_FUNC(play),
 			SOM_FUNC(setLootFilter),
-			SOM_FUNC(getLocalFiles)
+			SOM_FUNC(getLocalFiles),
+			SOM_FUNC(getDdrawOptions),
+			SOM_FUNC(setDdrawOptions)
 		)
 	SOM_PASSPORT_END
 
@@ -244,13 +300,21 @@ public:
 		return files;
 	}
 
+	sciter::value getDdrawOptions(){
+		return getDdrawIni();
+	}
+
+	bool setDdrawOptions(sciter::value ddrawoptions) {
+		setDdrawIni(ddrawoptions);
+		return true;
+	}
+
 private:
 	std::vector<std::future<bool>> pending_futures;
 };
 
 int uimain(std::function<int()> run) {
 	// TODO: Check for sciter.dll
-
 	// enable debug mode
 	#ifdef _DEBUG
 	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);

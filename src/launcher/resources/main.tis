@@ -39,6 +39,7 @@ var lootfilterListDictionary = {};
 var selectedLootFilter = {};
 var lootFilterLoaded = false;
 var savedLootFilterListLabel = $(#saved);
+var ddrawOptions = null;
 
 // handle pressing escape
 event keydown (e) {
@@ -64,6 +65,8 @@ self.ready = function() {
 	// disable news loading in favor of hard coding
 	//loadNews();
 	loadOptions();
+	
+	getDdrawOptions();
 }
 
 // function that is used by cpp for updating the
@@ -96,7 +99,30 @@ $(#play-button).onClick = function() {
 $(#options-button).onClick = function() {
 	modalBackground.attributes.addClass("is-visible");
 	optionsModal.attributes.addClass("is-visible");
+	getDdrawOptions();
+	if ($(#mode).value == "windowed") {
+		$(#resolution).style.set {display: "block"};
+	}
+	else {
+		$(#resolution).style.set {display: "none"};
+	}
 }
+
+$(#width).onMouse = function(evt) {
+    switch(evt.type) {
+      case Event.HANDLED | Event.MOUSE_DOWN: break; // handled mouse down event in bubbling phase
+    }
+}
+
+$(#mode).onValueChanged = function () {
+	if ($(#mode).value == "windowed") {
+		$(#resolution).style.set {display: "block"};
+	}
+	else {
+		$(#resolution).style.set {display: "none"};
+	}
+}
+
 
 $(#loot-filters-button).onClick = function() {
 	getLootFilterJsonList(); 
@@ -128,6 +154,7 @@ event change $(input.launcher-option) {
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
+	setDdrawOptions();
 
 	var modals = $$(.modal);
 	for (var modal in modals) {
@@ -386,4 +413,48 @@ function getLaunchArguments() {
 	}
 
 	return args.join(" ");
+}
+
+function getDdrawOptions() {
+	ddrawOptions = view.frame.getDdrawOptions();
+	for (var el in $$(.ddraw)) {
+		el.value = ddrawOptions.(el.id);
+		// handling blank edit fields by adding default values
+		if (el.value === undefined) {
+			if (el.id == "posx" || el.id == "posy") {
+				el.value = -32000;
+			}
+			else {
+				el.value = 0;
+			}
+		}
+	}
+	if (ddrawOptions.fullscreen && ddrawOptions.windowed){
+		$(#mode).value = "borderless"
+	}
+	else if (ddrawOptions.fullscreen){
+		$(#mode).value = "fullscreen"
+	}
+	else {
+		$(#mode).value = "windowed"
+	}
+}
+
+function setDdrawOptions() {
+	for (var el in $$(.ddraw)) {
+		ddrawOptions.(el.id) = el.value;
+	}
+	if($(#mode).value == "borderless") {
+		ddrawOptions.fullscreen = true;
+		ddrawOptions.windowed = true;
+	}
+	else if($(#mode).value == "fullscreen") {
+		ddrawOptions.fullscreen = true;
+		ddrawOptions.windowed = false;
+	}
+	else {
+		ddrawOptions.fullscreen = false;
+		ddrawOptions.windowed = true;
+	}
+	view.frame.setDdrawOptions(ddrawOptions);
 }
