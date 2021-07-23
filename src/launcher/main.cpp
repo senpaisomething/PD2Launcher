@@ -121,7 +121,8 @@ bool lootFilter(sciter::string author, sciter::string filter, sciter::string dow
 		}
 
 		fs::create_symlink(filterPath, defaultFilterPath);
-	} else {
+	}
+	else {
 		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "" || lastFilterDownload == ws2s(download_url)) {
 			return false;
 		}
@@ -248,12 +249,12 @@ public:
 			SOM_FUNC(getDdrawOptions),
 			SOM_FUNC(setDdrawOptions)
 		)
-	SOM_PASSPORT_END
+		SOM_PASSPORT_END
 
-	bool _update(sciter::string args) {
-		#ifndef _DEBUG
+		bool _update(sciter::string args) {
+#ifndef _DEBUG
 		updateClientFiles();
-		#endif
+#endif
 
 		this->call_function("self.finish_update");
 		return _launch(args);
@@ -300,7 +301,7 @@ public:
 		return files;
 	}
 
-	sciter::value getDdrawOptions(){
+	sciter::value getDdrawOptions() {
 		return getDdrawIni();
 	}
 
@@ -316,9 +317,9 @@ private:
 int uimain(std::function<int()> run) {
 	// TODO: Check for sciter.dll
 	// enable debug mode
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
-	#endif
+#endif
 
 	// ensure only one running instance
 	pd2Mutex = CreateMutex(NULL, TRUE, L"pd2.launcher.mutex");
@@ -339,9 +340,9 @@ int uimain(std::function<int()> run) {
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
 
-	#ifndef _DEBUG
+#ifndef _DEBUG
 	updateLauncher();
-	#endif
+#endif
 
 	// start the launcher ui
 	int result = run();

@@ -8,4 +8,9 @@
     <LocalDebuggerWorkingDirectory>$(DIABLO_DEBUG_FOLDER)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LocalDebuggerCommand>$(DIABLO_DEBUG_FOLDER)\$(TargetName)$(TargetExt)</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>$(DIABLO_DEBUG_FOLDER)\</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
 </Project>

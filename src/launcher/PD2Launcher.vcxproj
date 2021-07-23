@@ -56,7 +56,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>Build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\thirdparty\sciter-sdk\include;$(SolutionDir)\thirdparty\curl\include;$(SolutionDir)\thirdparty\crc32c\include;$(SolutionDir)\thirdparty\json\include;$(SolutionDir)\src\common\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\thirdparty\sciter-sdk\include;$(SolutionDir)\thirdparty\curl\include;$(SolutionDir)\thirdparty\crc32c\include;$(SolutionDir)\thirdparty\json\include;$(SolutionDir)\thirdparty\ini\include;$(SolutionDir)\src\common\include</IncludePath>
     <TargetName>PD2Launcher</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,6 +106,9 @@ $(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.c
     <PreBuildEvent>
       <Command>$(SolutionDir)\thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /Y /Q "$(SolutionDir)bin\PD2Launcher.exe" "$(DIABLO_DEBUG_FOLDER)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="inihelper.cpp" />
