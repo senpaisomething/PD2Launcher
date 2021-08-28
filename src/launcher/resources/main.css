@@ -497,6 +497,10 @@ label.checkbox, input[type=checkbox] {
     cursor: pointer;
 }
 
+input[type=checkbox]:hover {
+    background: none;
+}
+
 label.checkbox {
     font-size: 16dip;
 }
