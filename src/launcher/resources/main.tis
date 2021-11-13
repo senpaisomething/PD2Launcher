@@ -29,6 +29,7 @@ var modalBackground = $(#modal-background);
 var optionsModal = $(#options-modal);
 var lootFilterModal = $(#loot-filter-modal);
 var playButton = $(#play-button);
+var donateButton = $(#donate-button);
 var news = $(#news);
 var jsonFilters = null;
 var lootFilterAuthors = $(#lootfilter-authors);

@@ -150,6 +150,56 @@ select {
     margin-top: 12dip;
 }
 
+#donate-button-and-text {
+    flow: horizontal;
+    width: 95%;
+    margin-top: 12dip;
+
+}
+
+#donate-textv1{
+    text-align: center;
+    display: block;
+    height: 225dip;
+    width: 100dip;
+    font-size: 11dip;
+    margin: 0 auto;
+    color: @GOLD_DARKER;
+}
+
+#donate-text {
+    text-align: end;
+    height: 45dip;
+    width: 80dip;
+    font-size: 11dip;
+    margin: 0 auto;
+    color: @GOLD_DARKER;
+}
+
+#donate-containter {
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    background: pink;
+    margin: 0 auto;
+    text-align:match-parent;
+}
+
+.bottomright {
+    position: absolute;
+    bottom: 80px;
+    right: 16px;
+    font-size: 11px;
+    text-align:end;
+}
+  
+
+#donate-buttons {
+    width: 301dip;
+    display: block;
+    margin-right: -2dip;
+}
+
 #buttons {
     width: 301dip;
     display: block;
@@ -251,6 +301,19 @@ select {
 
     #loot-filters-button:active {
         background: url("img/loot-pressed.jpg");
+        background-size: 100%;
+    }
+
+#donate-button {
+    background: url("img/donate.jpg");
+    background-size: 100%;
+    width: 272dip;
+    height: 32dip;
+    padding-bottom: 10dip;
+}
+
+    #donate-button:active {
+        background: url("img/donate-pressed.jpg");
         background-size: 100%;
     }
 
@@ -495,6 +558,10 @@ select {
 
 label.checkbox, input[type=checkbox] {
     cursor: pointer;
+}
+
+input[type=checkbox]:hover {
+    background: none;
 }
 
 label.checkbox {
