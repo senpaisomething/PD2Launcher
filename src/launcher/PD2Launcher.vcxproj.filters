@@ -63,5 +63,11 @@
     <Image Include="..\..\Pictures\PD2_Icon_64x64.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="C:\Users\User\Downloads\donate.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="C:\Users\User\Downloads\donate-pressed.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

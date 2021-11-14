@@ -137,6 +137,8 @@ $(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.c
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Pictures\PD2_Icon_64x64.ico" />
+    <Image Include="C:\Users\User\Downloads\donate-pressed.jpg" />
+    <Image Include="C:\Users\User\Downloads\donate.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
