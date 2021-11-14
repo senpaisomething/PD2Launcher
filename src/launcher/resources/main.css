@@ -154,40 +154,28 @@ select {
     flow: horizontal;
     width: 95%;
     margin-top: 12dip;
-
-}
-
-#donate-textv1{
-    text-align: center;
-    display: block;
-    height: 225dip;
-    width: 100dip;
-    font-size: 11dip;
-    margin: 0 auto;
-    color: @GOLD_DARKER;
 }
 
 #donate-text {
-    text-align: end;
-    height: 45dip;
-    width: 80dip;
-    font-size: 11dip;
+    text-align: left;
+    width: 265px;
+    font-size: 12dip;
+    bottom: 38dip;
     margin: 0 auto;
-    color: @GOLD_DARKER;
+    color: @GOLD_LIGHTER;
 }
 
 #donate-containter {
     text-align: center;
     width: 120px;
     height: 120px;
-    background: pink;
     margin: 0 auto;
-    text-align:match-parent;
+    
 }
 
 .bottomright {
     position: absolute;
-    bottom: 80px;
+    bottom: 73px;
     right: 16px;
     font-size: 11px;
     text-align:end;
