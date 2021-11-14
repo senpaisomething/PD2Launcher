@@ -150,12 +150,6 @@ select {
     margin-top: 12dip;
 }
 
-#donate-button-and-text {
-    flow: horizontal;
-    width: 95%;
-    margin-top: 12dip;
-}
-
 #donate-text {
     text-align: left;
     width: 265px;
