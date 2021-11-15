@@ -151,6 +151,7 @@ select {
 }
 
 #donate-text {
+    background: rgba(0,0,0,.5);
     text-align: left;
     width: 265px;
     font-size: 12dip;
@@ -630,8 +631,7 @@ input[type=checkbox]:checked::after {
   }
 
   #show-advanced-btn:hover {
-    border-bottom: 1px solid @GOLD_LIGHTER;
-    
+    /*border-bottom: 1px solid @GOLD_LIGHTER;*/
   }
   #show-advanced-btn {
       border-bottom: 1px solid rgba(0,0,0,0.0);
