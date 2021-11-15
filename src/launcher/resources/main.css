@@ -630,9 +630,6 @@ input[type=checkbox]:checked::after {
     display: block;
   }
 
-  #show-advanced-btn:hover {
-    /*border-bottom: 1px solid @GOLD_LIGHTER;*/
-  }
   #show-advanced-btn {
       border-bottom: 1px solid rgba(0,0,0,0.0);
   }
