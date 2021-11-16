@@ -156,6 +156,7 @@ select {
     font-size: 12dip;
     bottom: 38dip;
     margin: 0 auto;
+    background: rgba(0,0,0,0.5);
     color: @GOLD_LIGHTER;
 }
 
@@ -629,10 +630,6 @@ input[type=checkbox]:checked::after {
     display: block;
   }
 
-  #show-advanced-btn:hover {
-    border-bottom: 1px solid @GOLD_LIGHTER;
-    
-  }
   #show-advanced-btn {
       border-bottom: 1px solid rgba(0,0,0,0.0);
   }
