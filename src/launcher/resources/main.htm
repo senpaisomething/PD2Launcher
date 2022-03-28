@@ -86,10 +86,8 @@
     </div>
 
     <div id="donate-containter">
-        <div id="donate-buttons">
-            <a href="https://www.projectdiablo2.com/donate" id="donate-button" class="bottomright"></a>
-                <span id="donate-text" class="bottomright">Thanks for your support, we couldn't keep the servers around without this community!</span>
-        </div>
+        <a href="https://www.projectdiablo2.com/donate" id="donate-button" class="bottomright"></a>
+        <span id="donate-text" class="bottomright">Thanks for your support, we couldn't keep the servers around without this community!</span>
     </div>
 
     <div id="modal-background"></div>
@@ -168,6 +166,12 @@
             </div>
             <div class="option-container">
                 <label class="checkbox">
+                    <input type="checkbox" id="adjmouse" class="ddraw" /> Automatic Mouse Sensitivity
+                    <span>Only works if full screen is enabled.</span>
+                </label>
+            </div>
+            <div class="option-container">
+                <label class="checkbox">
                     <input type="checkbox" id="devmode" class="ddraw" /> Unlock cursor
                 </label>
             </div>
@@ -179,11 +183,6 @@
             <div class="option-container">
                 <label class="checkbox">
                     <input type="checkbox" id="resizeable" class="ddraw" checked /> Resizeable window
-                </label>
-            </div>
-            <div class="option-container">
-                <label class="checkbox">
-                    <input type="checkbox" id="vhack" class="ddraw" /> Stretch cutscenes to fullscreen
                 </label>
             </div>
 
@@ -233,13 +232,6 @@
 
                 <div class="option-container">
                     <label class="checkbox">
-                        <input type="checkbox" id="adjmouse" class="ddraw" /> Automatic Mouse Sensitivity
-                        <span>Only works if full screen is enabled.</span>
-                    </label>
-                </div>
-
-                <div class="option-container">
-                    <label class="checkbox">
                         <input type="checkbox" id="nonexclusive" class="ddraw" /> Disable fullscreen-exclusive mode
                         <span>Use if some GUI elements are invisible</span>
                     </label>
@@ -262,8 +254,9 @@
                         Max game ticks
                         <label for="maxgameticks"></label>
                         <select type="dropdown" id="maxgameticks" class="ddraw">
-                            <option value="0">0 (default)</option>
+                            <option value="-2">Default Refresh Rate</option>
                             <option value="-1">-1 (disable)</option>
+                            <option value="0">0 emulate 60hz</option>
                             <option value="60">60</option>
                             <option value="30">30</option>
                             <option value="25">25</option>

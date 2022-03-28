@@ -152,7 +152,7 @@ select {
 
 #donate-text {
     text-align: left;
-    width: 265px;
+    width: 265dip;
     font-size: 12dip;
     bottom: 38dip;
     margin: 0 auto;
@@ -162,17 +162,17 @@ select {
 
 #donate-containter {
     text-align: center;
-    width: 120px;
-    height: 120px;
+    width: 120dip;
+    height: 120dip;
     margin: 0 auto;
     
 }
 
 .bottomright {
     position: absolute;
-    bottom: 73px;
-    right: 16px;
-    font-size: 11px;
+    bottom: 73dip;
+    right: 16dip;
+    font-size: 11dip;
     text-align:end;
 }
   
