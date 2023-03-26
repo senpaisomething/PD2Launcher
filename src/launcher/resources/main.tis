@@ -1,44 +1,4 @@
-﻿function setRendererRadioButtons(storage) {
-  // Set event listeners to update storage when radio buttons are changed
-  $('#3dfx').addEventListener('change', function() {
-    if ($('#3dfx').checked) {
-      $('#ddraw').checked = false;
-      storage.root.options.renderer = "-3dfx";
-      storage.set("renderer", "-3dfx");
-    }
-  });
-
-  $('#ddraw').addEventListener('change', function() {
-    if ($('#ddraw').checked) {
-      $('#3dfx').checked = false;
-      storage.root.options.renderer = "-ddraw";
-      storage.set("renderer", "-ddraw");
-    }
-  });
-}
-
-function initDb(storage) {
-  // Load saved options or use defaults
-  storage.root = {
-    options: {
-      skiptobnet: true,
-      renderer: storage.get("renderer") || "-3dfx", // Load saved option or use "-3dfx" by default
-    },
-    lootfilters: {},
-  };
-
-  // Set initial checked values for radio buttons
-  $('#3dfx').checked = storage.root.options.renderer === "-3dfx";
-  $('#ddraw').checked = storage.root.options.renderer === "-ddraw";
-
-  setRendererRadioButtons(storage);
-
-  ddrawOptions = storage.get("ddrawOptions") || null;
-
-  return storage.root;
-}
-
-var storage;
+﻿var storage;
 var storageRoot;
 
 try {
@@ -46,6 +6,19 @@ try {
 	storageRoot = storage.root || initDb(storage);
 } catch (e) {
 	view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
+}
+
+function initDb(storage) {
+  // Load saved options or use defaults
+  storage.root = {
+    options: {
+      skiptobnet: true,
+      renderer: storage.get("renderer") || "-3dfx", // default to -3dfx
+    },
+    lootfilters: {},
+  };
+
+  return storage.root;
 }
 
 // Fixes update to latest version.
@@ -93,7 +66,7 @@ self.ready = function() {
 
 	// disable news loading in favor of hard coding
 	//loadNews();
-	loadOptions(); // Add this line to call the loadOptions() function when the application is ready
+	loadOptions();
 }
 
 // function that is used by cpp for updating the
@@ -154,7 +127,7 @@ event change $(input.launcher-option) {
       break;
     case "radio":
       if (this.checked) {
-        storageRoot.options.renderer = this.value;
+        storageRoot.options[this.attributes#name] = this.attributes#value;
       }
       break;
   }
@@ -393,60 +366,31 @@ function onLootFilterAuthorLoadComplete(author, filters){
 }
 
 
-//NOT WORKING
 function loadOptions() {
-    // Load renderer value from persistent storage
-    //const renderer = view.storage.get("renderer");
+  var options = storageRoot.options;
 
-    if (renderer === "-3dfx") {
-        $("#radio-3dfx").checked = true;
-    } else if (renderer === "-ddraw") {
-        $("#radio-ddraw").checked = true;
-    } else {
-        // Set the default value to -3dfx if there is no previous selection
+  for(var key in options) {
+    var value = options[key];
+    var element = self.select("input.launcher-option[name='" + key + "']");
+    if(element == null) {
+      continue;
     }
 
-    var options = storageRoot.options;
-
-    for (var key in options) {
-        var value = options[key];
-        var element = self.select("input.launcher-option[name='" + key + "']");
-        if (element == null) {
-            continue;
-        }
-
-        switch (element.attributes#type) {
-            case "checkbox":
-            case "radio":
-                element.checked = value;
-                break;
-        }
+    switch(element.attributes#type) {
+      case "checkbox":
+        element.checked = value;
+        break;
+      case "radio":
+		  if (element.attributes#value == value) {
+			element.checked = true;
+		  }
+		  break;
+      default:
+        element.attributes#value = value;
+        break;
     }
+  }
 }
-
-//NOT WORKING FOR RADIOS
-function saveOptions() {
-    var options = $$("input.launcher-option");
-
-    for (var option in options) {
-        var name = option.attributes#name;
-        var type = option.attributes#type;
-
-        if (type === "checkbox") {
-            storageRoot.options[name] = option.checked;
-        } else if (type === "radio" && option.checked) {
-            storageRoot.options[name] = option.value;
-        }
-    }
-
-    // Save renderer options
-    var rendererValue = "-3dfx";
-    if ($("#radio-ddraw").checked) {
-        rendererValue = "-ddraw";
-    }
-    view.storage("renderer", rendererValue);
-}
-
 
 //Working
 function getLaunchArguments() {
@@ -458,7 +402,7 @@ function getLaunchArguments() {
 			args.push(option.value);
 		}
 		if(option.attributes#type == "radio" && option.checked) {
-			args.push(option.value);
+			args.push(option.attributes#value);
 		}
 	}
 
