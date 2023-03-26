@@ -139,27 +139,26 @@ $(#modal-background).onClick = function() {
 }
 
 // deal with all the modal close buttons
-var modalCloseButtons = $$(".modal-close");
-for (var modalCloseButton in modalCloseButtons) {
-    modalCloseButton.onClick = function() {
-        closeModals();
-        saveOptions();
-    };
+var modalCloseButtons = $$(.modal-close);
+for(var modalCloseButton in modalCloseButtons) {
+	modalCloseButton.onClick = function() {
+		closeModals();
+	}
 }
 
 // deal with options saving
-//event change $(input.launcher-option) {
-  //switch(this.attributes#type) {
-    //case "checkbox":
-      //storageRoot.options[this.attributes#name] = this.checked;
-      //break;
-    //case "radio":
-      //if (this.checked) {
-        //storageRoot.options.renderer = this.value;
-      //}
-    //  break;
-  //}
-//}
+event change $(input.launcher-option) {
+  switch(this.attributes#type) {
+    case "checkbox":
+      storageRoot.options[this.attributes#name] = this.checked;
+      break;
+    case "radio":
+      if (this.checked) {
+        storageRoot.options.renderer = this.value;
+      }
+      break;
+  }
+}
 
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
@@ -393,9 +392,11 @@ function onLootFilterAuthorLoadComplete(author, filters){
 	}
 }
 
+
+//NOT WORKING
 function loadOptions() {
     // Load renderer value from persistent storage
-    const renderer = view.storage.get("renderer");
+    //const renderer = view.storage.get("renderer");
 
     if (renderer === "-3dfx") {
         $("#radio-3dfx").checked = true;
@@ -403,8 +404,6 @@ function loadOptions() {
         $("#radio-ddraw").checked = true;
     } else {
         // Set the default value to -3dfx if there is no previous selection
-        $("#radio-3dfx").checked = true;
-        view.storage.set("renderer", "-3dfx");
     }
 
     var options = storageRoot.options;
@@ -425,6 +424,7 @@ function loadOptions() {
     }
 }
 
+//NOT WORKING FOR RADIOS
 function saveOptions() {
     var options = $$("input.launcher-option");
 
@@ -447,6 +447,8 @@ function saveOptions() {
     view.storage("renderer", rendererValue);
 }
 
+
+//Working
 function getLaunchArguments() {
 	var args = [];
 	var options = $$(input.launcher-option);
@@ -461,10 +463,4 @@ function getLaunchArguments() {
 	}
 
 	return args.join(" ");
-}
-
-function getDdrawOptions() {
-}
-
-function setDdrawOptions() {
 }
