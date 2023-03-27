@@ -1,15 +1,4 @@
-﻿function initDb(storage) {
-	storage.root = {
-		options: {
-			skiptobnet: true
-		},
-		lootfilters: {}
-	}
-
-	return storage.root;
-}
-
-var storage;
+﻿var storage;
 var storageRoot;
 
 try {
@@ -17,6 +6,19 @@ try {
 	storageRoot = storage.root || initDb(storage);
 } catch (e) {
 	view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
+}
+
+function initDb(storage) {
+  // Load saved options or use defaults
+  storage.root = {
+    options: {
+      skiptobnet: true,
+      renderer: storage.get("renderer") || "-3dfx", // default to -3dfx
+    },
+    lootfilters: {},
+  };
+
+  return storage.root;
 }
 
 // Fixes update to latest version.
@@ -65,8 +67,6 @@ self.ready = function() {
 	// disable news loading in favor of hard coding
 	//loadNews();
 	loadOptions();
-	
-	getDdrawOptions();
 }
 
 // function that is used by cpp for updating the
@@ -97,32 +97,21 @@ $(#play-button).onClick = function() {
 }
 
 $(#options-button).onClick = function() {
-	modalBackground.attributes.addClass("is-visible");
-	optionsModal.attributes.addClass("is-visible");
-	getDdrawOptions();
-	if ($(#mode).value == "windowed") {
-		$(#resolution).style.set {display: "block"};
-	}
-	else {
-		$(#resolution).style.set {display: "none"};
-	}
-}
+  modalBackground.attributes.addClass("is-visible");
+  optionsModal.attributes.addClass("is-visible");
 
-$(#width).onMouse = function(evt) {
-    switch(evt.type) {
-      case Event.HANDLED | Event.MOUSE_DOWN: break; // handled mouse down event in bubbling phase
-    }
+  // Check which radio button is selected and mark it as checked
+  if (storageRoot.options.renderer == "-3dfx") {
+    var radio3dfx = self.select("#3dfx");
+    radio3dfx.checked = true;
+  } else if (storageRoot.options.renderer == "-ddraw") {
+    var radioDdraw = self.select("#ddraw");
+    radioDdraw.checked = true;
+  } else {
+    var radio3dfx = self.select("#3dfx");
+    radio3dfx.checked = true;
+  }
 }
-
-$(#mode).onValueChanged = function () {
-	if ($(#mode).value == "windowed") {
-		$(#resolution).style.set {display: "block"};
-	}
-	else {
-		$(#resolution).style.set {display: "none"};
-	}
-}
-
 
 $(#loot-filters-button).onClick = function() {
 	getLootFilterJsonList(); 
@@ -144,17 +133,21 @@ for(var modalCloseButton in modalCloseButtons) {
 
 // deal with options saving
 event change $(input.launcher-option) {
-	switch(this.attributes#type) {
-		case "checkbox":
-			storageRoot.options[this.attributes#name] = this.checked;
-			break;
-	}
+  switch(this.attributes#type) {
+    case "checkbox":
+      storageRoot.options[this.attributes#name] = this.checked;
+      break;
+    case "radio":
+      if (this.checked) {
+        storageRoot.options[this.attributes#name] = this.attributes#value;
+      }
+      break;
+  }
 }
 
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
-	setDdrawOptions();
 
 	var modals = $$(.modal);
 	for (var modal in modals) {
@@ -385,23 +378,32 @@ function onLootFilterAuthorLoadComplete(author, filters){
 }
 
 function loadOptions() {
-	var options = storageRoot.options;
+  var options = storageRoot.options;
 
-	for(var key in options) {
-		var value = options[key];
-		var element = self.select("input.launcher-option[name='" + key + "']");
-		if(element == null) {
-			continue;
-		}
+  for(var key in options) {
+    var value = options[key];
+    var element = self.select("input.launcher-option[name='" + key + "']");
+    if(element == null) {
+      continue;
+    }
 
-		switch(element.attributes#type) {
-			case "checkbox":
-				element.checked = value;
-				break;
-		}
-	}
+    switch(element.attributes#type) {
+      case "checkbox":
+        element.checked = value;
+        break;
+      case "radio":
+		  if (element.attributes#value == value) {
+			element.checked = true;
+		  }
+		  break;
+      default:
+        element.attributes#value = value;
+        break;
+    }
+  }
 }
 
+//Working
 function getLaunchArguments() {
 	var args = [];
 	var options = $$(input.launcher-option);
@@ -410,51 +412,10 @@ function getLaunchArguments() {
 		if(option.attributes#type == "checkbox" && option.checked) {
 			args.push(option.value);
 		}
+		if(option.attributes#type == "radio" && option.checked) {
+			args.push(option.attributes#value);
+		}
 	}
 
 	return args.join(" ");
-}
-
-function getDdrawOptions() {
-	ddrawOptions = view.frame.getDdrawOptions();
-	for (var el in $$(.ddraw)) {
-		el.value = ddrawOptions.(el.id);
-		// handling blank edit fields by adding default values
-		if (el.value === undefined) {
-			if (el.id == "posx" || el.id == "posy") {
-				el.value = -32000;
-			}
-			else {
-				el.value = 0;
-			}
-		}
-	}
-	if (ddrawOptions.fullscreen && ddrawOptions.windowed){
-		$(#mode).value = "borderless"
-	}
-	else if (ddrawOptions.fullscreen){
-		$(#mode).value = "fullscreen"
-	}
-	else {
-		$(#mode).value = "windowed"
-	}
-}
-
-function setDdrawOptions() {
-	for (var el in $$(.ddraw)) {
-		ddrawOptions.(el.id) = el.value;
-	}
-	if($(#mode).value == "borderless") {
-		ddrawOptions.fullscreen = true;
-		ddrawOptions.windowed = true;
-	}
-	else if($(#mode).value == "fullscreen") {
-		ddrawOptions.fullscreen = true;
-		ddrawOptions.windowed = false;
-	}
-	else {
-		ddrawOptions.fullscreen = false;
-		ddrawOptions.windowed = true;
-	}
-	view.frame.setDdrawOptions(ddrawOptions);
 }
