@@ -13,7 +13,7 @@ function initDb(storage) {
   storage.root = {
     options: {
       skiptobnet: true,
-      renderer: storage.get("renderer") || "-3dfx", // default to -3dfx
+      renderer: "-3dfx", // default to -3dfx
     },
     lootfilters: {},
   };
@@ -99,6 +99,7 @@ $(#play-button).onClick = function() {
 $(#options-button).onClick = function() {
   modalBackground.attributes.addClass("is-visible");
   optionsModal.attributes.addClass("is-visible");
+  stdout.printf("\n\n renderer value: \n%s\n", storageRoot.options.renderer);
 
   // Check which radio button is selected and mark it as checked
   if (storageRoot.options.renderer == "-3dfx") {
@@ -131,7 +132,6 @@ for(var modalCloseButton in modalCloseButtons) {
 	}
 }
 
-// deal with options saving
 event change $(input.launcher-option) {
   switch(this.attributes#type) {
     case "checkbox":
@@ -139,7 +139,10 @@ event change $(input.launcher-option) {
       break;
     case "radio":
       if (this.checked) {
-        storageRoot.options[this.attributes#name] = this.attributes#value;
+        var value = this.attributes#value.toString();
+        storageRoot.options.renderer = value; // overwrite the renderer value
+        stdout.printf("\n\n\clicking something \n%s\n", value);
+        stdout.printf("\n\n\storageRoot \n%s\n", storageRoot.options.renderer);
       }
       break;
   }
@@ -379,26 +382,44 @@ function onLootFilterAuthorLoadComplete(author, filters){
 
 function loadOptions() {
   var options = storageRoot.options;
+  var hasRendererOption = false;
 
   for(var key in options) {
     var value = options[key];
     var element = self.select("input.launcher-option[name='" + key + "']");
+    
     if(element == null) {
       continue;
+    }
+    
+    if (element.attributes#type === "radio") {
+      hasRendererOption = true;
     }
 
     switch(element.attributes#type) {
       case "checkbox":
         element.checked = value;
-        break;
+		break;
       case "radio":
-		  if (element.attributes#value == value) {
-			element.checked = true;
-		  }
-		  break;
+        if (element.attributes#value == value) {
+          element.checked = true;
+          hasRendererOption = true;
+        }
+        break;
       default:
         element.attributes#value = value;
         break;
+    }
+  }
+  
+  //This is here as a fallback to that if a user has not selected a renderer to selectone and update that to the storageRoot.
+  // We are doing this so if a user does a fresh install or is updating launcher from v1.5 or less it will add this defaulted selection to storage
+  if (!hasRendererOption) {
+    var element = self.select("input.launcher-option[name='renderer'][value='-3dfx']");
+    if (element != null) {
+      element.checked = true;
+	  var value = element.attributes#value.toString();
+        storageRoot.options.renderer = value; // overwrite the renderer value
     }
   }
 }
