@@ -99,7 +99,6 @@ $(#play-button).onClick = function() {
 $(#options-button).onClick = function() {
   modalBackground.attributes.addClass("is-visible");
   optionsModal.attributes.addClass("is-visible");
-  stdout.printf("\n\n renderer value: \n%s\n", storageRoot.options.renderer);
 
   // Check which radio button is selected and mark it as checked
   if (storageRoot.options.renderer == "-3dfx") {
@@ -141,8 +140,6 @@ event change $(input.launcher-option) {
       if (this.checked) {
         var value = this.attributes#value.toString();
         storageRoot.options.renderer = value; // overwrite the renderer value
-        stdout.printf("\n\n\clicking something \n%s\n", value);
-        stdout.printf("\n\n\storageRoot \n%s\n", storageRoot.options.renderer);
       }
       break;
   }
