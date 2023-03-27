@@ -97,8 +97,20 @@ $(#play-button).onClick = function() {
 }
 
 $(#options-button).onClick = function() {
-	modalBackground.attributes.addClass("is-visible");
-	optionsModal.attributes.addClass("is-visible");
+  modalBackground.attributes.addClass("is-visible");
+  optionsModal.attributes.addClass("is-visible");
+
+  // Check which radio button is selected and mark it as checked
+  if (storageRoot.options.renderer == "-3dfx") {
+    var radio3dfx = self.select("#3dfx");
+    radio3dfx.checked = true;
+  } else if (storageRoot.options.renderer == "-ddraw") {
+    var radioDdraw = self.select("#ddraw");
+    radioDdraw.checked = true;
+  } else {
+    var radio3dfx = self.select("#3dfx");
+    radio3dfx.checked = true;
+  }
 }
 
 $(#loot-filters-button).onClick = function() {
@@ -364,7 +376,6 @@ function onLootFilterAuthorLoadComplete(author, filters){
 		lootFilterLoaded = true;
 	}
 }
-
 
 function loadOptions() {
   var options = storageRoot.options;
