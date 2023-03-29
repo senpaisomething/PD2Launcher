@@ -22,13 +22,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -48,7 +52,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(DIABLO_DEBUG_FOLDER)\</OutDir>
     <IntDir>Build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\thirdparty\sciter-sdk\include;$(SolutionDir)\thirdparty\curl\include;$(SolutionDir)\thirdparty\crc32c\include;$(SolutionDir)\thirdparty\ini\include;$(SolutionDir)\thirdparty\json\include;$(SolutionDir)\src\common\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)..\..\thirdparty\sciter-sdk\include;$(ProjectDir)..\..\thirdparty\curl\include;$(ProjectDir)..\..\thirdparty\crc32c\include;$(ProjectDir)..\..\thirdparty\ini\include;$(ProjectDir)..\..\thirdparty\json\include;$(SolutionDir)\src\common\include</IncludePath>
     <TargetName>PD2Launcher</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -56,7 +60,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>Build\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\thirdparty\sciter-sdk\include;$(SolutionDir)\thirdparty\curl\include;$(SolutionDir)\thirdparty\crc32c\include;$(SolutionDir)\thirdparty\json\include;$(SolutionDir)\thirdparty\ini\include;$(SolutionDir)\src\common\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)..\..\thirdparty\sciter-sdk\include;$(ProjectDir)..\..\thirdparty\curl\include;$(ProjectDir)..\..\thirdparty\crc32c\include;$(ProjectDir)..\..\thirdparty\json\include;$(ProjectDir)..\..\thirdparty\ini\include;$(SolutionDir)\src\common\include</IncludePath>
     <TargetName>PD2Launcher</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -65,19 +69,21 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\thirdparty\json\include;$(ProjectDir)..\..\thirdparty\crc32c\include;$(ProjectDir)..\..\thirdparty\curl\include;$(ProjectDir)..\..\thirdparty\ini\include;$(ProjectDir)..\..\thirdparty\sciter-sdk\include;$(ProjectDir)..\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>$(ExternalCompilerOptions) %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(SolutionDir)\thirdparty\curl\lib\libcurl_a.lib;$(SolutionDir)\thirdparty\crc32c\lib\crc32c_debug.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)..\..\thirdparty\curl\lib\libcurl_a.lib;$(ProjectDir)..\..\thirdparty\crc32c\lib\crc32c_debug.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>xcopy /Y /Q "$(SolutionDir)thirdparty\sciter-sdk\bin.win\x32\sciter.dll" "$(OutDir)"
-$(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
+      <Command>xcopy /Y /Q "$(ProjectDir)..\..\thirdparty\sciter-sdk\bin.win\x32\sciter.dll" "$(OutDir)"
+$(ProjectDir)..\..\thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,26 +94,27 @@ $(SolutionDir)thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.c
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\thirdparty\json\include;$(ProjectDir)..\..\thirdparty\crc32c\include;$(ProjectDir)..\..\thirdparty\curl\include;$(ProjectDir)..\..\thirdparty\ini\include;$(ProjectDir)..\..\thirdparty\sciter-sdk\include;$(ProjectDir)..\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>$(ExternalCompilerOptions) %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(SolutionDir)\thirdparty\curl\lib\libcurl_a.lib;$(SolutionDir)\thirdparty\crc32c\lib\crc32c.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)..\..\thirdparty\curl\lib\libcurl_a.lib;$(ProjectDir)..\..\thirdparty\crc32c\lib\crc32c.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>$(SolutionDir)\thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
+      <Command>xcopy /Y /Q "$(ProjectDir)..\..\thirdparty\sciter-sdk\bin.win\x32\sciter.dll" "$(OutDir)"
+$(ProjectDir)..\..\thirdparty\sciter-sdk\bin.win\packfolder.exe resources resources.cpp -v "resources"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y /Q "$(SolutionDir)bin\PD2Launcher.exe" "$(DIABLO_DEBUG_FOLDER)"</Command>
+      <Command>xcopy /Y /Q "$(OutDir)PD2Launcher.exe" "$(DIABLO_DEBUG_FOLDER)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
