@@ -1,17 +1,10 @@
-﻿function initDb(storage) {
-	storage.root = {
-		options: {
-			skiptobnet: true
-		},
-		lootfilters: {}
-	}
-
-	return storage.root;
-}
-
+﻿// Declare variables for storage and storageRoot
 var storage;
 var storageRoot;
 
+// Attempt to open the settings.db database
+// If the database exists, set the storageRoot variable to its root object
+// initDb(storage) will mostly only be called on first time install
 try {
 	storage = Storage.open(System.home("settings.db"));
 	storageRoot = storage.root || initDb(storage);
@@ -19,11 +12,27 @@ try {
 	view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
 }
 
+// the purpose of this function is to ensure that the database is properly initialized with the necessary default values 
+// for options and an empty lootfilters object, if they do not exist already.
+function initDb(storage) {
+  // Load saved options or use defaults
+  storage.root = {
+    options: {
+      skiptobnet: true,
+      renderer: "-3dfx", // default to -3dfx
+    },
+    lootfilters: {},
+  };
+
+  return storage.root;
+}
+
 // Fixes update to latest version.
 if (storageRoot.lootfilters == null){
 	storageRoot.lootfilters = {};
 }
 
+//unassorted variables
 var body = $(body);
 var modalBackground = $(#modal-background);
 var optionsModal = $(#options-modal);
@@ -39,6 +48,7 @@ var lootfilterListDictionary = {};
 var selectedLootFilter = {};
 var lootFilterLoaded = false;
 var savedLootFilterListLabel = $(#saved);
+var ddrawOptions = null;
 
 // handle pressing escape
 event keydown (e) {
@@ -51,6 +61,7 @@ event keydown (e) {
 	}
 }
 
+// called when launcher is opened  justreally placing it on screen in not some stupid place and loading the checkbox's and radios
 self.ready = function() {
 	// connect to debugger
 	if( view.connectToInspector ) view.connectToInspector();
@@ -60,9 +71,8 @@ self.ready = function() {
 	var (w,h) = (self.toPixels(750dip),self.toPixels(550dip))
 
 	view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
-
-	// disable news loading in favor of hard coding
-	//loadNews();
+	
+	// Load saved options for checkbox's and radios
 	loadOptions();
 }
 
@@ -72,32 +82,53 @@ self.finish_update = function() {
 	playButton.attributes.removeClass("disabled");
 }
 
+// handle clicking href's
 self.on("click", "a[href^=http]", function(evt) {
 	var href = this.attributes["href"];
 	Sciter.launch(href); // will open the url in default browser
 	return true; // consume the event
 });
 
+//handle clicking play button
 $(#play-button).onClick = function() {
+	//play button animation
 	playButton.attributes["disabled"] = true;
 	playButton.attributes.addClass("disabled");
 
+	// get lootfilter from storage
 	var filterOptions = storageRoot.lootfilters;
 
+	//set lootfilter to storage
 	view.frame.setLootFilter(
 		filterOptions["selectedAuthor"],
 		filterOptions["selectedFilter"],
 		filterOptions["filterDownloadUrl"],
 		filterOptions["filterUrl"]
 	);
+
+	// send commandline args to game
 	view.frame.play(getLaunchArguments());
 }
 
+// open the options page and read storage for the radio buttons if one has never been selected by user to select 3dfx
 $(#options-button).onClick = function() {
-	modalBackground.attributes.addClass("is-visible");
-	optionsModal.attributes.addClass("is-visible");
+  modalBackground.attributes.addClass("is-visible");
+  optionsModal.attributes.addClass("is-visible");
+
+  // Check which radio button is selected and mark it as checked
+  if (storageRoot.options.renderer == "-3dfx") {
+    var radio3dfx = self.select("#3dfx");
+    radio3dfx.checked = true;
+  } else if (storageRoot.options.renderer == "-ddraw") {
+    var radioDdraw = self.select("#ddraw");
+    radioDdraw.checked = true;
+  } else {
+    var radio3dfx = self.select("#3dfx");
+    radio3dfx.checked = true;
+  }
 }
 
+//deal with clicking the lootfilters button under the options button
 $(#loot-filters-button).onClick = function() {
 	getLootFilterJsonList(); 
 		   
@@ -116,15 +147,22 @@ for(var modalCloseButton in modalCloseButtons) {
 	}
 }
 
-// deal with options saving
+//deal with selecting the options page controls (radios and checkbox's)
 event change $(input.launcher-option) {
-	switch(this.attributes#type) {
-		case "checkbox":
-			storageRoot.options[this.attributes#name] = this.checked;
-			break;
-	}
+  switch(this.attributes#type) {
+    case "checkbox":
+      storageRoot.options[this.attributes#name] = this.checked;
+      break;
+    case "radio":
+      if (this.checked) {
+        var value = this.attributes#value.toString();
+        storageRoot.options.renderer = value; // overwrite the renderer value
+      }
+      break;
+  }
 }
 
+//method for closing filters or options pages
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
@@ -135,31 +173,9 @@ function closeModals() {
 	}
 }
 
-function loadNews() {
-	view.request({
-		url: "https://storage.googleapis.com/pd2-launcher/news.json",
-		protocol: #basic,
-		output: #json,
-		noCache: true,
-		success: function(data, status) {
-			news.clear();
-
-			for(var item in data.items) {
-				news.$append(
-					<div.entry>
-						<a.title href="{item.url}">{item.header}</a>
-						<div.date>{item.date}</div>
-					</div>
-				);
-			}
-		},
-		error:function(err, status) {
-
-		}
-	});
-}
-
+// checks github list for community submitted loot filters
 function getLootFilterJsonList(){
+	// If the list has not been retrieved yet, fetch it using an HTTP request.
 	if (jsonFilters == null){
 		jsonFilters = [];
 		view.request({
@@ -168,53 +184,71 @@ function getLootFilterJsonList(){
 			output: #json,
 			noCache: false,
 			success: function(data, status) {
+				// Add a "local" loot filter option to the beginning of the list.
 				jsonFilters.push({"author":"local", "url":"", "name":"local"});
 
+				// Add each loot filter to the list.
 				for (var d in data){
 					jsonFilters.push(d);
 				}
-						
+
+				// Open the modal window that displays the loot filter options.	
 				openLootFiltersModal();
 			},
 			error:function(err, status) {
 			}
 		});
 	} else {
+		// If the list has already been retrieved, just open the modal window that displays the loot filter options.
 		openLootFiltersModal();
 	}
 }
 
+//deal with opening the lootfilters page
 function openLootFiltersModal(){
 	loadLootFilterAuthors();
 	modalBackground.attributes.addClass("is-visible");
 	lootFilterModal.attributes.addClass("is-visible");
 }
 
+// Clears the current list of loot filter authors and generates a new list
+// based on the jsonFilters object. Also handles button clicks for selecting
+// a loot filter author and highlighting the selected author.
 function loadLootFilterAuthors(){
+	// Clear the current list of loot filter authors.
 	lootFilterAuthors.clear();
 
+	// Check if there are any loot filters available.
 	if (jsonFilters != null){
+
 		for(var item in jsonFilters) {
+			// Add a new button to the list of loot filter authors.
 			lootFilterAuthors.$append(
 				<div id="{item.author}btn" class="author-button">
 					<span id="{item.author}btntext">{item.author}</span>
 				</div>
 			);
 
+			// Add a click event listener to the author button text
 			$(#{item.author}btntext).on("click", function(evt, btn){
 				btn.parent.postEvent("click");
 			});
 
+			// Add a click event listener to the author button to select the
+			// loot filter author and highlight the selected author.
 			$(#{item.author}btn).on("click", function(evt, btn){
 				var buttons = $$(.author-button);
 				for (var button in buttons) {
 					button.attributes.removeClass("author-button-selected");
 				}
-						
+				
+				// select the corresponding loot filter author.
 				btn.attributes.addClass("author-button-selected");
 				selectLootFilterAuthor(btn.id.substr(0, btn.id.length - 3));
 			});
 
+			// If a loot filter is already selected in the storage, simulate a
+			// click on the corresponding author button to highlight it.
 			if (!lootFilterLoaded){
 				if (item.author == storageRoot.lootfilters["selectedAuthor"]){
 					$(#{item.author}btn).postEvent("click");
@@ -224,12 +258,16 @@ function loadLootFilterAuthors(){
 	}
 }
 
+// Selects a loot filter author and retrieves their list of filters
+// author: the name of the author to select
 function selectLootFilterAuthor(author){
+	
+	// Clear existing loot filter data
 	selectedLootFilterAuthor = null;
 	lootFilterList.clear();
 	lootFilterListHeader.clear();
 
-
+	// If an author is selected
 	if (author != null && author != ""){
 		// Get author object
 		for(var item in jsonFilters) {
@@ -238,7 +276,8 @@ function selectLootFilterAuthor(author){
 				break;
 			}
 		}
-
+		
+		// If the author is local
 		if (author.toLowerCase() == "local"){
 			var localFiles = view.frame.getLocalFiles();
 			var filters = [];
@@ -248,11 +287,13 @@ function selectLootFilterAuthor(author){
 					filters.push({"name": f});
 				}
 			}
+			
+			// Cache and show the filters
 			lootfilterListDictionary[author] = filters;
 			onLootFilterAuthorLoadComplete(selectedLootFilterAuthor, filters);
 		} else {
 			if (lootfilterListDictionary[author] == null){
-				// Lookup author git repo
+				// If the author has not been loaded before, look up their Git repository Lookup author git repo
 				if (selectedLootFilterAuthor != null && selectedLootFilterAuthor.url != null){
 					view.request({
 					url: selectedLootFilterAuthor.url,
@@ -277,13 +318,14 @@ function selectLootFilterAuthor(author){
 				});
 				}                     
 			} else {
-				// Already loaded before
+				// // If the author has been loaded before, use the cached data
 				onLootFilterAuthorLoadComplete(selectedLootFilterAuthor, lootfilterListDictionary[author]);
 			}
 		}
 	}
 }
 
+// Handles the completion of loading loot filters for a selected author
 function onLootFilterAuthorLoadComplete(author, filters){
 	var url = "https://github.com/Project-Diablo-2/LootFilters";
 	if (author.url){
@@ -357,31 +399,63 @@ function onLootFilterAuthorLoadComplete(author, filters){
 	}
 }
 
+// Load saved options from storage and set them on the launcher UI elements 
 function loadOptions() {
-	var options = storageRoot.options;
+  var options = storageRoot.options;
+  var hasRendererOption = false;
 
-	for(var key in options) {
-		var value = options[key];
-		var element = self.select("input.launcher-option[name='" + key + "']");
-		if(element == null) {
-			continue;
-		}
+  for(var key in options) {
+    var value = options[key];
+    var element = self.select("input.launcher-option[name='" + key + "']");
+    
+	 // Skip elements that don't match a saved option
+    if(element == null) {
+      continue;
+    }
+    
+    if (element.attributes#type === "radio") {
+      hasRendererOption = true;
+    }
 
-		switch(element.attributes#type) {
-			case "checkbox":
-				element.checked = value;
-				break;
-		}
-	}
+    switch(element.attributes#type) {
+      case "checkbox":
+        element.checked = value;
+		break;
+      case "radio":
+        if (element.attributes#value == value) {
+          element.checked = true;
+          hasRendererOption = true;
+        }
+        break;
+      default:
+        element.attributes#value = value;
+        break;
+    }
+  }
+  
+  //This is here as a fallback to that if a user has not selected a renderer to selectone and update that to the storageRoot.
+  // We are doing this so if a user does a fresh install or is updating launcher from v1.5 or less it will add this defaulted selection to storage
+  if (!hasRendererOption) {
+    var element = self.select("input.launcher-option[name='renderer'][value='-3dfx']");
+    if (element != null) {
+      element.checked = true;
+	  var value = element.attributes#value.toString();
+        storageRoot.options.renderer = value; // overwrite the renderer value
+    }
+  }
 }
 
+// Returns a string of command-line arguments based on the state of the launcher options
 function getLaunchArguments() {
 	var args = [];
-	var options = $$(input.launcher-option);
+	var options = $$(input.launcher-option); // get all launcher options
 
 	for(var option in options) {
 		if(option.attributes#type == "checkbox" && option.checked) {
-			args.push(option.value);
+			args.push(option.value); // add checkbox option if it is checked
+		}
+		if(option.attributes#type == "radio" && option.checked) {
+			args.push(option.attributes#value); // add radio option value if it is checked
 		}
 	}
 

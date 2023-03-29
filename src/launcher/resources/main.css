@@ -1,6 +1,7 @@
 ﻿@const GOLD: #998363;
 @const GOLD_LIGHTER: #b39a74;
 @const GOLD_DARKER: #877458;
+@const DISABLED: #56585c ;
 
 @font-face {
     font-family: exocet-medium;
@@ -33,6 +34,12 @@ a {
 
 button {
     border: none;
+    font-family: inherit;
+}
+
+select {
+    border: solid;
+    border-color: @GOLD;
     font-family: inherit;
 }
 
@@ -143,6 +150,39 @@ button {
     margin-top: 12dip;
 }
 
+#donate-text {
+    text-align: left;
+    width: 265dip;
+    font-size: 12dip;
+    bottom: 38dip;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.5);
+    color: @GOLD_LIGHTER;
+}
+
+#donate-containter {
+    text-align: center;
+    width: 120dip;
+    height: 120dip;
+    margin: 0 auto;
+    
+}
+
+.bottomright {
+    position: absolute;
+    bottom: 73dip;
+    right: 16dip;
+    font-size: 11dip;
+    text-align:end;
+}
+  
+
+#donate-buttons {
+    width: 301dip;
+    display: block;
+    margin-right: -2dip;
+}
+
 #buttons {
     width: 301dip;
     display: block;
@@ -244,6 +284,19 @@ button {
 
     #loot-filters-button:active {
         background: url("img/loot-pressed.jpg");
+        background-size: 100%;
+    }
+
+#donate-button {
+    background: url("img/donate.jpg");
+    background-size: 100%;
+    width: 272dip;
+    height: 32dip;
+    padding-bottom: 10dip;
+}
+
+    #donate-button:active {
+        background: url("img/donate-pressed.jpg");
         background-size: 100%;
     }
 
@@ -406,12 +459,116 @@ button {
         color: @GOLD_DARKER;
     }
 
+.v-sync-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+}
+
+    .v-sync-container span {
+        display: block;
+        font-size: 14dip;
+        margin-right: 125dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+.window-position-header {
+    font-size: 16dip;
+    margin-bottom: 10dip;
+}
+
+.window-position-container {
+    margin-bottom: 10dip;
+    margin-left: 20dip;
+    font-size: 16dip;
+    color: @GOLD_LIGHTER;
+}
+
+    .window-position-container span {
+        display: block;
+        font-size: 12dip;
+        margin-left: 25dip;
+        color: @GOLD_DARKER;
+    }
+
+    .window-position-boxes {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .height-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .width-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .width-box-label {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .pos-x-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
+    .pos-y-box {
+        display: block;
+        font-size: 14dip;
+        margin-left: 25dip;
+        margin-bottom: 10dip;
+        color: @GOLD_DARKER;
+    }
+
 label.checkbox, input[type=checkbox] {
     cursor: pointer;
 }
 
+input[type=checkbox]:hover {
+    background: none;
+}
+
 label.checkbox {
     font-size: 16dip;
+}
+
+select > popup.list {
+    border: 2dip @GOLD;
+}
+
+label.select select, option, select > caption {
+    color: @GOLD_DARKER;
+    font-size: 14dip;
+    background: #000;
+}
+
+input[type=number] {
+    text-align: center;
+    width: 65dip;
+    font-size: 14dip;
+    border: 2dip solid @GOLD;
+    color: @GOLD_DARKER;
+    background: #000;
+    font-family: inherit;
 }
 
 input[type=checkbox]:root {
@@ -448,4 +605,45 @@ input[type=checkbox]:checked::after {
     position: absolute;
     bottom: 5dip;
     right: 5dip;
+}
+
+[title~=advancedCheck]:checked {
+    /* background-color: white !important; */
+}
+
+[title~=advancedCheck]:checked #checktest {
+    /* background-color: blue !important; */
+}
+
+
+.ddraw-adv-options {
+    display: none;
+    width: auto;
+    height: 100%;
+  }
+  
+  #ddraw-adv-trigger {
+    display: none;
+  }
+  
+  #ddraw-adv-trigger:checked + .ddraw-adv-options {
+    display: block;
+  }
+
+  #show-advanced-btn {
+      border-bottom: 1px solid rgba(0,0,0,0.0);
+  }
+
+  select option {
+      padding-left: 10dip !important;
+      padding-top: 5dip;
+      padding-bottom: 1dip;
+  }
+
+label.radio, input[type=radio] {
+    cursor: pointer;
+}
+
+label.radio {
+    font-size: 16px;
 }

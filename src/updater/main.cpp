@@ -8,7 +8,8 @@
 
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
+std::string LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
+std::string BETA_LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
 
 void checkUpdates(bool forceDownload) {
 	std::cout << "Calling API..." << "\n";
@@ -83,6 +84,11 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nC
 	}
 
 	LocalFree(szArgList);
+
+	// If beta, point the buckets to the beta launcher
+#ifdef BETA_LAUNCHER
+	LAUNCHER_BUCKET = BETA_LAUNCHER_BUCKET;
+#endif
 
 	// check for updates to the launcher
 	checkUpdates(forceDownload);

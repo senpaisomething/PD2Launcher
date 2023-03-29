@@ -13,11 +13,15 @@
 #include "sciter-x-window.hpp"
 #include "resources.cpp"
 #include "inihelper.h"
-
+#include <aux-cvt.h>
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
-const char* CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
+
+std::string LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
+std::string CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
+
+std::string BETA_LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
+std::string BETA_CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
 
 std::string lastFilterDownload = "";
 
@@ -121,7 +125,8 @@ bool lootFilter(sciter::string author, sciter::string filter, sciter::string dow
 		}
 
 		fs::create_symlink(filterPath, defaultFilterPath);
-	} else {
+	}
+	else {
 		if (ws2s(author) == "" || ws2s(filter) == "" || ws2s(download_url) == "" || ws2s(url) == "" || lastFilterDownload == ws2s(download_url)) {
 			return false;
 		}
@@ -192,12 +197,12 @@ public:
 			SOM_FUNC(setLootFilter),
 			SOM_FUNC(getLocalFiles)
 		)
-	SOM_PASSPORT_END
+		SOM_PASSPORT_END
 
-	bool _update(sciter::string args) {
-		#ifndef _DEBUG
+		bool _update(sciter::string args) {
+#ifndef _DEBUG
 		updateClientFiles();
-		#endif
+#endif
 
 		this->call_function("self.finish_update");
 		return _launch(args);
@@ -250,11 +255,10 @@ private:
 
 int uimain(std::function<int()> run) {
 	// TODO: Check for sciter.dll
-
 	// enable debug mode
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	SciterSetOption(NULL, SCITER_SET_DEBUG_MODE, TRUE);
-	#endif
+#endif
 
 	// ensure only one running instance
 	pd2Mutex = CreateMutex(NULL, TRUE, L"pd2.launcher.mutex");
@@ -275,9 +279,15 @@ int uimain(std::function<int()> run) {
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
 
-	#ifndef _DEBUG
+	// If beta, point the buckets to the beta launcher
+#ifdef BETA_LAUNCHER
+	LAUNCHER_BUCKET = BETA_LAUNCHER_BUCKET;
+	CLIENT_FILES_BUCKET = BETA_CLIENT_FILES_BUCKET;
+#endif
+
+#ifndef _DEBUG
 	updateLauncher();
-	#endif
+#endif
 
 	// start the launcher ui
 	int result = run();

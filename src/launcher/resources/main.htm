@@ -21,6 +21,10 @@
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
+                    <a href="https://live.projectdiablo2.com/">Trade</a>
+                </td>
+                <td class="separator">&bull;</td>
+                <td>
                     <a href="https://www.reddit.com/r/ProjectDiablo2/">Reddit</a>
                 </td>
                 <td class="separator">&bull;</td>
@@ -33,10 +37,6 @@
                 </td>
                 <td class="separator">&bull;</td>
                 <td>
-                    <a href="https://www.patreon.com/ProjectDiablo2">Donate</a>
-                </td>
-                <td class="separator">&bull;</td>
-                <td>
                     <a href="https://projectdiablo2.miraheze.org/wiki/Main_Page">Wiki</a>
                 </td>
             </tr>
@@ -46,16 +46,41 @@
     <div id="content-wrapper">
         <div id="news">
             <div class="entry">
-                <a class="title" href="https://www.projectdiablo2.com/">Project Diablo 2 season 2 Transcendence Beta has begun!</a>
-                <div class="date">3-3-2021</div>
+                <a class="title" href="https://www.projectdiablo2.com/">Welcome to Project Diablo 2 Season 7 Malfeasance! Please click here to read the rules.</a>
+                <div class="date">3-25-23</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://live.projectdiablo2.com/">Check out our Trade Site at https://live.projectdiablo2.com/ </a>
+                <div class="date">5-21-22</div>
             </div>
             <div class="entry">
                 <a class="title" href="https://www.projectdiablo2.com/Rules">Don't forget trading on any third party site or platform will result in a permanent ban make sure to get up to speed with our server rules to avoid having your account suspended or banned!</a>
-                <div class="date">11-8-2020</div>
+                <div class="date">3-25-23</div>
             </div>
             <div class="entry">
-                <a class="title" href="https://www.projectdiablo2.com/Trade">Check out our Trade Site at www.ProjectDiablo2.com/trade or the Trading Channels in our discord!</a>
-                <div class="date">11-8-2020</div>
+                <a class="title" href="https://www.projectdiablo2.com/">Welcome to Project Diablo 2 Season 6 Fortification! Please click here to read the rules.</a>
+                <div class="date">11-25-22</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/">Welcome to Project Diablo 2 Season 5 Ascension! Please click here to read the new rules.</a>
+                <div class="date">5-21-22</div>
+            </div>
+
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/">Welcome to Project Diablo 2 season 4 Enlightenment</a>
+                <div class="date">12-03-2021</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/">Welcome to Project Diablo 2 season 3 Domination</a>
+                <div class="date">7-23-2021</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/">Welcome to Project Diablo 2 season 2 Transcendence</a>
+                <div class="date">3-12-2021</div>
+            </div>
+            <div class="entry">
+                <a class="title" href="https://www.projectdiablo2.com/">Project Diablo 2 season 2 Transcendence Beta has begun!</a>
+                <div class="date">3-3-2021</div>
             </div>
             <div class="entry">
                 <a class="title" href="https://www.projectdiablo2.com/">Project Diablo 2 season 1 Awakening has gone live!</a>
@@ -72,6 +97,11 @@
         </div>
     </div>
 
+    <div id="donate-containter">
+        <a href="https://www.projectdiablo2.com/donate" id="donate-button" class="bottomright"></a>
+        <span id="donate-text" class="bottomright">Thanks for your support, we couldn't keep the servers around without this community!</span>
+    </div>
+
     <div id="modal-background"></div>
     <div id="options-modal" class="modal scrollable">
         <div class="modal-titlebar">
@@ -83,23 +113,27 @@
         <div class="modal-content">
             <h2 class="option-header">Graphics</h2>
             <div class="option-container">
-                <label class="checkbox">
-                    <input type="checkbox" name="windowed" value="-w" class="launcher-option" /> Windowed mode (-w)
-                    <span>This will disable upscaling and shaders</span>
+                <label class="radio">
+                    <input type="radio" name="renderer" id="3dfx" value="-3dfx" class="launcher-option" />
+                    3dfx
                 </label>
+                <label class="radio">
+                    <input type="radio" name="renderer" id="ddraw" value="-ddraw" class="launcher-option" />
+                    ddraw
+                </label>
+                <span>Note: You can use CTRL+O in-game to edit video settings</span>
             </div>
-
             <h2 class="option-header">Sound</h2>
             <div class="option-container">
                 <label class="checkbox"><input type="checkbox" name="sndbkg" value="-sndbkg" class="launcher-option" /> Sound in Background (-sndbkg)</label>
             </div>
-
             <h2 class="option-header">Other</h2>
             <div class="option-container">
                 <label class="checkbox"><input type="checkbox" name="skiptobnet" value="-skiptobnet" class="launcher-option" /> Skip To BattleNet (-skiptobnet)</label>
             </div>
         </div>
     </div>
+    
     <div id="loot-filter-modal" class="modal">
         <div class="modal-titlebar">
             <div class="modal-title-left">Loot Filter Profiles</div>
@@ -122,6 +156,6 @@
             </div>
         </div>
     </div>
-    <div id="version">v1.2</div>
+    <div id="version">v1.6</div>
 </body>
 </html>
