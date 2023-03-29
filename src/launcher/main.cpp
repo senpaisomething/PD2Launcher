@@ -16,8 +16,12 @@
 #include <aux-cvt.h>
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
-const char* CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
+
+std::string LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
+std::string CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
+
+std::string BETA_LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
+std::string BETA_CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
 
 std::string lastFilterDownload = "";
 
@@ -274,6 +278,12 @@ int uimain(std::function<int()> run) {
 	// note: this:://app URL is dedicated to the sciter::archive content associated with the application
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
+
+	// If beta, point the buckets to the beta launcher
+#ifdef BETA_LAUNCHER
+	LAUNCHER_BUCKET = BETA_LAUNCHER_BUCKET;
+	CLIENT_FILES_BUCKET = BETA_CLIENT_FILES_BUCKET;
+#endif
 
 #ifndef _DEBUG
 	updateLauncher();
