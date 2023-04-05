@@ -74,6 +74,9 @@ self.ready = function() {
 	
 	// Load saved options for checkbox's and radios
 	loadOptions();
+	
+	// get ddraw options
+	getDdrawOptions();
 }
 
 // function that is used by cpp for updating the
@@ -119,13 +122,34 @@ $(#options-button).onClick = function() {
   if (storageRoot.options.renderer == "-3dfx") {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
+	showOrHideDdrawOptions("none")
   } else if (storageRoot.options.renderer == "-ddraw") {
     var radioDdraw = self.select("#ddraw");
     radioDdraw.checked = true;
+	getDdrawOptions();
+	showOrHideDdrawOptions("block")
   } else {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
+	showOrHideDdrawOptions("none")
   }
+}
+
+//event watcher for clicking #width a ddraw option
+$(#width).onMouse = function(evt) {
+    switch(evt.type) {
+      case Event.HANDLED | Event.MOUSE_DOWN: break; // handled mouse down event in bubbling phase
+    }
+}
+
+//deal with selecting mode as windowed as windowed
+$(#mode).onValueChanged = function () {
+	if ($(#mode).value == "windowed") {
+		$(#resolution).style.set {display: "block"};
+	}
+	else {
+		$(#resolution).style.set {display: "none"};
+	}
 }
 
 //deal with clicking the lootfilters button under the options button
@@ -147,6 +171,33 @@ for(var modalCloseButton in modalCloseButtons) {
 	}
 }
 
+//super annoying thing that runs on thoughts and prayers
+// basically only ever pass in a string "none" or "block"  (none = hide and block = show)
+function showOrHideDdrawOptions(noneOrBlock) {
+	// Don't forget the header
+	$(#ddraw-header).style.set({ display: noneOrBlock });
+
+	// Loop through the options
+	for (var el in $$(#ddraw-options)) {
+		el.style.set({ display: noneOrBlock });
+	}
+
+	// and those ugly ass resolution options.... gross
+	if (noneOrBlock === "none") {
+		$(#resolution).style.set({ display: noneOrBlock });
+	} else {
+		// Make sure window selection is populating resolution
+		if ($(#mode).value == "windowed") {
+			$(#resolution).style.set({ display: "block" });
+		} else {
+			$(#resolution).style.set({ display: "none" });
+		}
+	}
+
+	// and that damn advanced options
+	$(#show-advanced-btn).style.set({ display: noneOrBlock });
+}
+
 //deal with selecting the options page controls (radios and checkbox's)
 event change $(input.launcher-option) {
   switch(this.attributes#type) {
@@ -157,6 +208,11 @@ event change $(input.launcher-option) {
       if (this.checked) {
         var value = this.attributes#value.toString();
         storageRoot.options.renderer = value; // overwrite the renderer value
+		if (value === "-3dfx") {
+		  showOrHideDdrawOptions("none")
+        } else {
+          showOrHideDdrawOptions("block")
+        }
       }
       break;
   }
@@ -172,7 +228,7 @@ function closeModals() {
 		modal.attributes.removeClass("is-visible");
 	}
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 // checks github list for community submitted loot filters
 function getLootFilterJsonList(){
 	// If the list has not been retrieved yet, fetch it using an HTTP request.
@@ -399,6 +455,8 @@ function onLootFilterAuthorLoadComplete(author, filters){
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Load saved options from storage and set them on the launcher UI elements 
 function loadOptions() {
   var options = storageRoot.options;
@@ -460,4 +518,48 @@ function getLaunchArguments() {
 	}
 
 	return args.join(" ");
+}
+
+function getDdrawOptions() {
+	ddrawOptions = view.frame.getDdrawOptions();
+	for (var el in $$(.ddraw)) {
+		el.value = ddrawOptions.(el.id);
+		// handling blank edit fields by adding default values
+		if (el.value === undefined) {
+			if (el.id == "posx" || el.id == "posy") {
+				el.value = -32000;
+			}
+			else {
+				el.value = 0;
+			}
+		}
+	}
+	if (ddrawOptions.fullscreen && ddrawOptions.windowed){
+		$(#mode).value = "borderless"
+	}
+	else if (ddrawOptions.fullscreen){
+		$(#mode).value = "fullscreen"
+	}
+	else {
+		$(#mode).value = "windowed"
+	}
+}
+
+function setDdrawOptions() {
+	for (var el in $$(.ddraw)) {
+		ddrawOptions.(el.id) = el.value;
+	}
+	if($(#mode).value == "borderless") {
+		ddrawOptions.fullscreen = true;
+		ddrawOptions.windowed = true;
+	}
+	else if($(#mode).value == "fullscreen") {
+		ddrawOptions.fullscreen = true;
+		ddrawOptions.windowed = false;
+	}
+	else {
+		ddrawOptions.fullscreen = false;
+		ddrawOptions.windowed = true;
+	}
+	view.frame.setDdrawOptions(ddrawOptions);
 }

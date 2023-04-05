@@ -16,8 +16,12 @@
 #include <aux-cvt.h>
 namespace fs = std::filesystem;
 
-const char* LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
-const char* CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
+
+std::string LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-launcher-update/o";
+std::string CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-client-files/o";
+
+std::string BETA_LAUNCHER_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-launcher-update/o";
+std::string BETA_CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v1/b/pd2-beta-client-files/o";
 
 std::string lastFilterDownload = "";
 
@@ -182,6 +186,60 @@ void checkLootFilterFileStructure() {
 	}
 }
 
+sciter::value getDdrawIni() {
+	//Read ddraw.ini file and return a key/value map as sciter::value
+	sciter::value ddrawoptions;
+
+	mINI::INIFile file("ddraw.ini");
+	mINI::INIStructure ini;
+
+	file.read(ini);
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+		for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			auto const& value = it2.second;
+			ddrawoptions.set_item(key, value);
+		}
+	}
+	return ddrawoptions;
+}
+
+void setDdrawIni(sciter::value ddrawoptions) {
+	mINI::INIFile file("ddraw.ini");
+	mINI::INIStructure ini;
+
+	file.read(ini);
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+		for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			if (ddrawoptions.get_item(key).is_bool()) {
+				bool value = ddrawoptions.get_item(key).get(false);
+				ini[section][key] = (value) ? "true" : "false";
+			}
+			else if (ddrawoptions.get_item(key).is_int()) {
+				auto value = aux::itoa(ddrawoptions.get_item(key).get(1));
+				ini[section][key] = value;
+			}
+			else {
+				auto value = aux::w2a(ddrawoptions.get_item(key).get(L""));
+				ini[section][key] = value;
+			}
+		}
+	}
+	file.write(ini);
+	return;
+}
+
 class frame : public sciter::window {
 public:
 	frame() : window(SW_MAIN) {}
@@ -191,7 +249,9 @@ public:
 		SOM_FUNCS(
 			SOM_FUNC(play),
 			SOM_FUNC(setLootFilter),
-			SOM_FUNC(getLocalFiles)
+			SOM_FUNC(getLocalFiles),
+			SOM_FUNC(getDdrawOptions),
+			SOM_FUNC(setDdrawOptions)
 		)
 		SOM_PASSPORT_END
 
@@ -245,6 +305,15 @@ public:
 		return files;
 	}
 
+	sciter::value getDdrawOptions() {
+		return getDdrawIni();
+	}
+
+	bool setDdrawOptions(sciter::value ddrawoptions) {
+		setDdrawIni(ddrawoptions);
+		return true;
+	}
+
 private:
 	std::vector<std::future<bool>> pending_futures;
 };
@@ -274,6 +343,12 @@ int uimain(std::function<int()> run) {
 	// note: this:://app URL is dedicated to the sciter::archive content associated with the application
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
+
+	// If beta, point the buckets to the beta launcher
+#ifdef BETA_LAUNCHER
+	LAUNCHER_BUCKET = BETA_LAUNCHER_BUCKET;
+	CLIENT_FILES_BUCKET = BETA_CLIENT_FILES_BUCKET;
+#endif
 
 #ifndef _DEBUG
 	updateLauncher();
