@@ -74,9 +74,6 @@ self.ready = function() {
 	
 	// Load saved options for checkbox's and radios
 	loadOptions();
-	
-	// get ddraw options
-	getDdrawOptions();
 }
 
 // function that is used by cpp for updating the
@@ -126,12 +123,29 @@ $(#options-button).onClick = function() {
   } else if (storageRoot.options.renderer == "-ddraw") {
     var radioDdraw = self.select("#ddraw");
     radioDdraw.checked = true;
-	getDdrawOptions();
 	showOrHideDdrawOptions("block")
   } else {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
 	showOrHideDdrawOptions("none")
+  }
+
+// Mark the correct checkboxes and input values for ddrawOptions
+  var ddrawOptions = storageRoot.ddrawOptions;
+  for (var key in ddrawOptions) {
+    var value = ddrawOptions[key];
+    var element = self.select("input.ddraw[id='" + key + "']");
+    if (element) {
+      switch (element.attributes#type) {
+        case "checkbox":
+          element.checked = value;
+          break;
+        case "number":
+        case "select-one":
+          element.value = value;
+          break;
+      }
+    }
   }
 }
 
@@ -218,10 +232,34 @@ event change $(input.launcher-option) {
   }
 }
 
+// deal with changing the ddraw options
+event change $(input.ddraw) {
+	stdout.printf("attributes#type:  %s \n", this.attributes#type);
+  switch (this.attributes#type) {
+    case "checkbox":
+      storageRoot.ddrawOptions[this.attributes#id] = this.checked;
+	  stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
+      break;
+    case "number":
+      storageRoot.ddrawOptions[this.attributes#id] = this.value;
+	  stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
+      break;
+    case "select-one":
+      storageRoot.ddrawOptions[this.attributes#id] = this.value;
+	  stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
+      break;
+    default:
+      break;
+  }
+}
+
 //method for closing filters or options pages
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
+	
+	// Write the ddraw options to the ini file
+	writeDdrawOptionsToIni(storageRoot.ddrawOptions);
 
 	var modals = $$(.modal);
 	for (var modal in modals) {
@@ -462,6 +500,11 @@ function loadOptions() {
   var options = storageRoot.options;
   var hasRendererOption = false;
 
+  if (!("ddrawOptions" in storageRoot)) {
+  storageRoot.ddrawOptions = createDdrawOptionsFallbackDefaults();
+  stdout.printf("ddrawOptions  have been created?:  %s \n", storageRoot.ddrawOptions);
+}
+
   for(var key in options) {
     var value = options[key];
     var element = self.select("input.launcher-option[name='" + key + "']");
@@ -513,53 +556,52 @@ function getLaunchArguments() {
 			args.push(option.value); // add checkbox option if it is checked
 		}
 		if(option.attributes#type == "radio" && option.checked) {
-			args.push(option.attributes#value); // add radio option value if it is checked
+			if(option.attributes#value === "-3dfx") {
+				args.push(option.attributes#value); // add radio option value if it is checked
+			} else {
+				stdout.printf("not pushing ddraw  %s \n", option.attributes#value);
+			}
 		}
 	}
-
+	stdout.printf("print args:  %s \n", args.join(" "));
 	return args.join(" ");
 }
 
-function getDdrawOptions() {
-	ddrawOptions = view.frame.getDdrawOptions();
-	for (var el in $$(.ddraw)) {
-		el.value = ddrawOptions.(el.id);
-		// handling blank edit fields by adding default values
-		if (el.value === undefined) {
-			if (el.id == "posx" || el.id == "posy") {
-				el.value = -32000;
-			}
-			else {
-				el.value = 0;
-			}
-		}
-	}
-	if (ddrawOptions.fullscreen && ddrawOptions.windowed){
-		$(#mode).value = "borderless"
-	}
-	else if (ddrawOptions.fullscreen){
-		$(#mode).value = "fullscreen"
-	}
-	else {
-		$(#mode).value = "windowed"
-	}
+function writeDdrawOptionsToIni(ddrawOptions) {
+// Iterate over the properties in storageRoot.ddrawOptions
+for (var key in storageRoot.ddrawOptions) {
+  var value = storageRoot.ddrawOptions[key];
+  stdout.printf("%s: %s\n", key, value);
 }
 
-function setDdrawOptions() {
-	for (var el in $$(.ddraw)) {
-		ddrawOptions.(el.id) = el.value;
-	}
-	if($(#mode).value == "borderless") {
-		ddrawOptions.fullscreen = true;
-		ddrawOptions.windowed = true;
-	}
-	else if($(#mode).value == "fullscreen") {
-		ddrawOptions.fullscreen = true;
-		ddrawOptions.windowed = false;
-	}
-	else {
-		ddrawOptions.fullscreen = false;
-		ddrawOptions.windowed = true;
-	}
-	view.frame.setDdrawOptions(ddrawOptions);
+ setDdrawIni(storageRoot.ddrawOptions);
+}
+
+function createDdrawOptionsFallbackDefaults() {
+  return {
+    fullscreen: true,
+    windowed: false,
+    width: 0,
+    height: 0,
+    posx: -32000,
+    posy: -32000,
+    maintas: false,
+    boxing: false,
+    vsync: false,
+    adjmouse: false,
+    devmode: false,
+    border: false,
+    resizeable: true,
+    noactivateapp: false,
+    handlemouse: true,
+    nonexclusive: false,
+    maxfps: "60",
+    maxgameticks: "-2",
+    savesettings: "1",
+    renderer2: "opengl",
+    hook: "4",
+    minfps: "0",
+    shader: "Shaders\\xbr\\xbr-lv2-noblend.glsl",
+    singlecpu: true
+  };
 }
