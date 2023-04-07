@@ -156,14 +156,35 @@ $(#width).onMouse = function(evt) {
     }
 }
 
-//deal with selecting mode as windowed as windowed
-$(#mode).onValueChanged = function () {
-	if ($(#mode).value == "windowed") {
-		$(#resolution).style.set {display: "block"};
-	}
-	else {
-		$(#resolution).style.set {display: "none"};
-	}
+// deal with changing the mode option
+event change $(select.ddraw-select) {
+	stdout.printf("\n this.vale: %s\n", this.value);
+  switch (this.value) {
+    case "fullscreen":
+      storageRoot.ddrawOptions.windowed = false;
+      storageRoot.ddrawOptions.fullscreen = true;
+      break;
+    case "borderless":
+      storageRoot.ddrawOptions.windowed = true;
+      storageRoot.ddrawOptions.fullscreen = true;
+      break;
+    case "windowed":
+      storageRoot.ddrawOptions.windowed = true;
+      storageRoot.ddrawOptions.fullscreen = false;
+      $(#resolution).style.set {display: "block"};
+      break;
+    default:
+      break;
+  }
+  stdout.printf("windowed: %s, fullscreen: %s \n", storageRoot.ddrawOptions.windowed, storageRoot.ddrawOptions.fullscreen);
+  
+
+  // show or hide resolution options based on mode
+  if (storageRoot.ddrawOptions.windowed) {
+    $(#resolution).style.set {display: "block"};
+  } else {
+    $(#resolution).style.set {display: "none"};
+  }
 }
 
 //deal with clicking the lootfilters button under the options button
@@ -233,24 +254,24 @@ event change $(input.launcher-option) {
 }
 
 // deal with changing the ddraw options
-event change $(input.ddraw) {
-	stdout.printf("attributes#type:  %s \n", this.attributes#type);
-  switch (this.attributes#type) {
-    case "checkbox":
-      storageRoot.ddrawOptions[this.attributes#id] = this.checked;
-	  stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
-      break;
-    case "number":
-      storageRoot.ddrawOptions[this.attributes#id] = this.value;
-	  stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
-      break;
-    case "select-one":
-      storageRoot.ddrawOptions[this.attributes#id] = this.value;
-	  stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
-      break;
-    default:
-      break;
-  }
+event change $(input.ddraw, select.ddraw) {
+    stdout.printf("attributes#type:  %s \n", this.attributes#type);
+    switch (this.attributes#type) {
+        case "checkbox":
+            storageRoot.ddrawOptions[this.attributes#id] = this.checked;
+            stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
+            break;
+        case "number":
+            storageRoot.ddrawOptions[this.attributes#id] = this.value;
+            stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
+            break;
+        case "dropdown":
+			storageRoot.ddrawOptions[this.attributes#id || this.id] = this.value;
+			stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id || this.id]);
+			break;
+        default:
+            break;
+    }
 }
 
 //method for closing filters or options pages
@@ -266,7 +287,7 @@ function closeModals() {
 		modal.attributes.removeClass("is-visible");
 	}
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // checks github list for community submitted loot filters
 function getLootFilterJsonList(){
 	// If the list has not been retrieved yet, fetch it using an HTTP request.
@@ -493,8 +514,6 @@ function onLootFilterAuthorLoadComplete(author, filters){
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // Load saved options from storage and set them on the launcher UI elements 
 function loadOptions() {
   var options = storageRoot.options;
@@ -548,23 +567,33 @@ function loadOptions() {
 
 // Returns a string of command-line arguments based on the state of the launcher options
 function getLaunchArguments() {
-	var args = [];
-	var options = $$(input.launcher-option); // get all launcher options
+  var args = [];
+  var options = $$(input.launcher-option); // get all launcher options
 
-	for(var option in options) {
-		if(option.attributes#type == "checkbox" && option.checked) {
-			args.push(option.value); // add checkbox option if it is checked
-		}
-		if(option.attributes#type == "radio" && option.checked) {
-			if(option.attributes#value === "-3dfx") {
-				args.push(option.attributes#value); // add radio option value if it is checked
-			} else {
-				stdout.printf("not pushing ddraw  %s \n", option.attributes#value);
-			}
-		}
-	}
-	stdout.printf("print args:  %s \n", args.join(" "));
-	return args.join(" ");
+  for (var option of options) {
+    if (option.attributes#type == "checkbox" && option.checked) {
+      args.push(option.value); // add checkbox option if it is checked
+    }
+    if (option.attributes#type == "radio" && option.checked) {
+      if (option.attributes#value === "-3dfx") {
+        args.push(option.attributes#value); // add radio option value if it is checked
+      } else {
+        stdout.printf("not pushing ddraw  %s \n", option.attributes#value);
+        // remove -3dfx and -ddraw from args if they exist
+        var index = args.indexOf("-3dfx");
+        if (index !== -1) {
+          args.splice(index, 1);
+        }
+        index = args.indexOf("-ddraw");
+        if (index !== -1) {
+          args.splice(index, 1);
+        }
+      }
+    }
+  }
+
+  stdout.printf("print args:  %s \n", args.join(" "));
+  return args.join(" ");
 }
 
 function writeDdrawOptionsToIni(ddrawOptions) {
@@ -574,7 +603,7 @@ for (var key in storageRoot.ddrawOptions) {
   stdout.printf("%s: %s\n", key, value);
 }
 
- setDdrawIni(storageRoot.ddrawOptions);
+ view.frame.setDdrawOptions(storageRoot.ddrawOptions);
 }
 
 function createDdrawOptionsFallbackDefaults() {

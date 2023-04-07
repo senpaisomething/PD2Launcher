@@ -215,6 +215,12 @@ void setDdrawIni(sciter::value ddrawoptions) {
 
 	file.read(ini);
 
+	if (ini.size() == 0) {
+		writeDefaultDdrawIni(file, ini);
+		file.write(ini);
+		return;
+	}
+
 	for (auto const& it : ini)
 	{
 		auto const& section = it.first;
