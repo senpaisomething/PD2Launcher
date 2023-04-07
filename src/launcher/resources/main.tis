@@ -119,29 +119,31 @@ $(#options-button).onClick = function() {
   if (storageRoot.options.renderer == "-3dfx") {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
-	showOrHideDdrawOptions("none")
+    showOrHideDdrawOptions("none");
   } else if (storageRoot.options.renderer == "-ddraw") {
     var radioDdraw = self.select("#ddraw");
     radioDdraw.checked = true;
-	showOrHideDdrawOptions("block")
+    showOrHideDdrawOptions("block");
   } else {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
-	showOrHideDdrawOptions("none")
+    showOrHideDdrawOptions("none");
   }
 
-// Mark the correct checkboxes and input values for ddrawOptions
+  // Mark the correct checkboxes and input values for ddrawOptions
   var ddrawOptions = storageRoot.ddrawOptions;
   for (var key in ddrawOptions) {
     var value = ddrawOptions[key];
-    var element = self.select("input.ddraw[id='" + key + "']");
+    var element = self.select("input.ddraw[id='" + key + "'], select.ddraw[id='" + key + "']");
     if (element) {
       switch (element.attributes#type) {
         case "checkbox":
           element.checked = value;
           break;
         case "number":
-        case "select-one":
+          element.value = value;
+          break;
+        case "dropdown":
           element.value = value;
           break;
       }
@@ -158,7 +160,6 @@ $(#width).onMouse = function(evt) {
 
 // deal with changing the mode option
 event change $(select.ddraw-select) {
-	stdout.printf("\n this.vale: %s\n", this.value);
   switch (this.value) {
     case "fullscreen":
       storageRoot.ddrawOptions.windowed = false;
@@ -176,9 +177,7 @@ event change $(select.ddraw-select) {
     default:
       break;
   }
-  stdout.printf("windowed: %s, fullscreen: %s \n", storageRoot.ddrawOptions.windowed, storageRoot.ddrawOptions.fullscreen);
   
-
   // show or hide resolution options based on mode
   if (storageRoot.ddrawOptions.windowed) {
     $(#resolution).style.set {display: "block"};
@@ -255,19 +254,15 @@ event change $(input.launcher-option) {
 
 // deal with changing the ddraw options
 event change $(input.ddraw, select.ddraw) {
-    stdout.printf("attributes#type:  %s \n", this.attributes#type);
     switch (this.attributes#type) {
         case "checkbox":
             storageRoot.ddrawOptions[this.attributes#id] = this.checked;
-            stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
             break;
         case "number":
             storageRoot.ddrawOptions[this.attributes#id] = this.value;
-            stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id]);
             break;
         case "dropdown":
 			storageRoot.ddrawOptions[this.attributes#id || this.id] = this.value;
-			stdout.printf("from storage:  %s \n", storageRoot.ddrawOptions[this.attributes#id || this.id]);
 			break;
         default:
             break;
@@ -578,7 +573,6 @@ function getLaunchArguments() {
       if (option.attributes#value === "-3dfx") {
         args.push(option.attributes#value); // add radio option value if it is checked
       } else {
-        stdout.printf("not pushing ddraw  %s \n", option.attributes#value);
         // remove -3dfx and -ddraw from args if they exist
         var index = args.indexOf("-3dfx");
         if (index !== -1) {
@@ -592,7 +586,6 @@ function getLaunchArguments() {
     }
   }
 
-  stdout.printf("print args:  %s \n", args.join(" "));
   return args.join(" ");
 }
 
@@ -600,12 +593,12 @@ function writeDdrawOptionsToIni(ddrawOptions) {
 // Iterate over the properties in storageRoot.ddrawOptions
 for (var key in storageRoot.ddrawOptions) {
   var value = storageRoot.ddrawOptions[key];
-  stdout.printf("%s: %s\n", key, value);
 }
 
  view.frame.setDdrawOptions(storageRoot.ddrawOptions);
 }
 
+// if ddraw db is null fix that
 function createDdrawOptionsFallbackDefaults() {
   return {
     fullscreen: true,
