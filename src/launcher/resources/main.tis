@@ -119,12 +119,70 @@ $(#options-button).onClick = function() {
   if (storageRoot.options.renderer == "-3dfx") {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
+    showOrHideDdrawOptions("none");
   } else if (storageRoot.options.renderer == "-ddraw") {
     var radioDdraw = self.select("#ddraw");
     radioDdraw.checked = true;
+    showOrHideDdrawOptions("block");
   } else {
     var radio3dfx = self.select("#3dfx");
     radio3dfx.checked = true;
+    showOrHideDdrawOptions("none");
+  }
+
+  // Mark the correct checkboxes and input values for ddrawOptions
+  var ddrawOptions = storageRoot.ddrawOptions;
+  for (var key in ddrawOptions) {
+    var value = ddrawOptions[key];
+    var element = self.select("input.ddraw[id='" + key + "'], select.ddraw[id='" + key + "']");
+    if (element) {
+      switch (element.attributes#type) {
+        case "checkbox":
+          element.checked = value;
+          break;
+        case "number":
+          element.value = value;
+          break;
+        case "dropdown":
+          element.value = value;
+          break;
+      }
+    }
+  }
+}
+
+//event watcher for clicking #width a ddraw option
+$(#width).onMouse = function(evt) {
+    switch(evt.type) {
+      case Event.HANDLED | Event.MOUSE_DOWN: break; // handled mouse down event in bubbling phase
+    }
+}
+
+// deal with changing the mode option
+event change $(select.ddraw-select) {
+  switch (this.value) {
+    case "fullscreen":
+      storageRoot.ddrawOptions.windowed = false;
+      storageRoot.ddrawOptions.fullscreen = true;
+      break;
+    case "borderless":
+      storageRoot.ddrawOptions.windowed = true;
+      storageRoot.ddrawOptions.fullscreen = true;
+      break;
+    case "windowed":
+      storageRoot.ddrawOptions.windowed = true;
+      storageRoot.ddrawOptions.fullscreen = false;
+      $(#resolution).style.set {display: "block"};
+      break;
+    default:
+      break;
+  }
+  
+  // show or hide resolution options based on mode
+  if (storageRoot.ddrawOptions.windowed) {
+    $(#resolution).style.set {display: "block"};
+  } else {
+    $(#resolution).style.set {display: "none"};
   }
 }
 
@@ -147,6 +205,33 @@ for(var modalCloseButton in modalCloseButtons) {
 	}
 }
 
+//super annoying thing that runs on thoughts and prayers
+// basically only ever pass in a string "none" or "block"  (none = hide and block = show)
+function showOrHideDdrawOptions(noneOrBlock) {
+	// Don't forget the header
+	$(#ddraw-header).style.set({ display: noneOrBlock });
+
+	// Loop through the options
+	for (var el in $$(#ddraw-options)) {
+		el.style.set({ display: noneOrBlock });
+	}
+
+	// and those ugly ass resolution options.... gross
+	if (noneOrBlock === "none") {
+		$(#resolution).style.set({ display: noneOrBlock });
+	} else {
+		// Make sure window selection is populating resolution
+		if ($(#mode).value == "windowed") {
+			$(#resolution).style.set({ display: "block" });
+		} else {
+			$(#resolution).style.set({ display: "none" });
+		}
+	}
+
+	// and that damn advanced options
+	$(#show-advanced-btn).style.set({ display: noneOrBlock });
+}
+
 //deal with selecting the options page controls (radios and checkbox's)
 event change $(input.launcher-option) {
   switch(this.attributes#type) {
@@ -157,15 +242,40 @@ event change $(input.launcher-option) {
       if (this.checked) {
         var value = this.attributes#value.toString();
         storageRoot.options.renderer = value; // overwrite the renderer value
+		if (value === "-3dfx") {
+		  showOrHideDdrawOptions("none")
+        } else {
+          showOrHideDdrawOptions("block")
+        }
       }
       break;
   }
+}
+
+// deal with changing the ddraw options
+event change $(input.ddraw, select.ddraw) {
+    switch (this.attributes#type) {
+        case "checkbox":
+            storageRoot.ddrawOptions[this.attributes#id] = this.checked;
+            break;
+        case "number":
+            storageRoot.ddrawOptions[this.attributes#id] = this.value;
+            break;
+        case "dropdown":
+			storageRoot.ddrawOptions[this.attributes#id || this.id] = this.value;
+			break;
+        default:
+            break;
+    }
 }
 
 //method for closing filters or options pages
 function closeModals() {
 	modalBackground.attributes.removeClass("is-visible");
 	lootFilterLoaded = false;
+	
+	// Write the ddraw options to the ini file
+	writeDdrawOptionsToIni(storageRoot.ddrawOptions);
 
 	var modals = $$(.modal);
 	for (var modal in modals) {
@@ -404,6 +514,11 @@ function loadOptions() {
   var options = storageRoot.options;
   var hasRendererOption = false;
 
+  if (!("ddrawOptions" in storageRoot)) {
+  storageRoot.ddrawOptions = createDdrawOptionsFallbackDefaults();
+  stdout.printf("ddrawOptions  have been created?:  %s \n", storageRoot.ddrawOptions);
+}
+
   for(var key in options) {
     var value = options[key];
     var element = self.select("input.launcher-option[name='" + key + "']");
@@ -447,17 +562,68 @@ function loadOptions() {
 
 // Returns a string of command-line arguments based on the state of the launcher options
 function getLaunchArguments() {
-	var args = [];
-	var options = $$(input.launcher-option); // get all launcher options
+  var args = [];
+  var options = $$(input.launcher-option); // get all launcher options
 
-	for(var option in options) {
-		if(option.attributes#type == "checkbox" && option.checked) {
-			args.push(option.value); // add checkbox option if it is checked
-		}
-		if(option.attributes#type == "radio" && option.checked) {
-			args.push(option.attributes#value); // add radio option value if it is checked
-		}
-	}
+  for (var option of options) {
+    if (option.attributes#type == "checkbox" && option.checked) {
+      args.push(option.value); // add checkbox option if it is checked
+    }
+    if (option.attributes#type == "radio" && option.checked) {
+      if (option.attributes#value === "-3dfx") {
+        args.push(option.attributes#value); // add radio option value if it is checked
+      } else {
+        // remove -3dfx and -ddraw from args if they exist
+        var index = args.indexOf("-3dfx");
+        if (index !== -1) {
+          args.splice(index, 1);
+        }
+        index = args.indexOf("-ddraw");
+        if (index !== -1) {
+          args.splice(index, 1);
+        }
+      }
+    }
+  }
 
-	return args.join(" ");
+  return args.join(" ");
+}
+
+function writeDdrawOptionsToIni(ddrawOptions) {
+// Iterate over the properties in storageRoot.ddrawOptions
+for (var key in storageRoot.ddrawOptions) {
+  var value = storageRoot.ddrawOptions[key];
+}
+
+ view.frame.setDdrawOptions(storageRoot.ddrawOptions);
+}
+
+// if ddraw db is null fix that
+function createDdrawOptionsFallbackDefaults() {
+  return {
+    fullscreen: true,
+    windowed: false,
+    width: 0,
+    height: 0,
+    posx: -32000,
+    posy: -32000,
+    maintas: false,
+    boxing: false,
+    vsync: false,
+    adjmouse: false,
+    devmode: false,
+    border: false,
+    resizeable: true,
+    noactivateapp: false,
+    handlemouse: true,
+    nonexclusive: false,
+    maxfps: "60",
+    maxgameticks: "-2",
+    savesettings: "1",
+    renderer2: "opengl",
+    hook: "4",
+    minfps: "0",
+    shader: "Shaders\\xbr\\xbr-lv2-noblend.glsl",
+    singlecpu: true
+  };
 }

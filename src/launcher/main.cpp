@@ -186,6 +186,66 @@ void checkLootFilterFileStructure() {
 	}
 }
 
+sciter::value getDdrawIni() {
+	//Read ddraw.ini file and return a key/value map as sciter::value
+	sciter::value ddrawoptions;
+
+	mINI::INIFile file("ddraw.ini");
+	mINI::INIStructure ini;
+
+	file.read(ini);
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+		for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			auto const& value = it2.second;
+			ddrawoptions.set_item(key, value);
+		}
+	}
+	return ddrawoptions;
+}
+
+void setDdrawIni(sciter::value ddrawoptions) {
+	mINI::INIFile file("ddraw.ini");
+	mINI::INIStructure ini;
+
+	file.read(ini);
+
+	if (ini.size() == 0) {
+		writeDefaultDdrawIni(file, ini);
+		file.write(ini);
+		return;
+	}
+
+	for (auto const& it : ini)
+	{
+		auto const& section = it.first;
+		auto const& collection = it.second;
+		for (auto const& it2 : collection)
+		{
+			auto const& key = it2.first;
+			if (ddrawoptions.get_item(key).is_bool()) {
+				bool value = ddrawoptions.get_item(key).get(false);
+				ini[section][key] = (value) ? "true" : "false";
+			}
+			else if (ddrawoptions.get_item(key).is_int()) {
+				auto value = aux::itoa(ddrawoptions.get_item(key).get(1));
+				ini[section][key] = value;
+			}
+			else {
+				auto value = aux::w2a(ddrawoptions.get_item(key).get(L""));
+				ini[section][key] = value;
+			}
+		}
+	}
+	file.write(ini);
+	return;
+}
+
 class frame : public sciter::window {
 public:
 	frame() : window(SW_MAIN) {}
@@ -195,7 +255,9 @@ public:
 		SOM_FUNCS(
 			SOM_FUNC(play),
 			SOM_FUNC(setLootFilter),
-			SOM_FUNC(getLocalFiles)
+			SOM_FUNC(getLocalFiles),
+			SOM_FUNC(getDdrawOptions),
+			SOM_FUNC(setDdrawOptions)
 		)
 		SOM_PASSPORT_END
 
@@ -247,6 +309,15 @@ public:
 		}
 
 		return files;
+	}
+
+	sciter::value getDdrawOptions() {
+		return getDdrawIni();
+	}
+
+	bool setDdrawOptions(sciter::value ddrawoptions) {
+		setDdrawIni(ddrawoptions);
+		return true;
 	}
 
 private:
