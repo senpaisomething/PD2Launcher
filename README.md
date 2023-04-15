@@ -1,10 +1,11 @@
 # Project Diablo 2 - Launcher
 
 ## Install Instructions
+
 1. Clone the repo
 2. Change directory into the repo and run the following commands:
-    - `git submodule init`
-    - `git submodule update`
+   - `git submodule init`
+   - `git submodule update`
 3. Open the project in Visual Studio and run it.
 
 ## Setting up Debug and Build output Folders
@@ -14,4 +15,18 @@ Set the following environment variables according to your setup, change the fold
 ```
 [System.Environment]::SetEnvironmentVariable('DIABLO_DEBUG_FOLDER','C:\Program Files (x86)\Diablo II\ProjectD2',[System.EnvironmentVariableTarget]::Machine)
 ```
+
 4. Open the project in Visual Studio and run it.
+
+## Pushing a new version
+
+To push a new version run the `scripts/Compile.ps1`
+
+To compile the beta version add `-IsBeta`  
+To push to live, add `-PushToBucket`
+
+Compiling the latest `beta` launcher and pushing it to live would be:  
+`.\scripts\Compile.ps1 -IsBeta -PushToBucket`
+
+Compiling the latest `live` launcher and pushing it to live would be:  
+`.\scripts\Compile.ps1 -PushToBucket`
