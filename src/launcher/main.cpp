@@ -25,7 +25,7 @@ std::string BETA_CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v
 
 std::string lastFilterDownload = "";
 
-std::vector<std::string> dont_update = { "D2.LNG", "BnetLog.txt", "ProjectDiablo.cfg", "ddraw.ini", "default.filter", "loot.filter", "UI.ini" };
+std::vector<std::string> dont_update = { "D2.LNG", "BnetLog.txt", "ProjectDiablo.cfg", "ddraw.ini", "default.filter", "loot.filter", "UI.ini", "d2gl.yaml" };
 HANDLE pd2Mutex;
 
 void updateLauncher() {
