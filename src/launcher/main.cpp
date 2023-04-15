@@ -26,6 +26,7 @@ std::string BETA_CLIENT_FILES_BUCKET = "https://storage.googleapis.com/storage/v
 std::string lastFilterDownload = "";
 
 std::vector<std::string> dont_update = { "D2.LNG", "BnetLog.txt", "ProjectDiablo.cfg", "ddraw.ini", "default.filter", "loot.filter", "UI.ini", "d2gl.yaml" };
+std::vector<std::string> required_files = { "ddraw.ini", "default.filter", "loot.filter", "d2gl.yaml" };
 HANDLE pd2Mutex;
 
 void updateLauncher() {
@@ -119,6 +120,42 @@ void updateClientFiles() {
 			// Don't update certain files (config files, etc.)
 			if (std::find(dont_update.begin(), dont_update.end(), itemName) == dont_update.end()) {
 				downloadFile(mediaLink, path.string());
+			}
+		}
+	}
+}
+
+void downloadRequiredFiles() {
+	for (std::string file : required_files) {
+		// if the itemName ends in a slash, its not a file
+		if (hasEnding(file, "/")) {
+			continue;
+		}
+
+		// get the absolute path to the file/item in question
+		fs::path path = fs::current_path();
+		path = path / file;
+		path = path.lexically_normal();
+
+
+		if (!fs::exists(path)) {
+
+			// This is a heavy way around to do this, but we only need to do this once per install
+			nlohmann::json json = callJsonAPI(CLIENT_FILES_BUCKET);
+			for (auto& element : json["items"]) {
+				std::string itemName = element["name"];
+				std::string mediaLink = element["mediaLink"];
+				std::string crcHash = element["crc32c"];
+
+				// if the itemName ends in a slash, its not a file
+				if (hasEnding(itemName, "/")) {
+					continue;
+				}
+
+				if (file.compare(itemName) == 0) {
+					downloadFile(mediaLink, path.string());
+					break;
+				}
 			}
 		}
 	}
@@ -362,6 +399,20 @@ int uimain(std::function<int()> run) {
 		return 0;
 	}
 
+	// If beta, point the buckets to the beta launcher
+#ifdef BETA_LAUNCHER
+	LAUNCHER_BUCKET = BETA_LAUNCHER_BUCKET;
+	CLIENT_FILES_BUCKET = BETA_CLIENT_FILES_BUCKET;
+#endif
+
+#ifndef _DEBUG
+	updateLauncher();
+#endif
+
+#ifndef _DEBUG
+	downloadRequiredFiles();
+#endif
+
 	checkLootFilterFileStructure();
 
 	// needed for persistant storage
@@ -373,16 +424,6 @@ int uimain(std::function<int()> run) {
 	// note: this:://app URL is dedicated to the sciter::archive content associated with the application
 	pwin->load(WSTR("this://app/main.htm"));
 	pwin->expand();
-
-	// If beta, point the buckets to the beta launcher
-#ifdef BETA_LAUNCHER
-	LAUNCHER_BUCKET = BETA_LAUNCHER_BUCKET;
-	CLIENT_FILES_BUCKET = BETA_CLIENT_FILES_BUCKET;
-#endif
-
-#ifndef _DEBUG
-	updateLauncher();
-#endif
 
 	// start the launcher ui
 	int result = run();
