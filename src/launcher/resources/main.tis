@@ -6,8 +6,10 @@ var storageRoot;
 // If the database exists, set the storageRoot variable to its root object
 // initDb(storage) will mostly only be called on first time install
 try {
+	stdout.printf("opening storage");
 	storage = Storage.open(System.home("settings.db"));
 	storageRoot = storage.root || initDb(storage);
+	stdout.printf("storage created");
 } catch (e) {
 	view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
 }
@@ -19,7 +21,6 @@ function initDb(storage) {
   storage.root = {
     options: {
       skiptobnet: true,
-      renderer: "-3dfx", // default to -3dfx
     },
     lootfilters: {},
   };
@@ -28,9 +29,9 @@ function initDb(storage) {
 }
 
 // Fixes update to latest version.
-if (storageRoot.lootfilters == null){
-	storageRoot.lootfilters = {};
-}
+//if (storageRoot.lootfilters == null){
+	//storageRoot.lootfilters = {};
+//}
 
 //unassorted variables
 var body = $(body);
@@ -71,9 +72,10 @@ self.ready = function() {
 	var (w,h) = (self.toPixels(750dip),self.toPixels(550dip))
 
 	view.move( sx + (sw - w) / 2, sy + (sh - h) / 2, w, h);
-	
+	stdout.printf("about to load options");
 	// Load saved options for checkbox's and radios
 	loadOptions();
+	stdout.printf("options loaded");
 }
 
 // function that is used by cpp for updating the
@@ -91,6 +93,7 @@ self.on("click", "a[href^=http]", function(evt) {
 
 //handle clicking play button
 $(#play-button).onClick = function() {
+stdout.printf("ddrawOptions  play was selected");
 	//play button animation
 	playButton.attributes["disabled"] = true;
 	playButton.attributes.addClass("disabled");
@@ -107,6 +110,7 @@ $(#play-button).onClick = function() {
 	);
 
 	// send commandline args to game
+	stdout.printf("about to try to send args");
 	view.frame.play(getLaunchArguments());
 }
 
@@ -509,21 +513,20 @@ function onLootFilterAuthorLoadComplete(author, filters){
 	}
 }
 
-// Load saved options from storage and set them on the launcher UI elements 
 function loadOptions() {
   var options = storageRoot.options;
   var hasRendererOption = false;
 
   if (!("ddrawOptions" in storageRoot)) {
-  storageRoot.ddrawOptions = createDdrawOptionsFallbackDefaults();
-  stdout.printf("ddrawOptions  have been created?:  %s \n", storageRoot.ddrawOptions);
-}
+    storageRoot.ddrawOptions = createDdrawOptionsFallbackDefaults();
+    stdout.printf("ddrawOptions have been created?:  %s \n", storageRoot.ddrawOptions);
+  }
 
   for(var key in options) {
     var value = options[key];
     var element = self.select("input.launcher-option[name='" + key + "']");
     
-	 // Skip elements that don't match a saved option
+    // Skip elements that don't match a saved option
     if(element == null) {
       continue;
     }
@@ -535,7 +538,7 @@ function loadOptions() {
     switch(element.attributes#type) {
       case "checkbox":
         element.checked = value;
-		break;
+        break;
       case "radio":
         if (element.attributes#value == value) {
           element.checked = true;
@@ -547,15 +550,15 @@ function loadOptions() {
         break;
     }
   }
-  
-  //This is here as a fallback to that if a user has not selected a renderer to selectone and update that to the storageRoot.
+
+  // This is here as a fallback to that if a user has not selected a renderer to selectone and update that to the storageRoot.
   // We are doing this so if a user does a fresh install or is updating launcher from v1.5 or less it will add this defaulted selection to storage
   if (!hasRendererOption) {
     var element = self.select("input.launcher-option[name='renderer'][value='-3dfx']");
     if (element != null) {
       element.checked = true;
-	  var value = element.attributes#value.toString();
-        storageRoot.options.renderer = value; // overwrite the renderer value
+      var value = element.attributes#value.toString();
+      storageRoot.options.renderer = value; // overwrite the renderer value
     }
   }
 }
