@@ -1,4 +1,18 @@
-﻿// Declare variables for storage and storageRoot
+﻿// the purpose of this function is to ensure that the database is properly initialized with the necessary default values 
+// for options and an empty lootfilters object, if they do not exist already.
+function initDb(storage) {
+  // Load saved options or use defaults
+  storage.root = {
+    options: {
+      skiptobnet: true,
+    },
+    lootfilters: {},
+  };
+
+  return storage.root;
+}
+
+// Declare variables for storage and storageRoot
 var storage;
 var storageRoot;
 
@@ -12,20 +26,6 @@ try {
 	stdout.printf("storage created");
 } catch (e) {
 	view.msgbox(#alert, "Failed to load settings. Your options/loot filters will not save. \nThis is normally a permissions issue and running as admin once typically fixes it.", "Settings failed to load.");
-}
-
-// the purpose of this function is to ensure that the database is properly initialized with the necessary default values 
-// for options and an empty lootfilters object, if they do not exist already.
-function initDb(storage) {
-  // Load saved options or use defaults
-  storage.root = {
-    options: {
-      skiptobnet: true,
-    },
-    lootfilters: {},
-  };
-
-  return storage.root;
 }
 
 // Fixes update to latest version.
