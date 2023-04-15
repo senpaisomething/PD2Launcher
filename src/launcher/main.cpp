@@ -31,6 +31,30 @@ HANDLE pd2Mutex;
 void updateLauncher() {
 	nlohmann::json json = callJsonAPI(LAUNCHER_BUCKET);
 
+	// Update updater
+	for (auto& element : json["items"]) {
+		std::string itemName = element["name"];
+		std::string mediaLink = element["mediaLink"];
+		std::string crcHash = element["crc32c"];
+
+		// get the absolute path to the file/item in question
+		fs::path path = fs::current_path();
+		path = path / itemName;
+		path = path.lexically_normal();
+
+		if (itemName == "updater.exe") {
+			if (!fs::exists(path)) {
+				std::cout << "Downloading: " << itemName << "\n";
+				downloadFile(mediaLink, path.string());
+			}
+			else if (!compareCRC(path, crcHash)) {
+				std::cout << "CRC Mismatch: " << itemName << "\n";
+				downloadFile(mediaLink, path.string());
+			}
+		}
+	}
+
+	// Update launcher
 	for (auto& element : json["items"]) {
 		std::string itemName = element["name"];
 		std::string mediaLink = element["mediaLink"];

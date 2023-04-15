@@ -26,6 +26,11 @@ void checkUpdates(bool forceDownload) {
 			continue;
 		}
 
+		// Can't update itself
+		if (itemName == "updater.exe") {
+			continue;
+		}
+
 		// get the absolute path to the file/item in question
 		fs::path path = fs::current_path();
 		path = path / itemName;
