@@ -29,9 +29,9 @@ try {
 }
 
 // Fixes update to latest version.
-//if (storageRoot.lootfilters == null){
-	//storageRoot.lootfilters = {};
-//}
+if (storageRoot.lootfilters == null){
+	storageRoot.lootfilters = {};
+}
 
 //unassorted variables
 var body = $(body);
